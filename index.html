@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Esteira Comercial - Dashboard EBM</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.js"></script>
+<style>
+:root{--navy:#003D6B;--wine:#A4001B;--navy-light:#0A5A8C;--navy-pale:#E8F0F6;--wine-light:#C4233B;--wine-pale:#FCEDEF;--gray-900:#1a1a1a;--gray-700:#444;--gray-500:#777;--gray-300:#bbb;--gray-100:#f2f3f5;--white:#fff;--green:#1B8C4F;--orange:#D4760A}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--gray-100);color:var(--gray-900);font-size:13px}
+.header{background:var(--navy);padding:14px 24px;display:flex;justify-content:space-between;align-items:center}
+.header h1{font-size:18px;font-weight:700;color:var(--white);letter-spacing:.3px}
+.header .date{font-size:11px;color:rgba(255,255,255,.7)}
+.filters{background:var(--white);padding:8px 24px;display:flex;gap:28px;border-bottom:1px solid #dde3e8;flex-wrap:wrap;align-items:center}
+.filter-group{display:flex;align-items:center;gap:6px}
+.filter-group label{font-size:10px;font-weight:700;color:var(--gray-500);text-transform:uppercase;letter-spacing:.6px}
+.filter-group button{padding:4px 14px;border:1px solid #cdd5dc;background:var(--white);border-radius:4px;font-size:12px;cursor:pointer;transition:all .15s;color:var(--gray-700)}
+.filter-group button.active{background:var(--navy);color:var(--white);border-color:var(--navy)}
+.filter-group button:hover:not(.active){background:var(--navy-pale);border-color:var(--navy-light)}
+.tabs{background:var(--white);padding:0 24px;display:flex;gap:0;border-bottom:1px solid #dde3e8}
+.tab{padding:10px 22px;font-size:12px;font-weight:600;cursor:pointer;border-bottom:2px solid transparent;color:var(--gray-500);transition:all .15s}
+.tab.active{color:var(--navy);border-bottom-color:var(--wine)}
+.tab:hover:not(.active){color:var(--navy-light)}
+.content{padding:16px 24px;max-width:1400px;margin:0 auto}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
+.kpi{background:var(--white);border-radius:6px;padding:14px;border-left:3px solid var(--navy)}
+.kpi.wine{border-left-color:var(--wine)}
+.kpi.dark{border-left-color:var(--gray-900)}
+.kpi.green{border-left-color:var(--green)}
+.kpi .label{font-size:10px;text-transform:uppercase;letter-spacing:.5px;color:var(--gray-500);margin-bottom:4px;font-weight:600}
+.kpi .value{font-size:20px;font-weight:700;color:var(--gray-900)}
+.kpi .sub{font-size:11px;color:var(--gray-500);margin-top:2px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+.grid3{display:grid;grid-template-columns:2fr 1fr;gap:12px;margin-bottom:16px}
+.card{background:var(--white);border-radius:6px;padding:14px}
+.card h3{font-size:13px;font-weight:600;color:var(--navy);margin-bottom:10px}
+table{width:100%;border-collapse:collapse;font-size:11px}
+th{text-align:left;padding:6px 8px;border-bottom:2px solid #dde3e8;font-weight:700;color:var(--navy);font-size:10px;text-transform:uppercase}
+td{padding:5px 8px;border-bottom:1px solid var(--gray-100)}
+tr:hover td{background:var(--navy-pale)}
+.text-right{text-align:right}
+.text-center{text-align:center}
+.neg{color:var(--wine)}
+.pos{color:var(--green)}
+.badge{display:inline-block;padding:2px 6px;border-radius:3px;font-size:10px;font-weight:600}
+.badge-ok{background:#e1f5e8;color:var(--green)}
+.badge-warn{background:#fff3e0;color:var(--orange)}
+.badge-bad{background:var(--wine-pale);color:var(--wine)}
+.chart-container{position:relative;height:220px}
+.chart-sm{height:180px}
+@media(max-width:900px){.kpis{grid-template-columns:repeat(2,1fr)}.grid2,.grid3{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Esteira Comercial</h1>
+  <div class="date">Abril 2026 · Atualizado 30/04/2026 09:38</div>
+</div>
+
+<div class="filters">
+  <div class="filter-group">
+    <label>Regional:</label>
+    <button class="active" onclick="setFilter('regional',this,'todas')">Todas</button>
+    <button onclick="setFilter('regional',this,'df')">DF</button>
+    <button onclick="setFilter('regional',this,'go')">GO</button>
+    <button onclick="setFilter('regional',this,'sp')">SP</button>
+  </div>
+  <div class="filter-group">
+    <label>Modalidade:</label>
+    <button class="active" onclick="setFilter('modalidade',this,'todas')">Todas</button>
+    <button onclick="setFilter('modalidade',this,'associativo')">Associativo</button>
+    <button onclick="setFilter('modalidade',this,'spbe')">SPBE</button>
+  </div>
+</div>
+
+<div class="tabs">
+  <div class="tab active" onclick="switchTab(this,'pipeline')">Pipeline</div>
+  <div class="tab" onclick="switchTab(this,'metas')">Metas</div>
+  <div class="tab" onclick="switchTab(this,'empreendimentos')">Empreendimentos</div>
+</div>
+
+<div class="content" id="main-content"></div>
+
+<script>
+const PIPELINE = {
+  todas:{
+    todas:{
+      DF:{proposta:{v:0,q:0},credito:{v:340500,q:1},juridico:{v:323750,q:1},assinatura:{v:716000,q:2},conferencia:{v:0,q:0},pendencia:{v:1741000,q:4},finalizado:{v:3605000,q:10}},
+      GO:{proposta:{v:1801778,q:5},credito:{v:3915789,q:10},juridico:{v:715335,q:2},assinatura:{v:11708317,q:28},conferencia:{v:1787330,q:6},pendencia:{v:10860767,q:27},finalizado:{v:32476195,q:70}},
+      SP:{proposta:{v:444500,q:1},credito:{v:0,q:0},juridico:{v:0,q:0},assinatura:{v:2232579,q:4},conferencia:{v:0,q:0},pendencia:{v:1640000,q:4},finalizado:{v:4604364,q:8}}
+    },
+    df:{DF:{proposta:{v:0,q:0},credito:{v:340500,q:1},juridico:{v:323750,q:1},assinatura:{v:716000,q:2},conferencia:{v:0,q:0},pendencia:{v:1741000,q:4},finalizado:{v:3605000,q:10}}},
+    go:{GO:{proposta:{v:1801778,q:5},credito:{v:3915789,q:10},juridico:{v:715335,q:2},assinatura:{v:11708317,q:28},conferencia:{v:1787330,q:6},pendencia:{v:10860767,q:27},finalizado:{v:32476195,q:70}}},
+    sp:{SP:{proposta:{v:444500,q:1},credito:{v:0,q:0},juridico:{v:0,q:0},assinatura:{v:2232579,q:4},conferencia:{v:0,q:0},pendencia:{v:1640000,q:4},finalizado:{v:4604364,q:8}}}
+  },
+  associativo:{
+    todas:{
+      DF:{proposta:{v:0,q:0},credito:{v:0,q:0},juridico:{v:0,q:0},assinatura:{v:350000,q:1},conferencia:{v:0,q:0},pendencia:{v:679000,q:2},finalizado:{v:2503000,q:7}},
+      GO:{proposta:{v:874478,q:2},credito:{v:371033,q:1},juridico:{v:0,q:0},assinatura:{v:6279273,q:18},conferencia:{v:1385530,q:4},pendencia:{v:6991271,q:19},finalizado:{v:18010833,q:49}}
+    },
+    df:{DF:{proposta:{v:0,q:0},credito:{v:0,q:0},juridico:{v:0,q:0},assinatura:{v:350000,q:1},conferencia:{v:0,q:0},pendencia:{v:679000,q:2},finalizado:{v:2503000,q:7}}},
+    go:{GO:{proposta:{v:874478,q:2},credito:{v:371033,q:1},juridico:{v:0,q:0},assinatura:{v:6279273,q:18},conferencia:{v:1385530,q:4},pendencia:{v:6991271,q:19},finalizado:{v:18010833,q:49}}},
+    sp:{}
+  },
+  spbe:{
+    todas:{
+      DF:{proposta:{v:0,q:0},credito:{v:340500,q:1},juridico:{v:323750,q:1},assinatura:{v:366000,q:1},conferencia:{v:0,q:0},pendencia:{v:1062000,q:2},finalizado:{v:1102000,q:3}},
+      GO:{proposta:{v:927300,q:3},credito:{v:3544756,q:9},juridico:{v:715335,q:2},assinatura:{v:5429043,q:10},conferencia:{v:401800,q:2},pendencia:{v:3869496,q:8},finalizado:{v:14465362,q:21}},
+      SP:{proposta:{v:444500,q:1},credito:{v:0,q:0},juridico:{v:0,q:0},assinatura:{v:2232579,q:4},conferencia:{v:0,q:0},pendencia:{v:1640000,q:4},finalizado:{v:4604364,q:8}}
+    },
+    df:{DF:{proposta:{v:0,q:0},credito:{v:340500,q:1},juridico:{v:323750,q:1},assinatura:{v:366000,q:1},conferencia:{v:0,q:0},pendencia:{v:1062000,q:2},finalizado:{v:1102000,q:3}}},
+    go:{GO:{proposta:{v:927300,q:3},credito:{v:3544756,q:9},juridico:{v:715335,q:2},assinatura:{v:5429043,q:10},conferencia:{v:401800,q:2},pendencia:{v:3869496,q:8},finalizado:{v:14465362,q:21}}},
+    sp:{SP:{proposta:{v:444500,q:1},credito:{v:0,q:0},juridico:{v:0,q:0},assinatura:{v:2232579,q:4},conferencia:{v:0,q:0},pendencia:{v:1640000,q:4},finalizado:{v:4604364,q:8}}}
+  }
+};
+
+const METAS = {
+  todas:{todas:[
+    {dir:'Felipe',proj:65396703,fin:25493995,desvP:-62.7,qtdP:113,qtdR:47,desvQ:-58.4},
+    {dir:'Paulo/S\u00e9rgio',proj:41404192,fin:15191563,desvP:-69.0,qtdP:114,qtdR:41,desvQ:-64.0}
+  ],df:[
+    {dir:'Felipe',proj:65396703,fin:25493995,desvP:-62.7,qtdP:113,qtdR:47,desvQ:-58.4},
+    {dir:'Paulo/S\u00e9rgio',proj:41404192,fin:15191563,desvP:-69.0,qtdP:114,qtdR:41,desvQ:-64.0}
+  ],go:[
+    {dir:'Felipe',proj:65396703,fin:25493995,desvP:-62.7,qtdP:113,qtdR:47,desvQ:-58.4},
+    {dir:'Paulo/S\u00e9rgio',proj:41404192,fin:15191563,desvP:-69.0,qtdP:114,qtdR:41,desvQ:-64.0}
+  ],sp:[
+    {dir:'Felipe',proj:65396703,fin:25493995,desvP:-62.7,qtdP:113,qtdR:47,desvQ:-58.4},
+    {dir:'Paulo/S\u00e9rgio',proj:41404192,fin:15191563,desvP:-69.0,qtdP:114,qtdR:41,desvQ:-64.0}
+  ]},
+  associativo:{todas:[
+    {dir:'Felipe',proj:65396703,fin:7705075,desvP:-89.3,qtdP:113,qtdR:21,desvQ:-83.2},
+    {dir:'Paulo/S\u00e9rgio',proj:41404192,fin:12808758,desvP:-72.5,qtdP:114,qtdR:35,desvQ:-72.8}
+  ],df:[
+    {dir:'Felipe',proj:65396703,fin:7705075,desvP:-89.3,qtdP:113,qtdR:21,desvQ:-83.2},
+    {dir:'Paulo/S\u00e9rgio',proj:41404192,fin:12808758,desvP:-72.5,qtdP:114,qtdR:35,desvQ:-72.8}
+  ],go:[
+    {dir:'Felipe',proj:65396703,fin:7705075,desvP:-89.3,qtdP:113,qtdR:21,desvQ:-83.2},
+    {dir:'Paulo/S\u00e9rgio',proj:41404192,fin:12808758,desvP:-72.5,qtdP:114,qtdR:35,desvQ:-72.8}
+  ],sp:[]},
+  spbe:{todas:[
+    {dir:'Felipe',proj:65396703,fin:17788920,desvP:-73.4,qtdP:113,qtdR:26,desvQ:-77.9},
+    {dir:'Paulo/S\u00e9rgio',proj:41404192,fin:2382805,desvP:-96.5,qtdP:114,qtdR:6,desvQ:-96.5}
+  ],df:[
+    {dir:'Felipe',proj:65396703,fin:17788920,desvP:-73.4,qtdP:113,qtdR:26,desvQ:-77.9},
+    {dir:'Paulo/S\u00e9rgio',proj:41404192,fin:2382805,desvP:-96.5,qtdP:114,qtdR:6,desvQ:-96.5}
+  ],go:[
+    {dir:'Felipe',proj:65396703,fin:17788920,desvP:-73.4,qtdP:113,qtdR:26,desvQ:-77.9},
+    {dir:'Paulo/S\u00e9rgio',proj:41404192,fin:2382805,desvP:-96.5,qtdP:114,qtdR:6,desvQ:-96.5}
+  ],sp:[
+    {dir:'Felipe',proj:65396703,fin:17788920,desvP:-73.4,qtdP:113,qtdR:26,desvQ:-77.9},
+    {dir:'Paulo/S\u00e9rgio',proj:41404192,fin:2382805,desvP:-96.5,qtdP:114,qtdR:6,desvQ:-96.5}
+  ]}
+};
+
+const EMPREENDIMENTOS = {
+  todas:[
+    {n:'Now Pq Amaz\u00f4nia 3\u00aa Fase',proj:361403,fin:840200,desvP:132.5,qtdP:1,qtdR:2},
+    {n:'Metropolitan Genebra',proj:3905333,fin:3520000,desvP:-9.9,qtdP:2,qtdR:1},
+    {n:'Wide Nova Campinas',proj:1423986,fin:1250000,desvP:-12.2,qtdP:1,qtdR:1},
+    {n:'Wish Passeio Castanheiras',proj:2995000,fin:2565978,desvP:-14.3,qtdP:5,qtdR:5},
+    {n:'Volt C 220',proj:3569687,fin:2692125,desvP:-24.6,qtdP:6,qtdR:5},
+    {n:'Now Pra\u00e7a C8',proj:1041731,fin:785000,desvP:-24.6,qtdP:2,qtdR:2},
+    {n:'Now Mil\u00e3o 2\u00aa Fase',proj:2878661,fin:1991900,desvP:-30.8,qtdP:7,qtdR:5},
+    {n:'Parque Am\u00e9rica Cancun 3\u00aa Fase',proj:1636261,fin:1020000,desvP:-37.7,qtdP:5,qtdR:3},
+    {n:'Wish Vaca Brava',proj:2273315,fin:1392977,desvP:-38.7,qtdP:3,qtdR:2},
+    {n:'Vida Samambaia',proj:5952548,fin:3235000,desvP:-45.7,qtdP:17,qtdR:9},
+    {n:'Now 111',proj:4774611,fin:2389963,desvP:-49.9,qtdP:13,qtdR:7},
+    {n:'Wish Bella Vista',proj:1208347,fin:602000,desvP:-50.2,qtdP:2,qtdR:1},
+    {n:'Wish 675',proj:1581482,fin:786386,desvP:-50.3,qtdP:2,qtdR:1},
+    {n:'Wish Gran Six',proj:1622407,fin:711503,desvP:-56.1,qtdP:2,qtdR:1},
+    {n:'Reserva Urbana Pitangueira 1\u00aa Fase',proj:3542633,fin:1685000,desvP:-52.4,qtdP:10,qtdR:5},
+    {n:'Now Alameda Das \u00c1guas 1\u00aa Fase',proj:5029726,fin:1274410,desvP:-74.7,qtdP:12,qtdR:3},
+    {n:'Now Alameda Das \u00c1guas 2\u00aa Fase',proj:3706458,fin:747200,desvP:-79.8,qtdP:9,qtdR:2},
+    {n:'Now Laguna 1\u00aa Fase',proj:2370500,fin:691720,desvP:-70.8,qtdP:7,qtdR:2},
+    {n:'Now Laguna 2\u00aa Fase',proj:7440006,fin:1439190,desvP:-80.7,qtdP:22,qtdR:4},
+    {n:'Wish Trinta E Sete',proj:2444065,fin:676000,desvP:-72.3,qtdP:3,qtdR:1}
+  ],
+  associativo:[
+    {n:'Now Pra\u00e7a C8',proj:1041731,fin:785000,desvP:-24.6,qtdP:2,qtdR:2},
+    {n:'Now Mil\u00e3o 2\u00aa Fase',proj:2878661,fin:1991900,desvP:-30.8,qtdP:7,qtdR:5},
+    {n:'Parque Am\u00e9rica Cancun 3\u00aa Fase',proj:1636261,fin:1020000,desvP:-37.7,qtdP:5,qtdR:3},
+    {n:'Now 111',proj:4774611,fin:2389963,desvP:-49.9,qtdP:13,qtdR:7},
+    {n:'Reserva Urbana Pitangueira 1\u00aa Fase',proj:3542633,fin:1685000,desvP:-52.4,qtdP:10,qtdR:5},
+    {n:'Vida Samambaia',proj:5952548,fin:2503000,desvP:-58.0,qtdP:17,qtdR:7},
+    {n:'Now Laguna 1\u00aa Fase',proj:2370500,fin:691720,desvP:-70.8,qtdP:7,qtdR:2},
+    {n:'Now Alameda Das \u00c1guas 1\u00aa Fase',proj:5029726,fin:1274410,desvP:-74.7,qtdP:12,qtdR:3},
+    {n:'Now Alameda Das \u00c1guas 2\u00aa Fase',proj:3706458,fin:747200,desvP:-79.8,qtdP:9,qtdR:2},
+    {n:'Now Laguna 2\u00aa Fase',proj:7440006,fin:1439190,desvP:-80.7,qtdP:22,qtdR:4}
+  ],
+  spbe:[
+    {n:'Now Pq Amaz\u00f4nia 3\u00aa Fase',proj:361403,fin:840200,desvP:132.5,qtdP:1,qtdR:2},
+    {n:'Metropolitan Genebra',proj:3905333,fin:3520000,desvP:-9.9,qtdP:2,qtdR:1},
+    {n:'Wide Nova Campinas',proj:1423986,fin:1250000,desvP:-12.2,qtdP:1,qtdR:1},
+    {n:'Wish Passeio Castanheiras',proj:2995000,fin:2565978,desvP:-14.3,qtdP:5,qtdR:5},
+    {n:'Volt C 220',proj:3569687,fin:2692125,desvP:-24.6,qtdP:6,qtdR:5},
+    {n:'Wish Vaca Brava',proj:2273315,fin:1392977,desvP:-38.7,qtdP:3,qtdR:2},
+    {n:'Parque Am\u00e9rica Cancun 2\u00aa Fase',proj:637353,fin:340000,desvP:-46.7,qtdP:2,qtdR:1},
+    {n:'Wish Bella Vista',proj:1208347,fin:602000,desvP:-50.2,qtdP:2,qtdR:1},
+    {n:'Wish 675',proj:1581482,fin:786386,desvP:-50.3,qtdP:2,qtdR:1},
+    {n:'Wish Gran Six',proj:1622407,fin:711503,desvP:-56.1,qtdP:2,qtdR:1},
+    {n:'Wish Trinta E Sete',proj:2444065,fin:676000,desvP:-72.3,qtdP:3,qtdR:1}
+  ]
+};
+
+let state={regional:'todas',modalidade:'todas',tab:'pipeline'};
+let charts={};
+
+function fmt(v){
+  if(v>=1e6) return 'R$'+(v/1e6).toFixed(1).replace('.',',')+'M';
+  if(v>=1e3) return 'R$'+(v/1e3).toFixed(0)+'K';
+  return 'R$'+v.toLocaleString('pt-BR');
+}
+function fmtFull(v){return 'R$'+v.toLocaleString('pt-BR',{minimumFractionDigits:0})}
+
+function calcTotals(pData){
+  const stages=['proposta','credito','juridico','assinatura','conferencia','pendencia','finalizado'];
+  const tot={};stages.forEach(s=>{tot[s]={v:0,q:0}});
+  Object.values(pData).forEach(reg=>{stages.forEach(s=>{tot[s].v+=reg[s].v;tot[s].q+=reg[s].q})});
+  return tot;
+}
+
+function setFilter(type,btn,val){
+  state[type]=val;
+  btn.parentElement.querySelectorAll('button').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');render();
+}
+function switchTab(el,tab){
+  state.tab=tab;
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');render();
+}
+function destroyCharts(){Object.values(charts).forEach(c=>{try{c.destroy()}catch(e){}});charts={}}
+
+function render(){
+  destroyCharts();
+  const pData=PIPELINE[state.modalidade]?.[state.regional]||{};
+  const tot=calcTotals(pData);
+  const stages=['proposta','credito','juridico','assinatura','conferencia','pendencia','finalizado'];
+  const stageLabels=['Proposta','Cr\u00e9dito','Jur\u00eddico','Assinatura','Confer\u00eancia','Pend\u00eancia','Finalizado'];
+  const totalVGV=stages.reduce((s,st)=>s+tot[st].v,0);
+  const totalQTD=stages.reduce((s,st)=>s+tot[st].q,0);
+  const finVGV=tot.finalizado.v;const finQTD=tot.finalizado.q;
+  const andVGV=totalVGV-finVGV;const andQTD=totalQTD-finQTD;
+  const el=document.getElementById('main-content');
+
+  const barColors=['#E8F0F6','#C5D9E8','#8FB8D4','#5A96BC','#2E78A4','#0A5A8C','#003D6B'];
+
+  if(state.tab==='pipeline'){
+    el.innerHTML=`
+      <div class="kpis">
+        <div class="kpi"><div class="label">VGV Total</div><div class="value">\${fmt(totalVGV)}</div><div class="sub">\${totalQTD} propostas</div></div>
+        <div class="kpi wine"><div class="label">Vendas em Andamento</div><div class="value">\${fmt(andVGV)}</div><div class="sub">\${andQTD} propostas</div></div>
+        <div class="kpi dark"><div class="label">Vendas Finalizadas</div><div class="value">\${fmt(finVGV)}</div><div class="sub">\${finQTD} propostas \u00b7 \${fmtFull(finVGV)}</div></div>
+        <div class="kpi green"><div class="label">Taxa Finaliza\u00e7\u00e3o</div><div class="value">\${totalQTD?((finQTD/totalQTD)*100).toFixed(0):0}%</div><div class="sub">\${finQTD} de \${totalQTD}</div></div>
+      </div>
+      <div class="grid3">
+        <div class="card"><h3>Pipeline por Etapa (VGV)</h3><div class="chart-container"><canvas id="ch-pipeline"></canvas></div></div>
+        <div class="card"><h3>Distribui\u00e7\u00e3o por Etapa</h3><div class="chart-container"><canvas id="ch-dist"></canvas></div></div>
+      </div>
+      <div class="card" style="margin-bottom:16px"><h3>Detalhamento por Regional</h3>
+        <table>
+          <tr><th>Regional</th>\${stageLabels.map(l=>'<th class="text-right">'+l+'</th>').join('')}<th class="text-right">Total</th></tr>
+          \${Object.entries(pData).map(([reg,d])=>{
+            const rTot=stages.reduce((s,st)=>s+d[st].v,0);
+            const rQtd=stages.reduce((s,st)=>s+d[st].q,0);
+            return '<tr><td><strong>'+reg+'</strong></td>'+stages.map(st=>'<td class="text-right">'+(d[st].v?fmt(d[st].v):'\u2014')+'<br><span style="color:var(--gray-300);font-size:10px">'+(d[st].q||'')+'</span></td>').join('')+'<td class="text-right"><strong>'+fmt(rTot)+'</strong><br><span style="color:var(--gray-300);font-size:10px">'+rQtd+'</span></td></tr>';
+          }).join('')}
+          <tr style="font-weight:700;border-top:2px solid var(--navy)"><td>Total</td>\${stages.map(st=>'<td class="text-right">'+(tot[st].v?fmt(tot[st].v):'\u2014')+'<br><span style="color:var(--gray-300);font-size:10px">'+(tot[st].q||'')+'</span></td>').join('')}<td class="text-right">\${fmt(totalVGV)}<br><span style="color:var(--gray-300);font-size:10px">\${totalQTD}</span></td></tr>
+        </table>
+      </div>`;
+
+    const ctx1=document.getElementById('ch-pipeline');
+    if(ctx1){charts.pipeline=new Chart(ctx1,{type:'bar',data:{labels:stageLabels,datasets:[{data:stages.map(s=>tot[s].v),backgroundColor:barColors,borderRadius:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:i=>fmtFull(i.raw)}}},scales:{y:{ticks:{callback:v=>fmt(v)},grid:{color:'#eef2f6'}},x:{grid:{display:false}}}}})}
+
+    const ctx2=document.getElementById('ch-dist');
+    if(ctx2){charts.dist=new Chart(ctx2,{type:'doughnut',data:{labels:stageLabels,datasets:[{data:stages.map(s=>tot[s].v),backgroundColor:barColors}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{boxWidth:10,font:{size:10}}},tooltip:{callbacks:{label:i=>fmtFull(i.raw)}}}}})}
+
+  } else if(state.tab==='metas'){
+    const metas=METAS[state.modalidade]?.[state.regional]||[];
+    const totalProj=metas.reduce((s,m)=>s+m.proj,0);
+    const totalFin=metas.reduce((s,m)=>s+m.fin,0);
+    const totalQP=metas.reduce((s,m)=>s+m.qtdP,0);
+    const totalQR=metas.reduce((s,m)=>s+m.qtdR,0);
+    const totalDesvP=totalProj?((totalFin-totalProj)/totalProj*100):0;
+
+    el.innerHTML=`
+      <div class="kpis">
+        <div class="kpi"><div class="label">VGV Projetado</div><div class="value">\${fmt(totalProj)}</div><div class="sub">\${fmtFull(totalProj)}</div></div>
+        <div class="kpi dark"><div class="label">VGV Finalizado</div><div class="value">\${fmt(totalFin)}</div><div class="sub">\${fmtFull(totalFin)}</div></div>
+        <div class="kpi wine"><div class="label">Desvio VGV</div><div class="value neg">\${totalDesvP.toFixed(1)}%</div><div class="sub">\${fmtFull(Math.abs(totalFin-totalProj))} abaixo</div></div>
+        <div class="kpi green"><div class="label">Atingimento QTD</div><div class="value">\${totalQP?((totalQR/totalQP)*100).toFixed(0):0}%</div><div class="sub">\${totalQR} de \${totalQP}</div></div>
+      </div>
+      <div class="grid2">
+        <div class="card"><h3>Projetado vs Finalizado por Diretor</h3><div class="chart-container"><canvas id="ch-metas"></canvas></div></div>
+        <div class="card"><h3>Atingimento da Meta</h3><div class="chart-container"><canvas id="ch-ating"></canvas></div></div>
+      </div>
+      <div class="card"><h3>Detalhamento de Metas</h3>
+        <table>
+          <tr><th>Diretor</th><th class="text-right">VGV Projetado</th><th class="text-right">VGV Finalizado</th><th class="text-right">Desvio %</th><th class="text-center">QTD Proj.</th><th class="text-center">QTD Real.</th><th class="text-right">Desvio QTD</th><th class="text-center">Status</th></tr>
+          \${metas.map(m=>{
+            const pct=m.proj?((m.fin/m.proj)*100).toFixed(0):0;
+            const badge=pct>=80?'badge-ok':pct>=50?'badge-warn':'badge-bad';
+            const label=pct>=80?'Na Meta':pct>=50?'Aten\u00e7\u00e3o':'Abaixo';
+            return '<tr><td><strong>'+m.dir+'</strong></td><td class="text-right">'+fmtFull(m.proj)+'</td><td class="text-right">'+fmtFull(m.fin)+'</td><td class="text-right neg">'+m.desvP+'%</td><td class="text-center">'+m.qtdP+'</td><td class="text-center">'+m.qtdR+'</td><td class="text-right neg">'+m.desvQ.toFixed(1)+'%</td><td class="text-center"><span class="badge '+badge+'">'+label+' '+pct+'%</span></td></tr>';
+          }).join('')}
+          <tr style="font-weight:700;border-top:2px solid var(--navy)"><td>Total</td><td class="text-right">\${fmtFull(totalProj)}</td><td class="text-right">\${fmtFull(totalFin)}</td><td class="text-right neg">\${totalDesvP.toFixed(1)}%</td><td class="text-center">\${totalQP}</td><td class="text-center">\${totalQR}</td><td class="text-right neg">\${totalQP?((totalQR-totalQP)/totalQP*100).toFixed(1):0}%</td><td class="text-center"><span class="badge badge-bad">Abaixo \${totalProj?((totalFin/totalProj)*100).toFixed(0):0}%</span></td></tr>
+        </table>
+      </div>`;
+
+    const ctx3=document.getElementById('ch-metas');
+    if(ctx3){charts.metas=new Chart(ctx3,{type:'bar',data:{labels:metas.map(m=>m.dir),datasets:[{label:'Projetado',data:metas.map(m=>m.proj),backgroundColor:'#C5D9E8',borderRadius:3},{label:'Finalizado',data:metas.map(m=>m.fin),backgroundColor:'#003D6B',borderRadius:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{boxWidth:10,font:{size:10}}},tooltip:{callbacks:{label:i=>i.dataset.label+': '+fmtFull(i.raw)}}},scales:{y:{ticks:{callback:v=>fmt(v)},grid:{color:'#eef2f6'}},x:{grid:{display:false}}}}})}
+
+    const ctx4=document.getElementById('ch-ating');
+    if(ctx4){const pctVal=totalProj?((totalFin/totalProj)*100):0;charts.ating=new Chart(ctx4,{type:'doughnut',data:{labels:['Atingido','Restante'],datasets:[{data:[Math.min(pctVal,100),Math.max(100-pctVal,0)],backgroundColor:['#003D6B','#E8F0F6']}]},options:{responsive:true,maintainAspectRatio:false,cutout:'70%',plugins:{legend:{display:false},tooltip:{callbacks:{label:i=>i.label+': '+i.raw.toFixed(1)+'%'}}}}})}
+
+  } else if(state.tab==='empreendimentos'){
+    const emps=EMPREENDIMENTOS[state.modalidade]||EMPREENDIMENTOS.todas;
+    const sorted=[...emps].sort((a,b)=>b.desvP-a.desvP);
+    const top5=sorted.slice(0,5);
+
+    el.innerHTML=`
+      <div class="grid2" style="margin-bottom:16px">
+        <div class="card"><h3>Top 5 Empreendimentos (Melhor Atingimento)</h3><div class="chart-container chart-sm"><canvas id="ch-top5"></canvas></div></div>
+        <div class="card"><h3>Atingimento por Empreendimento</h3><div class="chart-container chart-sm"><canvas id="ch-empbar"></canvas></div></div>
+      </div>
+      <div class="card"><h3>Todos os Empreendimentos</h3>
+        <table>
+          <tr><th>Empreendimento</th><th class="text-right">VGV Projetado</th><th class="text-right">VGV Finalizado</th><th class="text-right">Desvio %</th><th class="text-center">QTD Proj.</th><th class="text-center">QTD Real.</th><th class="text-center">Status</th></tr>
+          \${sorted.map(e=>{
+            const badge=e.desvP>=0?'badge-ok':e.desvP>=-30?'badge-warn':'badge-bad';
+            const label=e.desvP>=0?'Ok':e.desvP>=-30?'Aten\u00e7\u00e3o':'Abaixo';
+            return '<tr><td><strong>'+e.n+'</strong></td><td class="text-right">'+fmtFull(e.proj)+'</td><td class="text-right">'+fmtFull(e.fin)+'</td><td class="text-right '+(e.desvP>=0?'pos':'neg')+'">'+(e.desvP>0?'+':'')+e.desvP+'%</td><td class="text-center">'+e.qtdP+'</td><td class="text-center">'+e.qtdR+'</td><td class="text-center"><span class="badge '+badge+'">'+label+'</span></td></tr>';
+          }).join('')}
+        </table>
+      </div>`;
+
+    const ctx5=document.getElementById('ch-top5');
+    if(ctx5){charts.top5=new Chart(ctx5,{type:'bar',data:{labels:top5.map(e=>e.n.length>20?e.n.substring(0,20)+'\u2026':e.n),datasets:[{data:top5.map(e=>e.fin),backgroundColor:'#003D6B',borderRadius:3}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:i=>fmtFull(i.raw)}}},scales:{x:{ticks:{callback:v=>fmt(v)},grid:{color:'#eef2f6'}},y:{grid:{display:false},ticks:{font:{size:10}}}}}})}
+
+    const ctx6=document.getElementById('ch-empbar');
+    if(ctx6){const s=sorted.slice(0,10);charts.empbar=new Chart(ctx6,{type:'bar',data:{labels:s.map(e=>e.n.length>15?e.n.substring(0,15)+'\u2026':e.n),datasets:[{data:s.map(e=>e.proj?(e.fin/e.proj*100):0),backgroundColor:s.map(e=>e.desvP>=0?'#1B8C4F':e.desvP>=-30?'#D4760A':'#A4001B'),borderRadius:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:i=>i.raw.toFixed(1)+'%'}}},scales:{y:{ticks:{callback:v=>v+'%'},grid:{color:'#eef2f6'},suggestedMax:150},x:{grid:{display:false},ticks:{font:{size:9},maxRotation:45}}}}})}
+  }
+}
+render();
+</script>
+</body>
+</html>
