@@ -249,28 +249,11 @@ function render(){
   const barColors=['#E8F0F6','#C5D9E8','#8FB8D4','#5A96BC','#2E78A4','#0A5A8C','#003D6B'];
 
   if(state.tab==='pipeline'){
-    el.innerHTML=`
-      <div class="kpis">
-        <div class="kpi"><div class="label">VGV Total</div><div class="value">${fmt(totalVGV)}</div><div class="sub">${totalQTD} propostas</div></div>
-        <div class="kpi wine"><div class="label">Vendas em Andamento</div><div class="value">${fmt(andVGV)}</div><div class="sub">${andQTD} propostas</div></div>
-        <div class="kpi dark"><div class="label">Vendas Finalizadas</div><div class="value">${fmt(finVGV)}</div><div class="sub">${finQTD} propostas · ${fmtFull(finVGV)}</div></div>
-        <div class="kpi green"><div class="label">Taxa Finalização</div><div class="value">${totalQTD?((finQTD/totalQTD)*100).toFixed(0):0}%</div><div class="sub">${finQTD} de ${totalQTD}</div></div>
-      </div>
-      <div class="grid3">
-        <div class="card"><h3>Pipeline por Etapa (VGV)</h3><div class="chart-container"><canvas id="ch-pipeline"></canvas></div></div>
-        <div class="card"><h3>Distribuição por Etapa</h3><div class="chart-container"><canvas id="ch-dist"></canvas></div></div>
-      </div>
-      <div class="card" style="margin-bottom:16px"><h3>Detalhamento por Regional</h3>
-        <table>
-          <tr><th>Regional</th>${stageLabels.map(l=>'<th class="text-right">'+l+'</th>').join('')}<th class="text-right">Total</th></tr>
-          ${Object.entries(pData).map(([reg,d])=>{
+    el.innerHTML='\n      <div class="kpis">\n        <div class="kpi"><div class="label">VGV Total</div><div class="value">'+(fmt(totalVGV))+'</div><div class="sub">'+(totalQTD)+' propostas</div></div>\n        <div class="kpi wine"><div class="label">Vendas em Andamento</div><div class="value">'+(fmt(andVGV))+'</div><div class="sub">'+(andQTD)+' propostas</div></div>\n        <div class="kpi dark"><div class="label">Vendas Finalizadas</div><div class="value">'+(fmt(finVGV))+'</div><div class="sub">'+(finQTD)+' propostas · '+(fmtFull(finVGV))+'</div></div>\n        <div class="kpi green"><div class="label">Taxa Finalização</div><div class="value">'+(totalQTD?((finQTD/totalQTD)*100).toFixed(0):0)+'%</div><div class="sub">'+(finQTD)+' de '+(totalQTD)+'</div></div>\n      </div>\n      <div class="grid3">\n        <div class="card"><h3>Pipeline por Etapa (VGV)</h3><div class="chart-container"><canvas id="ch-pipeline"></canvas></div></div>\n        <div class="card"><h3>Distribuição por Etapa</h3><div class="chart-container"><canvas id="ch-dist"></canvas></div></div>\n      </div>\n      <div class="card" style="margin-bottom:16px"><h3>Detalhamento por Regional</h3>\n        <table>\n          <tr><th>Regional</th>'+(stageLabels.map(l=>'<th class="text-right">'+l+'</th>').join(''))+'<th class="text-right">Total</th></tr>\n          '+(Object.entries(pData).map(([reg,d])=>{
             const rTot=stages.reduce((s,st)=>s+d[st].v,0);
             const rQtd=stages.reduce((s,st)=>s+d[st].q,0);
             return '<tr><td><strong>'+reg+'</strong></td>'+stages.map(st=>'<td class="text-right">'+(d[st].v?fmt(d[st].v):'—')+'<br><span style="color:var(--gray-300);font-size:10px">'+(d[st].q||'')+'</span></td>').join('')+'<td class="text-right"><strong>'+fmt(rTot)+'</strong><br><span style="color:var(--gray-300);font-size:10px">'+rQtd+'</span></td></tr>';
-          }).join('')}
-          <tr style="font-weight:700;border-top:2px solid var(--navy)"><td>Total</td>${stages.map(st=>'<td class="text-right">'+(tot[st].v?fmt(tot[st].v):'—')+'<br><span style="color:var(--gray-300);font-size:10px">'+(tot[st].q||'')+'</span></td>').join('')}<td class="text-right">${fmt(totalVGV)}<br><span style="color:var(--gray-300);font-size:10px">${totalQTD}</span></td></tr>
-        </table>
-      </div>`;
+          }).join(''))+'\n          <tr style="font-weight:700;border-top:2px solid var(--navy)"><td>Total</td>'+(stages.map(st=>'<td class="text-right">'+(tot[st].v?fmt(tot[st].v):'—')+'<br><span style="color:var(--gray-300);font-size:10px">'+(tot[st].q||'')+'</span></td>').join(''))+'<td class="text-right">'+(fmt(totalVGV))+'<br><span style="color:var(--gray-300);font-size:10px">'+(totalQTD)+'</span></td></tr>\n        </table>\n      </div>';
 
     const ctx1=document.getElementById('ch-pipeline');
     if(ctx1){charts.pipeline=new Chart(ctx1,{type:'bar',data:{labels:stageLabels,datasets:[{data:stages.map(s=>tot[s].v),backgroundColor:barColors,borderRadius:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:i=>fmtFull(i.raw)}}},scales:{y:{ticks:{callback:v=>fmt(v)},grid:{color:'#eef2f6'}},x:{grid:{display:false}}}}})}
@@ -286,29 +269,12 @@ function render(){
     const totalQR=metas.reduce((s,m)=>s+m.qtdR,0);
     const totalDesvP=totalProj?((totalFin-totalProj)/totalProj*100):0;
 
-    el.innerHTML=`
-      <div class="kpis">
-        <div class="kpi"><div class="label">VGV Projetado</div><div class="value">${fmt(totalProj)}</div><div class="sub">${fmtFull(totalProj)}</div></div>
-        <div class="kpi dark"><div class="label">VGV Finalizado</div><div class="value">${fmt(totalFin)}</div><div class="sub">${fmtFull(totalFin)}</div></div>
-        <div class="kpi wine"><div class="label">Desvio VGV</div><div class="value neg">${totalDesvP.toFixed(1)}%</div><div class="sub">${fmtFull(Math.abs(totalFin-totalProj))} abaixo</div></div>
-        <div class="kpi green"><div class="label">Atingimento QTD</div><div class="value">${totalQP?((totalQR/totalQP)*100).toFixed(0):0}%</div><div class="sub">${totalQR} de ${totalQP}</div></div>
-      </div>
-      <div class="grid2">
-        <div class="card"><h3>Projetado vs Finalizado por Diretor</h3><div class="chart-container"><canvas id="ch-metas"></canvas></div></div>
-        <div class="card"><h3>Atingimento da Meta</h3><div class="chart-container"><canvas id="ch-ating"></canvas></div></div>
-      </div>
-      <div class="card"><h3>Detalhamento de Metas</h3>
-        <table>
-          <tr><th>Diretor</th><th class="text-right">VGV Projetado</th><th class="text-right">VGV Finalizado</th><th class="text-right">Desvio %</th><th class="text-center">QTD Proj.</th><th class="text-center">QTD Real.</th><th class="text-right">Desvio QTD</th><th class="text-center">Status</th></tr>
-          ${metas.map(m=>{
+    el.innerHTML='\n      <div class="kpis">\n        <div class="kpi"><div class="label">VGV Projetado</div><div class="value">'+(fmt(totalProj))+'</div><div class="sub">'+(fmtFull(totalProj))+'</div></div>\n        <div class="kpi dark"><div class="label">VGV Finalizado</div><div class="value">'+(fmt(totalFin))+'</div><div class="sub">'+(fmtFull(totalFin))+'</div></div>\n        <div class="kpi wine"><div class="label">Desvio VGV</div><div class="value neg">'+(totalDesvP.toFixed(1))+'%</div><div class="sub">'+(fmtFull(Math.abs(totalFin-totalProj)))+' abaixo</div></div>\n        <div class="kpi green"><div class="label">Atingimento QTD</div><div class="value">'+(totalQP?((totalQR/totalQP)*100).toFixed(0):0)+'%</div><div class="sub">'+(totalQR)+' de '+(totalQP)+'</div></div>\n      </div>\n      <div class="grid2">\n        <div class="card"><h3>Projetado vs Finalizado por Diretor</h3><div class="chart-container"><canvas id="ch-metas"></canvas></div></div>\n        <div class="card"><h3>Atingimento da Meta</h3><div class="chart-container"><canvas id="ch-ating"></canvas></div></div>\n      </div>\n      <div class="card"><h3>Detalhamento de Metas</h3>\n        <table>\n          <tr><th>Diretor</th><th class="text-right">VGV Projetado</th><th class="text-right">VGV Finalizado</th><th class="text-right">Desvio %</th><th class="text-center">QTD Proj.</th><th class="text-center">QTD Real.</th><th class="text-right">Desvio QTD</th><th class="text-center">Status</th></tr>\n          '+(metas.map(m=>{
             const pct=m.proj?((m.fin/m.proj)*100).toFixed(0):0;
             const badge=pct>=80?'badge-ok':pct>=50?'badge-warn':'badge-bad';
             const label=pct>=80?'Na Meta':pct>=50?'Atenção':'Abaixo';
             return '<tr><td><strong>'+m.dir+'</strong></td><td class="text-right">'+fmtFull(m.proj)+'</td><td class="text-right">'+fmtFull(m.fin)+'</td><td class="text-right neg">'+m.desvP+'%</td><td class="text-center">'+m.qtdP+'</td><td class="text-center">'+m.qtdR+'</td><td class="text-right neg">'+m.desvQ.toFixed(1)+'%</td><td class="text-center"><span class="badge '+badge+'">'+label+' '+pct+'%</span></td></tr>';
-          }).join('')}
-          <tr style="font-weight:700;border-top:2px solid var(--navy)"><td>Total</td><td class="text-right">${fmtFull(totalProj)}</td><td class="text-right">${fmtFull(totalFin)}</td><td class="text-right neg">${totalDesvP.toFixed(1)}%</td><td class="text-center">${totalQP}</td><td class="text-center">${totalQR}</td><td class="text-right neg">${totalQP?((totalQR-totalQP)/totalQP*100).toFixed(1):0}%</td><td class="text-center"><span class="badge badge-bad">Abaixo ${totalProj?((totalFin/totalProj)*100).toFixed(0):0}%</span></td></tr>
-        </table>
-      </div>`;
+          }).join(''))+'\n          <tr style="font-weight:700;border-top:2px solid var(--navy)"><td>Total</td><td class="text-right">'+(fmtFull(totalProj))+'</td><td class="text-right">'+(fmtFull(totalFin))+'</td><td class="text-right neg">'+(totalDesvP.toFixed(1))+'%</td><td class="text-center">'+(totalQP)+'</td><td class="text-center">'+(totalQR)+'</td><td class="text-right neg">'+(totalQP?((totalQR-totalQP)/totalQP*100).toFixed(1):0)+'%</td><td class="text-center"><span class="badge badge-bad">Abaixo '+(totalProj?((totalFin/totalProj)*100).toFixed(0):0)+'%</span></td></tr>\n        </table>\n      </div>';
 
     const ctx3=document.getElementById('ch-metas');
     if(ctx3){charts.metas=new Chart(ctx3,{type:'bar',data:{labels:metas.map(m=>m.dir),datasets:[{label:'Projetado',data:metas.map(m=>m.proj),backgroundColor:'#C5D9E8',borderRadius:3},{label:'Finalizado',data:metas.map(m=>m.fin),backgroundColor:'#003D6B',borderRadius:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{boxWidth:10,font:{size:10}}},tooltip:{callbacks:{label:i=>i.dataset.label+': '+fmtFull(i.raw)}}},scales:{y:{ticks:{callback:v=>fmt(v)},grid:{color:'#eef2f6'}},x:{grid:{display:false}}}}})}
@@ -321,21 +287,11 @@ function render(){
     const sorted=[...emps].sort((a,b)=>b.desvP-a.desvP);
     const top5=sorted.slice(0,5);
 
-    el.innerHTML=`
-      <div class="grid2" style="margin-bottom:16px">
-        <div class="card"><h3>Top 5 Empreendimentos (Melhor Atingimento)</h3><div class="chart-container chart-sm"><canvas id="ch-top5"></canvas></div></div>
-        <div class="card"><h3>Atingimento por Empreendimento</h3><div class="chart-container chart-sm"><canvas id="ch-empbar"></canvas></div></div>
-      </div>
-      <div class="card"><h3>Todos os Empreendimentos</h3>
-        <table>
-          <tr><th>Empreendimento</th><th class="text-right">VGV Projetado</th><th class="text-right">VGV Finalizado</th><th class="text-right">Desvio %</th><th class="text-center">QTD Proj.</th><th class="text-center">QTD Real.</th><th class="text-center">Status</th></tr>
-          ${sorted.map(e=>{
+    el.innerHTML='\n      <div class="grid2" style="margin-bottom:16px">\n        <div class="card"><h3>Top 5 Empreendimentos (Melhor Atingimento)</h3><div class="chart-container chart-sm"><canvas id="ch-top5"></canvas></div></div>\n        <div class="card"><h3>Atingimento por Empreendimento</h3><div class="chart-container chart-sm"><canvas id="ch-empbar"></canvas></div></div>\n      </div>\n      <div class="card"><h3>Todos os Empreendimentos</h3>\n        <table>\n          <tr><th>Empreendimento</th><th class="text-right">VGV Projetado</th><th class="text-right">VGV Finalizado</th><th class="text-right">Desvio %</th><th class="text-center">QTD Proj.</th><th class="text-center">QTD Real.</th><th class="text-center">Status</th></tr>\n          '+(sorted.map(e=>{
             const badge=e.desvP>=0?'badge-ok':e.desvP>=-30?'badge-warn':'badge-bad';
             const label=e.desvP>=0?'Ok':e.desvP>=-30?'Atenção':'Abaixo';
             return '<tr><td><strong>'+e.n+'</strong></td><td class="text-right">'+fmtFull(e.proj)+'</td><td class="text-right">'+fmtFull(e.fin)+'</td><td class="text-right '+(e.desvP>=0?'pos':'neg')+'">'+(e.desvP>0?'+':'')+e.desvP+'%</td><td class="text-center">'+e.qtdP+'</td><td class="text-center">'+e.qtdR+'</td><td class="text-center"><span class="badge '+badge+'">'+label+'</span></td></tr>';
-          }).join('')}
-        </table>
-      </div>`;
+          }).join(''))+'\n        </table>\n      </div>';
 
     const ctx5=document.getElementById('ch-top5');
     if(ctx5){charts.top5=new Chart(ctx5,{type:'bar',data:{labels:top5.map(e=>e.n.length>20?e.n.substring(0,20)+'…':e.n),datasets:[{data:top5.map(e=>e.fin),backgroundColor:'#003D6B',borderRadius:3}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:i=>fmtFull(i.raw)}}},scales:{x:{ticks:{callback:v=>fmt(v)},grid:{color:'#eef2f6'}},y:{grid:{display:false},ticks:{font:{size:10}}}}}})}
