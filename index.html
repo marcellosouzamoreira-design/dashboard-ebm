@@ -450,7 +450,7 @@
         <button role="tab" data-period="esteira" type="button">⚙ Esteira</button>
         <button role="tab" data-period="empreendimentos" type="button">🏢 Empreendimentos</button>
       </div>
-      <div class="updated">Última atualização BI: <strong id="last-update">02/05/2026 09:35:17</strong></div>
+      <div class="updated">Última atualização BI: <strong id="last-update">02/05/2026 18:39:29</strong></div>
       <div class="header-buttons">
         <button id="btn-refresh" class="btn-refresh" type="button" title="Atualização automática 2x/dia (8:30 e 20:30)" style="display:none;">↻ Snapshot</button>
         <button id="btn-print" class="btn-export" type="button" title="Imprimir / Salvar PDF (atalho: P)">🖨 PDF</button>
@@ -542,7 +542,7 @@
       <div class="kpi andamento" style="text-align:center;padding:24px;">
         <div class="label">Esteira ativa neste momento</div>
         <div class="value" style="font-size:42px;">R$63M</div>
-        <div class="sub">Soma de todas propostas em andamento (estágios 00–05) capturadas em 01/05/2026</div>
+        <div class="sub">Soma de todas propostas em andamento (estágios 00–05) snapshot 02/05/2026 18:39</div>
       </div>
     </div>
 
@@ -593,7 +593,7 @@
 
 
   <footer class="note">
-    Fonte: Power BI EBM — relatório "Esteira Comercial". Snapshot extraído via navegador em 01/05/2026 às 08:47.<br>
+    Fonte: Power BI EBM — relatório "Esteira Comercial". Snapshot extraído via navegador em 02/05/2026 às 18:39.<br>
     Dados mensais (Jan–Abr) capturados individualmente. <strong>2026 YTD</strong> é a soma dos meses extraídos.
     Vendas em Andamento (R$63M) é instantâneo no momento da extração — não varia por filtro de mês.<br>
     Splits por Modalidade (Associativo/SPBE) e Momento (Lançamento/Estoque) referem-se a <strong>Abril/2026</strong>
@@ -630,7 +630,7 @@
 
   // ---------- DATA ----------
   // Todos os dados são meses de 2026, capturados via Power BI público.
-  // Esteira ativa (andamento) é um snapshot único capturado em 01/05/2026 09:38
+  // Esteira ativa (andamento) é um snapshot único capturado em 02/05/2026 18:39
   // — reflete propostas em estágios 00–05 no momento da extração. Mesmo valor
   // usado em todos os meses e na aba MAI (mês vigente).
   const ANDAMENTO_ATUAL = 63222804;
@@ -702,9 +702,9 @@
         { name: "Regional DF", vgv: 5664250,  qtd: 16  },
       ],
       [
-        // Abril fechado em 02/05. Felipe/Paulo: rateio proporcional ao snapshot 01/05 — extração detalhada na próxima atualização agendada
-        { name: "Felipe",         projetado: 65396703,  realizado: 36804920, qtdProj: 113, qtdReal: 72,  pct: 52, status: "bad" },
-        { name: "Paulo / Sérgio", projetado: 41404192,  realizado: 23372934, qtdProj: 114, qtdReal: 66,  pct: 45, status: "bad" },
+        // Abril fechado — valores oficiais Felipe/Paulo extraídos do BI em 02/05/2026 18:39
+        { name: "Felipe",         projetado: 65396703,  realizado: 36856641, qtdProj: 113, qtdReal: 73,  pct: 51, status: "bad" },
+        { name: "Paulo / Sérgio", projetado: 41404192,  realizado: 23321213, qtdProj: 114, qtdReal: 65,  pct: 45, status: "bad" },
         { name: "EBM Diretoria",  projetado: null,      realizado: null,     qtdProj: null, qtdReal: null, pct: null, status: "na" },
         { name: "TOTAL",          projetado: 106800894, realizado: 60177854, qtdProj: 227, qtdReal: 138, pct: 50, status: "bad", isTotal: true },
       ]
@@ -716,7 +716,7 @@
         finalizadas: 0,
         total: 63222804,
       },
-      // Esteira ativa REAL extraída do BI em 01/05/2026 09:38
+      // Esteira ativa REAL extraída do BI em 02/05/2026 18:39
       funil: [
         { name: "00 — Proposta",     vgv: 8465212,  qtd: 21 },  // +R$1 ajuste de arredondamento
         { name: "01 — Crédito",      vgv: 6660932,  qtd: 16 },
@@ -758,8 +758,8 @@
       regionalTotal: { vgv: 312261731, qtd: 703 },
       regionalNote: "Soma de Jan–Abr 2026 (Abril atualizado em 02/05).",
       diretores: [
-        { name: "Felipe",         projetado: 55275088+68625050+68475570+65396703,  realizado: 45592156+50163105+55922437+36804920, qtdProj: 96+108+107+113, qtdReal: 78+102+118+72,  pct: 73, status: "bad" },
-        { name: "Paulo / Sérgio", projetado: 35833188+35692124+30472083+41404192,  realizado: 34909827+22329373+38415979+23372934, qtdProj: 98+98+84+114,   qtdReal: 98+59+104+66,   pct: 83, status: "bad" },
+        { name: "Felipe",         projetado: 55275088+68625050+68475570+65396703,  realizado: 45592156+50163105+55922437+36856641, qtdProj: 96+108+107+113, qtdReal: 78+102+118+73,  pct: 73, status: "bad" },
+        { name: "Paulo / Sérgio", projetado: 35833188+35692124+30472083+41404192,  realizado: 34909827+22329373+38415979+23321213, qtdProj: 98+98+84+114,   qtdReal: 98+59+104+65,   pct: 83, status: "bad" },
         { name: "EBM Diretoria",  projetado: null,                                  realizado: 1207000+2460000+1084000,             qtdProj: null,           qtdReal: 2+2+2,          pct: null, status: "na" },
         { name: "TOTAL",          projetado: 91108276+104317175+98947653+106800894, realizado: 312261731,                            qtdProj: 194+206+191+227, qtdReal: 178+163+224+138, pct: 78, status: "bad", isTotal: true },
       ],
@@ -1401,7 +1401,7 @@
     b.addEventListener('click', () => activate(b.dataset.period));
   });
   document.getElementById('btn-refresh').addEventListener('click', () => {
-    alert('Esse painel é um snapshot do BI extraído em 01/05/2026 09:38.\n\nPara atualizar os números, peça ao Claude:\n"Atualize o dashboard da esteira EBM."');
+    alert('Esse painel é um snapshot do BI extraído em 02/05/2026 18:39.\n\nPara atualizar os números, peça ao Claude:\n"Atualize o dashboard da esteira EBM."');
   });
   document.getElementById('btn-print').addEventListener('click', () => window.print());
 
