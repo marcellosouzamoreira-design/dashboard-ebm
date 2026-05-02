@@ -465,26 +465,8 @@
 
     <div class="esteira-funnel" id="esteira-funnel"></div>
 
-    <div class="alert-banner warn" style="display:flex;">
-      <span class="badge-icon"></span>
-      <div>
-        <strong>Snapshot de 01/05/2026 09:38.</strong>
-        Total ativo: R$63,2M em 130 propostas distribuídas nos 6 estágios em aberto. Maior concentração em <strong>Assinatura</strong> (R$27,8M / 41 propostas — 44% do pipeline ativo).
-      </div>
-    </div>
-
-    <section style="background:#fafafa;">
-      <h2>Como interpretar os estágios</h2>
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;font-size:13px;">
-        <div><strong style="color:var(--ebm-navy);">00 — Proposta</strong><br><span style="color:var(--ebm-muted);">Cliente formalizou interesse, proposta gerada</span></div>
-        <div><strong style="color:var(--ebm-navy);">01 — Crédito</strong><br><span style="color:var(--ebm-muted);">Análise de crédito em andamento (banco/Caixa)</span></div>
-        <div><strong style="color:var(--ebm-navy);">02 — Jurídico</strong><br><span style="color:var(--ebm-muted);">Revisão contratual e documental</span></div>
-        <div><strong style="color:var(--ebm-navy);">03 — Assinatura</strong><br><span style="color:var(--ebm-muted);">Aguardando assinatura do contrato</span></div>
-        <div><strong style="color:var(--ebm-navy);">04 — Conferência</strong><br><span style="color:var(--ebm-muted);">Validação interna pós-assinatura</span></div>
-        <div><strong style="color:var(--ebm-navy);">05 — Pendência</strong><br><span style="color:var(--ebm-muted);">Resolução de pendências documentais/processuais</span></div>
-        <div><strong style="color:var(--ebm-warn);">06 — Finalizado</strong><br><span style="color:var(--ebm-muted);">Venda concluída — vai pra "Vendas Finalizadas"</span></div>
-      </div>
-    </section>
+    <h2 style="margin-top:24px;">Empreendimentos na esteira <span class="hint">VGV e unidades ativas por empreendimento</span></h2>
+    <table class="emp-table" id="esteira-emp-table"></table>
   </section>
 
   <!-- Aba Empreendimentos -->
@@ -526,12 +508,6 @@
     </div>
   </section>
 
-  <!-- Anotações persistentes -->
-  <section class="notes-section">
-    <h2>Suas anotações <span class="hint">salvas localmente neste navegador, separadas por aba</span></h2>
-    <textarea id="notes-textarea" placeholder="Ex.: investigar queda de Felipe em Abril, ligar pro João sobre Now 29..."></textarea>
-    <div class="notes-saved" id="notes-saved">✓ Salvo</div>
-  </section>
 
   <footer class="note">
     Fonte: Power BI EBM — relatório "Esteira Comercial". Snapshot extraído via navegador em 01/05/2026 às 08:47.<br>
@@ -906,6 +882,27 @@
     }).join('');
     document.getElementById('emp-table').innerHTML = headers + '<tbody>' + rows + '</tbody>';
   }
+  // ---------- Tabela de empreendimentos NA ESTEIRA (aba Esteira) ----------
+  function renderEsteiraEmpTable() {
+    const el = document.getElementById('esteira-emp-table');
+    if (!el) return;
+    // Lista de empreendimentos ordenada por VGV decrescente (apenas com vendas > 0)
+    const list = empreendimentos.filter(e => e.vgv > 0).sort((a,b) => b.vgv - a.vgv);
+    const headers = `<thead><tr>
+      <th>#</th><th>Empreendimento</th>
+      <th>VGV</th><th>Unid.</th>
+    </tr></thead>`;
+    const rows = list.map((e, i) => `
+      <tr>
+        <td>${i+1}</td>
+        <td><span class="reg-tag reg-${e.reg}">${e.reg}</span><span class="nm">${e.nome}</span></td>
+        <td>${fmtBRL(e.vgv)}</td>
+        <td>${fmtNum(e.qtd)}</td>
+      </tr>
+    `).join('');
+    el.innerHTML = headers + '<tbody>' + rows + '</tbody>';
+  }
+
   // ---------- Curva ABC / Pareto ----------
   let paretoChart = null;
   function renderPareto() {
@@ -1057,11 +1054,13 @@
   function safeSet(key, val){ try { localStorage.setItem(key, val); return true; } catch(e) { return false; } }
   function loadNotes(period) {
     const ta = document.getElementById('notes-textarea');
+    if (!ta) return;
     ta.value = safeGet('ebm-notes-' + period) || '';
   }
   function setupNotes() {
     const ta = document.getElementById('notes-textarea');
     const saved = document.getElementById('notes-saved');
+    if (!ta || !saved) return;
     let saveTimer;
     ta.addEventListener('input', () => {
       clearTimeout(saveTimer);
@@ -1212,7 +1211,7 @@
       document.body.classList.add('esteira-mode');
       document.getElementById('kpi-row').style.display = 'none';
       renderEsteiraFunnel();
-      loadNotes('esteira');
+      renderEsteiraEmpTable();
       return;
     }
     document.body.classList.remove('esteira-mode', 'empreendimentos-mode');
