@@ -53,28 +53,38 @@
   body.dark .diretor.is-total { background: rgba(74,159,224,0.10); }
   * { box-sizing: border-box; }
   html, body { margin: 0; padding: 0; background: var(--ebm-bg); color: var(--ebm-text);
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
-    font-size: 14px; line-height: 1.45; }
-  .wrap { max-width: 1280px; margin: 0 auto; padding: 24px 20px 48px; }
-  header { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px;
-    flex-wrap: wrap; margin-bottom: 20px; }
-  .title { display: flex; align-items: center; gap: 14px; }
-  .title .logo { width: 40px; height: 40px; border-radius: 8px;
+    font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    font-size: 14px; line-height: 1.5; -webkit-font-smoothing: antialiased; }
+  .wrap { max-width: 1320px; margin: 0 auto; padding: 24px 24px 64px; }
+  /* Animação ao trocar aba (subtle fade) */
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+  section, .kpis, .grid { animation: fadeIn 200ms ease-out; }
+  header { display: flex; justify-content: space-between; align-items: center; gap: 20px;
+    flex-wrap: wrap; margin-bottom: 28px; }
+  .title { display: flex; align-items: center; gap: 16px; }
+  .title .logo { width: 56px; height: 56px; border-radius: 10px;
     background: var(--ebm-navy);
     display: flex; align-items: center; justify-content: center; color: white;
-    font-weight: 700; font-size: 16px; letter-spacing: 0.5px; }
-  .title h1 { margin: 0; color: var(--ebm-navy); font-size: 22px; font-weight: 700; }
-  .title .subtitle { margin: 2px 0 0; color: var(--ebm-muted); font-size: 13px; }
+    font-weight: 800; font-size: 20px; letter-spacing: 1px;
+    box-shadow: 0 4px 12px rgba(0,61,107,0.25); }
+  .title h1 { margin: 0; color: var(--ebm-navy); font-size: 26px; font-weight: 800;
+    letter-spacing: -0.2px; }
+  .title .subtitle { margin: 2px 0 0; color: var(--ebm-muted); font-size: 12px;
+    text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
   .header-meta { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
   .updated { color: var(--ebm-muted); font-size: 12px; text-align: right; }
   .updated strong { color: var(--ebm-text); }
   .toggle { display: inline-flex; background: var(--ebm-card); border: 1px solid var(--ebm-border);
-    border-radius: 999px; padding: 3px; box-shadow: 0 1px 2px rgba(0,0,0,0.04); }
-  .toggle button { border: 0; background: transparent; padding: 8px 16px; font-size: 13px;
-    font-weight: 600; color: var(--ebm-muted); border-radius: 999px; cursor: pointer;
+    border-radius: 12px; padding: 4px; box-shadow: 0 1px 3px rgba(15,23,42,0.06);
+    flex-wrap: wrap; gap: 2px; }
+  .toggle button { border: 0; background: transparent; padding: 8px 14px; font-size: 13px;
+    font-weight: 600; color: var(--ebm-muted); border-radius: 8px; cursor: pointer;
     transition: all 0.15s ease; }
-  .toggle button.active { background: var(--ebm-navy); color: #fff; box-shadow: 0 1px 4px rgba(0,0,0,0.15); }
-  .toggle button:not(.active):hover { color: var(--ebm-text); }
+  .toggle button.active { background: var(--ebm-navy); color: #fff; box-shadow: 0 2px 6px rgba(0,61,107,0.25); }
+  .toggle button:not(.active):hover { color: var(--ebm-text); background: rgba(0,0,0,0.03); }
+  body.dark .toggle button:not(.active):hover { background: rgba(255,255,255,0.06); }
+  /* Separador visual entre meses e abas especiais */
+  .toggle .sep { width: 1px; height: 22px; background: var(--ebm-border); align-self: center; margin: 0 4px; }
 
   /* Splits section (Modalidade / Momento) */
   .splits-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
@@ -101,29 +111,56 @@
     font-size: 10px; letter-spacing: 0.4px; }
   .split-table tr.total td { font-weight: 700; color: var(--ebm-navy); border-top: 2px solid var(--ebm-navy); border-bottom: 0; }
 
-  .kpis { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 22px; }
-  .kpi { background: var(--ebm-card); border: 1px solid var(--ebm-border); border-radius: 14px;
-    padding: 18px 20px; position: relative; overflow: hidden; }
-  .kpi .label { color: var(--ebm-muted); font-size: 12px; text-transform: uppercase;
-    letter-spacing: 0.7px; font-weight: 600; }
-  .kpi .value { font-size: 28px; font-weight: 700; margin-top: 6px; color: var(--ebm-text); }
-  .kpi .sub { color: var(--ebm-muted); font-size: 12px; margin-top: 4px; }
-  .kpi.andamento { border-top: 4px solid var(--ebm-red); }
-  .kpi.finalizadas { border-top: 4px solid var(--ebm-navy); }
-  .kpi.total { border-top: 4px solid var(--ebm-charcoal); }
+  /* Hierarquia: KPI principal grande + 2 secundários */
+  .kpis { display: grid; grid-template-columns: 1.6fr 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+  .kpi { background: var(--ebm-card); border: 1px solid var(--ebm-border); border-radius: 16px;
+    padding: 22px 24px; position: relative; overflow: hidden;
+    box-shadow: 0 1px 3px rgba(15,23,42,0.04); }
+  .kpi.hero { padding: 26px 28px; }
+  .kpi .label { color: var(--ebm-muted); font-size: 11px; text-transform: uppercase;
+    letter-spacing: 0.8px; font-weight: 700; }
+  .kpi .value { font-size: 28px; font-weight: 800; margin-top: 8px; color: var(--ebm-text);
+    letter-spacing: -0.5px; line-height: 1.1; }
+  .kpi.hero .value { font-size: 42px; }
+  .kpi .sub { color: var(--ebm-muted); font-size: 12px; margin-top: 6px; }
+  .kpi.hero .sub { font-size: 13px; }
+  /* Semáforo de atingimento */
+  .kpi.hero.status-ok { background: linear-gradient(135deg, rgba(15,110,77,0.08) 0%, var(--ebm-card) 60%); border-color: rgba(15,110,77,0.3); }
+  .kpi.hero.status-warn { background: linear-gradient(135deg, rgba(138,94,19,0.08) 0%, var(--ebm-card) 60%); border-color: rgba(138,94,19,0.3); }
+  .kpi.hero.status-bad { background: linear-gradient(135deg, rgba(164,0,27,0.08) 0%, var(--ebm-card) 60%); border-color: rgba(164,0,27,0.3); }
+  body.dark .kpi.hero.status-ok { background: linear-gradient(135deg, rgba(46,186,133,0.12) 0%, var(--ebm-card) 60%); }
+  body.dark .kpi.hero.status-warn { background: linear-gradient(135deg, rgba(224,166,72,0.12) 0%, var(--ebm-card) 60%); }
+  body.dark .kpi.hero.status-bad { background: linear-gradient(135deg, rgba(255,102,117,0.12) 0%, var(--ebm-card) 60%); }
+  /* Sparkline embutido nos KPIs */
+  .kpi .spark { height: 36px; margin-top: 12px; position: relative; }
+  .kpi.hero .spark { height: 44px; }
+  /* Pct badge */
+  .kpi .pct-badge { display: inline-block; padding: 3px 10px; border-radius: 999px;
+    font-size: 12px; font-weight: 700; margin-left: 8px; vertical-align: middle; }
+  .kpi .pct-badge.ok { background: rgba(15,110,77,0.15); color: var(--ebm-ok); }
+  .kpi .pct-badge.warn { background: rgba(138,94,19,0.15); color: var(--ebm-warn); }
+  .kpi .pct-badge.bad { background: rgba(164,0,27,0.15); color: var(--ebm-bad); }
+  @media (max-width: 900px) {
+    .kpis { grid-template-columns: 1fr; }
+    .kpi.hero .value { font-size: 32px; }
+  }
 
-  .grid { display: grid; gap: 14px; }
   .grid.cols-2 { grid-template-columns: 1.4fr 1fr; }
   .grid.cols-2-eq { grid-template-columns: 1fr 1fr; }
   @media (max-width: 900px) {
     .kpis, .grid.cols-2, .grid.cols-2-eq { grid-template-columns: 1fr; }
   }
 
-  section { background: var(--ebm-card); border: 1px solid var(--ebm-border); border-radius: 14px;
-    padding: 18px 20px; margin-bottom: 14px; }
-  section h2 { margin: 0 0 14px; font-size: 15px; font-weight: 700; color: var(--ebm-navy);
-    letter-spacing: 0.2px; }
-  section h2 .hint { color: var(--ebm-muted); font-weight: 500; font-size: 12px; margin-left: 8px; }
+  section { background: var(--ebm-card); border: 1px solid var(--ebm-border); border-radius: 16px;
+    padding: 22px 24px; margin-bottom: 20px;
+    box-shadow: 0 1px 3px rgba(15,23,42,0.04); }
+  section h2 { margin: 0 0 18px; font-size: 16px; font-weight: 700; color: var(--ebm-navy);
+    letter-spacing: -0.1px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  section h2::before { content: ''; display: inline-block; width: 4px; height: 18px;
+    background: var(--ebm-navy); border-radius: 2px; }
+  section h2 .hint { color: var(--ebm-muted); font-weight: 500; font-size: 12px;
+    text-transform: none; letter-spacing: 0; }
+  .grid { display: grid; gap: 18px; margin-bottom: 20px; }
 
   /* Funil */
   .funnel { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
@@ -140,28 +177,38 @@
   .funnel-empty { color: var(--ebm-muted); font-size: 12px; padding: 12px; text-align: center;
     background: #fafafa; border: 1px dashed var(--ebm-border); border-radius: 10px; }
 
-  /* Diretores cards */
-  .diretores { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
-  .diretor { padding: 14px; background: #fafafa; border: 1px solid var(--ebm-border); border-radius: 12px; }
+  /* Diretores: bullet chart compacto (1 linha por diretor) */
+  .diretores { display: flex; flex-direction: column; gap: 14px; }
+  .diretor { padding: 14px 16px; background: var(--ebm-soft, #fafafa); border: 1px solid var(--ebm-border);
+    border-radius: 12px; display: grid; grid-template-columns: 160px 90px 1fr 90px; gap: 14px;
+    align-items: center; }
+  body.dark .diretor { background: var(--ebm-soft); }
   .diretor .name { font-weight: 700; color: var(--ebm-navy); font-size: 14px; }
-  .diretor .meta-status { display: inline-block; margin-top: 4px; padding: 2px 8px; font-size: 11px;
-    border-radius: 999px; font-weight: 600; }
-  .meta-status.ok { background: rgba(27,127,88,0.12); color: var(--ebm-ok); }
-  .meta-status.bad { background: rgba(178,58,72,0.12); color: var(--ebm-bad); }
-  .meta-status.na { background: rgba(107,114,128,0.12); color: var(--ebm-muted); }
-  .gauge-row { display: flex; align-items: baseline; justify-content: space-between; margin-top: 10px; }
-  .gauge-pct { font-size: 26px; font-weight: 700; color: var(--ebm-text); }
-  .gauge-pct.ok { color: var(--ebm-ok); }
-  .gauge-pct.bad { color: var(--ebm-bad); }
-  .gauge-bar { height: 8px; border-radius: 999px; background: #ECECEF; margin-top: 6px;
-    overflow: hidden; position: relative; }
-  .gauge-bar .fill { height: 100%; border-radius: 999px; }
-  .gauge-bar .fill.ok { background: var(--ebm-ok); }
-  .gauge-bar .fill.bad { background: var(--ebm-bad); }
-  .gauge-bar .target { position: absolute; top: -2px; bottom: -2px; width: 2px; background: var(--ebm-charcoal); }
-  .diretor .nums { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px;
-    font-size: 12px; color: var(--ebm-muted); }
-  .diretor .nums .num-val { color: var(--ebm-text); font-weight: 600; }
+  .diretor .name-status { font-size: 10px; color: var(--ebm-muted); margin-top: 2px;
+    text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }
+  .diretor .gauge-pct { font-size: 24px; font-weight: 800; color: var(--ebm-text); letter-spacing: -0.5px; }
+  .diretor .gauge-pct.ok { color: var(--ebm-ok); }
+  .diretor .gauge-pct.bad { color: var(--ebm-bad); }
+  .diretor .gauge-pct.warn { color: var(--ebm-warn); }
+  /* Bullet chart */
+  .bullet { position: relative; height: 22px; background: rgba(0,0,0,0.04); border-radius: 4px; overflow: visible; }
+  body.dark .bullet { background: rgba(255,255,255,0.06); }
+  .bullet .fill { height: 100%; border-radius: 4px; transition: width .3s ease; }
+  .bullet .fill.ok { background: var(--ebm-ok); }
+  .bullet .fill.warn { background: var(--ebm-warn); }
+  .bullet .fill.bad { background: var(--ebm-bad); }
+  .bullet .target { position: absolute; top: -3px; bottom: -3px; width: 3px; background: var(--ebm-text);
+    border-radius: 1px; box-shadow: 0 0 0 1px var(--ebm-card); }
+  .bullet .scale { position: absolute; top: 100%; left: 0; right: 0; margin-top: 2px;
+    display: flex; justify-content: space-between; font-size: 9px; color: var(--ebm-muted); font-weight: 600; }
+  .diretor .vgv-side { font-size: 12px; color: var(--ebm-muted); text-align: right; line-height: 1.4; }
+  .diretor .vgv-side strong { color: var(--ebm-text); font-weight: 700; display:block; font-size: 13px; }
+  .diretor.is-total { border-color: var(--ebm-navy); background: rgba(0,61,107,0.06); }
+  body.dark .diretor.is-total { background: rgba(74,159,224,0.10); }
+  @media (max-width: 700px) {
+    .diretor { grid-template-columns: 1fr 80px; gap: 10px; }
+    .diretor .bullet, .diretor .vgv-side { grid-column: 1/3; }
+  }
 
   /* pct-pill — usado na tabela de empreendimentos */
   .pct-pill.ok { background: rgba(27,127,88,0.12); color: var(--ebm-ok); }
@@ -368,8 +415,10 @@
         <button role="tab" data-period="fev" type="button">Fev</button>
         <button role="tab" data-period="mar" type="button">Mar</button>
         <button role="tab" data-period="abr" type="button">Abr</button>
-        <button role="tab" data-period="mai" type="button">Mai (vigente)</button>
+        <button role="tab" data-period="mai" type="button">Mai •</button>
+        <span class="sep" aria-hidden="true"></span>
         <button role="tab" data-period="ytd" class="active" type="button">2026 YTD</button>
+        <span class="sep" aria-hidden="true"></span>
         <button role="tab" data-period="esteira" type="button">⚙ Esteira</button>
         <button role="tab" data-period="empreendimentos" type="button">🏢 Empreendimentos</button>
       </div>
@@ -388,7 +437,7 @@
   <!-- Tendência mensal (sparkline) -->
   <div class="trend-card" id="trend-card-wrap">
     <div class="trend-header">
-      <div class="trend-title">Tendência mensal — % atingimento da meta</div>
+      <div class="trend-title">📈 Tendência mensal — % atingimento da meta</div>
       <div class="trend-meta">Jan → Abr · meta = 100%</div>
     </div>
     <div class="trend-chart-wrap"><canvas id="chart-trend" aria-label="Gráfico de tendência mensal: % atingimento de meta e VGV finalizado por mês (Jan a Abr/2026)"></canvas></div>
@@ -396,7 +445,7 @@
 
   <!-- Splits de Modalidade e Momento (Abril/2026) -->
   <section id="splits-section">
-    <h2>Splits — Abril/2026 <span class="hint" style="color:var(--ebm-warn);">por Modalidade e Momento · base: snapshot de 01/05 (totaliza R$51,8M — Abril fechou em R$60,2M após extração detalhada agendada)</span></h2>
+    <h2>🔀 Splits — Abril/2026 <span class="hint" style="color:var(--ebm-warn);">base: snapshot de 01/05 (totaliza R$51,8M — Abril fechou em R$60,2M após extração detalhada agendada)</span></h2>
     <div class="splits-grid">
       <div class="split-block">
         <div class="split-title">Por Modalidade</div>
@@ -422,17 +471,17 @@
   </section>
 
   <section id="funil-section">
-    <h2>Esteira / Funil de Propostas <span class="hint" id="funil-hint"></span></h2>
+    <h2>📊 Esteira / Funil de Propostas <span class="hint" id="funil-hint"></span></h2>
     <div id="funil"></div>
   </section>
 
   <div class="grid cols-2">
     <section>
-      <h2>Acompanhamento de Metas — por Diretor</h2>
+      <h2>🎯 Metas por Diretor</h2>
       <div id="diretores" class="diretores"></div>
     </section>
     <section>
-      <h2>Distribuição por Regional <span class="hint" id="regional-hint"></span></h2>
+      <h2>🗺 Distribuição por Regional <span class="hint" id="regional-hint"></span></h2>
       <div class="chart-box"><canvas id="chart-regional" aria-label="Gráfico de barras: VGV finalizado por Regional (DF, GO, SP)"></canvas></div>
       <div id="regional-summary" class="summary-cards"></div>
     </section>
@@ -440,7 +489,7 @@
 
   <!-- Ticket Médio -->
   <section id="ticket-section">
-    <h2>Ticket Médio <span class="hint" id="ticket-hint"></span></h2>
+    <h2>💵 Ticket Médio <span class="hint" id="ticket-hint"></span></h2>
     <div id="ticket-cards" class="ticket-grid"></div>
     <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--ebm-border);">
       <div style="font-size:11px;font-weight:700;color:var(--ebm-muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">
@@ -453,7 +502,7 @@
 
   <!-- Aba Esteira Ativa (snapshot atual) -->
   <section id="esteira-section">
-    <h2>Esteira Comercial — Snapshot Atual <span class="hint">propostas vivas em 01/05/2026</span></h2>
+    <h2>⚙ Esteira Comercial — Snapshot Atual <span class="hint">propostas vivas no momento da extração</span></h2>
 
     <div class="kpis" style="margin-bottom:18px;grid-template-columns:1fr;">
       <div class="kpi andamento" style="text-align:center;padding:24px;">
@@ -465,13 +514,13 @@
 
     <div class="esteira-funnel" id="esteira-funnel"></div>
 
-    <h2 style="margin-top:24px;">Empreendimentos na esteira <span class="hint">VGV e unidades ativas por empreendimento</span></h2>
+    <h2 style="margin-top:24px;">🏘 Empreendimentos na esteira <span class="hint">VGV e unidades ativas por empreendimento</span></h2>
     <table class="emp-table" id="esteira-emp-table"></table>
   </section>
 
   <!-- Aba Empreendimentos -->
   <section id="empreendimentos-section">
-    <h2>Empreendimentos — Lista Completa & Ranking <span class="hint">base: Março/2026 (mês com extração detalhada)</span></h2>
+    <h2>🏢 Empreendimentos — Lista Completa & Ranking <span class="hint">base: Março/2026 (mês com extração detalhada)</span></h2>
 
     <div style="display:flex;gap:8px;margin-bottom:14px;align-items:center;flex-wrap:wrap;">
       <span style="font-size:12px;font-weight:700;color:var(--ebm-muted);text-transform:uppercase;letter-spacing:0.5px;">Ordenar por:</span>
@@ -699,27 +748,58 @@
       if (d != null) {
         const cls = d > 0 ? 'up' : (d < 0 ? 'down' : 'neutral');
         const arrow = d > 0 ? '↑' : (d < 0 ? '↓' : '→');
-        deltaFin = `<div class="delta ${cls}">${arrow} ${Math.abs(d).toFixed(1)}% vs ${prevPeriod.toUpperCase()}</div>`;
+        deltaFin = `<div class="delta ${cls}" style="margin-top:6px;font-size:12px;font-weight:700;">${arrow} ${Math.abs(d).toFixed(1)}% vs ${prevPeriod.toUpperCase()}</div>`;
       }
     }
+    // Pct + status (semáforo)
+    const tot = p.diretores.find(d=>d.isTotal);
+    const pct = tot && tot.pct != null ? tot.pct : null;
+    let statusCls = '', pctBadge = '';
+    if (pct != null) {
+      statusCls = pct >= 90 ? 'status-ok' : (pct >= 60 ? 'status-warn' : 'status-bad');
+      const badgeCls = pct >= 90 ? 'ok' : (pct >= 60 ? 'warn' : 'bad');
+      pctBadge = `<span class="pct-badge ${badgeCls}">${pct}% meta</span>`;
+    }
+    // Hero: Vendas Finalizadas | Secundário 1: Andamento | Secundário 2: VGV Total
     el.innerHTML = `
-      <div class="kpi andamento">
-        <div class="label">Vendas em Andamento</div>
-        <div class="value">${p.kpi.andamento==null ? '—' : fmtBRLshort(p.kpi.andamento)}</div>
-        <div class="sub">${p.kpi.andamento==null ? 'Não populado neste recorte' : 'Esteira ativa (estágios 00–05)'}</div>
-      </div>
-      <div class="kpi finalizadas">
-        <div class="label">Vendas Finalizadas</div>
+      <div class="kpi hero finalizadas ${statusCls}">
+        <div class="label">📊 Vendas Finalizadas ${pctBadge}</div>
         <div class="value">${fmtBRLshort(p.kpi.finalizadas)}</div>
         <div class="sub">${fmtBRL(p.kpi.finalizadas)}</div>
         ${deltaFin}
+        <div class="spark"><canvas id="spark-fin"></canvas></div>
+      </div>
+      <div class="kpi andamento">
+        <div class="label">⚙ Esteira Ativa</div>
+        <div class="value">${p.kpi.andamento==null ? '—' : fmtBRLshort(p.kpi.andamento)}</div>
+        <div class="sub">${p.kpi.andamento==null ? 'Não populado' : 'Estágios 00–05'}</div>
       </div>
       <div class="kpi total">
-        <div class="label">VGV Total</div>
+        <div class="label">💰 VGV Total</div>
         <div class="value">${fmtBRLshort(p.kpi.total)}</div>
-        <div class="sub">${fmtBRL(p.kpi.total)}</div>
+        <div class="sub">Andamento + Finalizadas</div>
       </div>
     `;
+    // Sparkline embutido no KPI hero
+    setTimeout(() => {
+      const sparkEl = document.getElementById('spark-fin');
+      if (!sparkEl) return;
+      const sparkData = monthOrder.map(k => data[k].kpi.finalizadas);
+      if (window.__sparkChart) { try { window.__sparkChart.destroy(); } catch(e){} }
+      window.__sparkChart = new Chart(sparkEl.getContext('2d'), {
+        type: 'line',
+        data: { labels: ['Jan','Fev','Mar','Abr'], datasets: [{
+          data: sparkData, borderColor: pct >= 90 ? '#0F6E4D' : (pct >= 60 ? '#8A5E13' : '#A4001B'),
+          backgroundColor: pct >= 90 ? 'rgba(15,110,77,0.15)' : (pct >= 60 ? 'rgba(138,94,19,0.15)' : 'rgba(164,0,27,0.15)'),
+          tension: 0.4, fill: true, pointRadius: 0, borderWidth: 2
+        }]},
+        options: { responsive: true, maintainAspectRatio: false,
+          plugins: { legend: {display:false}, tooltip: {enabled:false} },
+          scales: { x: {display:false}, y: {display:false} },
+          elements: { line: {borderJoinStyle:'round'} }
+        }
+      });
+    }, 50);
   }
 
   // ---------- Tendência mensal (sparkline) ----------
@@ -1108,34 +1188,37 @@
     </div>`;
   }
 
-  // ---------- Diretores ----------
+  // ---------- Diretores (bullet chart) ----------
   function renderDiretores(p){
     const el = document.getElementById('diretores');
     el.innerHTML = p.diretores.map(d => {
       const isTotal = d.isTotal;
-      const pctTxt = d.pct == null ? '—' : (d.pct + '%');
-      const pctCls = d.status === 'ok' ? 'ok' : (d.status === 'bad' ? 'bad' : '');
-      const fillW = d.pct == null ? 0 : Math.max(0, Math.min(d.pct, 200));
-      const fillCls = d.status === 'ok' ? 'ok' : 'bad';
-      const statusLabel = d.status === 'ok' ? 'Acima da Meta' : (d.status === 'bad' ? 'Abaixo da Meta' : 'Sem meta');
-      const statusCls = d.status === 'ok' ? 'ok' : (d.status === 'bad' ? 'bad' : 'na');
+      const pct = d.pct;
+      const pctTxt = pct == null ? '—' : (pct + '%');
+      // Status visual baseado em pct (não d.status que vem hardcoded)
+      let cls = 'bad';
+      let label = 'Abaixo da Meta';
+      if (pct == null) { cls = ''; label = 'Sem meta'; }
+      else if (pct >= 90) { cls = 'ok'; label = 'No alvo / Acima'; }
+      else if (pct >= 60) { cls = 'warn'; label = 'Atenção'; }
+      const fillW = pct == null ? 0 : Math.max(0, Math.min(pct, 200));
+      // Escala: 0-200%, marca em 100% (50% da barra)
       return `
         <div class="diretor${isTotal?' is-total':''}">
-          <div class="name">${d.name}</div>
-          <span class="meta-status ${statusCls}">${statusLabel}</span>
-          <div class="gauge-row">
-            <div class="gauge-pct ${pctCls}">${pctTxt}</div>
-            <div style="font-size:11px;color:var(--ebm-muted);">meta = 100%</div>
+          <div>
+            <div class="name">${d.name}</div>
+            <div class="name-status">${label}</div>
           </div>
-          <div class="gauge-bar">
-            <div class="fill ${fillCls}" style="width:${fillW/2}%;"></div>
+          <div class="gauge-pct ${cls}">${pctTxt}</div>
+          <div class="bullet">
+            <div class="fill ${cls}" style="width:${fillW/2}%;"></div>
             <div class="target" style="left:50%;"></div>
+            <div class="scale"><span>0%</span><span>100%</span><span>200%</span></div>
           </div>
-          <div class="nums">
-            <div>VGV Realizado<br><span class="num-val">${fmtBRLshort(d.realizado)}</span></div>
-            <div>VGV Projetado<br><span class="num-val">${fmtBRLshort(d.projetado)}</span></div>
-            <div>QTD Realizado<br><span class="num-val">${fmtNum(d.qtdReal)}</span></div>
-            <div>QTD Projetado<br><span class="num-val">${fmtNum(d.qtdProj)}</span></div>
+          <div class="vgv-side">
+            <strong>${fmtBRLshort(d.realizado)}</strong>
+            de ${fmtBRLshort(d.projetado)}<br>
+            ${fmtNum(d.qtdReal)} unid.
           </div>
         </div>
       `;
