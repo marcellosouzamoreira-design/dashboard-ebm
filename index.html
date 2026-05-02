@@ -800,8 +800,11 @@
     const el = document.getElementById('esteira-funnel');
     el.innerHTML = stages.map(s => {
       const m = data.mai.funil.find(x => x.name.startsWith(s.code));
-      const vgv = s.closed ? fmtBRLshort(312261731) + ' YTD' : (m && m.vgv ? fmtBRLshort(m.vgv) : '—');
-      const qtd = s.closed ? '703 propostas (YTD)' : (m && m.qtd ? fmtNum(m.qtd) + ' propostas' : s.hint);
+      // 06 - Finalizado: mostra apenas vendas finalizadas no mês vigente (Maio)
+      const finMes = data.mai.kpi.finalizadas || 0;
+      const qtdMes = (data.mai.funil.find(x => x.name.startsWith('06')) || {qtd: 0}).qtd || 0;
+      const vgv = s.closed ? (finMes > 0 ? fmtBRLshort(finMes) : 'R$0') : (m && m.vgv ? fmtBRLshort(m.vgv) : '—');
+      const qtd = s.closed ? (qtdMes > 0 ? fmtNum(qtdMes) + ' propostas (mês)' : 'sem vendas no mês') : (m && m.qtd ? fmtNum(m.qtd) + ' propostas' : s.hint);
       return `
       <div class="esteira-step ${s.closed?'closed':'active'}">
         <div class="e-stage">${s.code}</div>
