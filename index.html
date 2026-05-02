@@ -301,6 +301,34 @@
   body.empreendimentos-mode #ticket-section,
   body.esteira-mode #ticket-section { display: none; }
 
+  /* Grid de regionais — Empreendimentos por DF/GO/SP */
+  .reg-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  @media (max-width: 900px) { .reg-grid { grid-template-columns: 1fr; } }
+  .reg-card { background: var(--ebm-soft, #fafafa); border: 1px solid var(--ebm-border);
+    border-radius: 12px; padding: 16px; border-top: 4px solid; }
+  body.dark .reg-card { background: var(--ebm-soft); }
+  .reg-card.DF { border-top-color: var(--ebm-warn); }
+  .reg-card.GO { border-top-color: var(--ebm-navy); }
+  .reg-card.SP { border-top-color: var(--ebm-bad); }
+  .reg-card .reg-header { display: flex; justify-content: space-between; align-items: baseline;
+    margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid var(--ebm-border); }
+  .reg-card .reg-title { font-weight: 800; font-size: 16px; color: var(--ebm-navy); letter-spacing: -0.2px; }
+  .reg-card.DF .reg-title { color: var(--ebm-warn); }
+  .reg-card.SP .reg-title { color: var(--ebm-bad); }
+  .reg-card .reg-summary { font-size: 11px; color: var(--ebm-muted); text-align: right;
+    text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }
+  .reg-card .reg-summary strong { display: block; font-size: 14px; color: var(--ebm-text);
+    text-transform: none; letter-spacing: 0; font-weight: 700; }
+  .reg-card .emp-list { list-style: none; padding: 0; margin: 0; max-height: 320px; overflow-y: auto; }
+  .reg-card .emp-list li { display: grid; grid-template-columns: 1fr auto auto; gap: 10px;
+    padding: 7px 4px; border-bottom: 1px solid rgba(0,0,0,0.04); align-items: center; font-size: 12px; }
+  body.dark .reg-card .emp-list li { border-bottom-color: rgba(255,255,255,0.06); }
+  .reg-card .emp-list li:last-child { border-bottom: 0; }
+  .reg-card .emp-list .e-nm { color: var(--ebm-text); font-weight: 600; }
+  .reg-card .emp-list .e-vgv { color: var(--ebm-navy); font-weight: 700; text-align: right; font-size: 11px; }
+  .reg-card .emp-list .e-qtd { color: var(--ebm-muted); font-size: 11px; min-width: 40px; text-align: right; }
+  .reg-card .emp-empty { padding: 14px; color: var(--ebm-muted); font-size: 12px; font-style: italic; text-align: center; }
+
   /* Curva ABC */
   .abc-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
   @media (max-width: 700px) { .abc-cards { grid-template-columns: 1fr; } }
@@ -486,6 +514,12 @@
       <div id="regional-summary" class="summary-cards"></div>
     </section>
   </div>
+
+  <!-- Empreendimentos por Regional na Esteira (só aparece em Mai) -->
+  <section id="mai-regionais-section" style="display:none;">
+    <h2>🏘 Empreendimentos na esteira por Regional <span class="hint">propostas em aberto agrupadas por DF/GO/SP</span></h2>
+    <div id="mai-regionais-grid" class="reg-grid"></div>
+  </section>
 
   <!-- Ticket Médio -->
   <section id="ticket-section">
@@ -962,6 +996,43 @@
     }).join('');
     document.getElementById('emp-table').innerHTML = headers + '<tbody>' + rows + '</tbody>';
   }
+  // ---------- Empreendimentos na esteira agrupados por Regional (aba Mai) ----------
+  function renderMaiRegionais() {
+    const sec = document.getElementById('mai-regionais-section');
+    const grid = document.getElementById('mai-regionais-grid');
+    if (!sec || !grid) return;
+    const REGIONAIS = ['DF','GO','SP'];
+    const labels = {DF:'Regional DF', GO:'Regional GO', SP:'Regional SP'};
+    grid.innerHTML = REGIONAIS.map(reg => {
+      const items = empreendimentos
+        .filter(e => e.reg === reg && e.vgv > 0)
+        .sort((a,b) => b.vgv - a.vgv);
+      const totVgv = items.reduce((s,e) => s+e.vgv, 0);
+      const totQtd = items.reduce((s,e) => s+e.qtd, 0);
+      const lis = items.length === 0
+        ? '<div class="emp-empty">Sem empreendimentos ativos</div>'
+        : '<ul class="emp-list">' + items.map(e => `
+            <li>
+              <span class="e-nm">${e.nome}</span>
+              <span class="e-vgv">${fmtBRLshort(e.vgv)}</span>
+              <span class="e-qtd">${fmtNum(e.qtd)} u.</span>
+            </li>
+          `).join('') + '</ul>';
+      return `
+        <div class="reg-card ${reg}">
+          <div class="reg-header">
+            <div class="reg-title">${labels[reg]}</div>
+            <div class="reg-summary">
+              ${items.length} empreend.
+              <strong>${fmtBRLshort(totVgv)} · ${totQtd} unid.</strong>
+            </div>
+          </div>
+          ${lis}
+        </div>
+      `;
+    }).join('');
+  }
+
   // ---------- Tabela de empreendimentos NA ESTEIRA (aba Esteira) ----------
   function renderEsteiraEmpTable() {
     const el = document.getElementById('esteira-emp-table');
@@ -1314,6 +1385,16 @@
     renderDiretores(p);
     renderRegional(p, period);
     renderTicket(p, period);
+    // Empreendimentos por Regional — só na aba Mai
+    const maiSec = document.getElementById('mai-regionais-section');
+    if (maiSec) {
+      if (period === 'mai') {
+        maiSec.style.display = '';
+        renderMaiRegionais();
+      } else {
+        maiSec.style.display = 'none';
+      }
+    }
     loadNotes(period);
   }
   document.querySelectorAll('#period-toggle button').forEach(b => {
