@@ -1,15 +1,16 @@
 <!doctype html>
-<script type="application/json" id="cowork-artifact-meta">
-{
-  "name": "Ebm Esteira Comercial",
-  "schemaVersion": 1,
-  "description": "Dashboard da Esteira Comercial EBM — toggle por mês de 2026 (Jan/Fev/Mar/Abr) + 2026 YTD acumulado. KPIs (Andamento R$56M / Finalizadas / VGV Total), funil de propostas, gauges de meta por diretor (Felipe, Paulo/Sérgio, EBM Diretoria), distribuição por regional (DF/GO/SP) e top/bottom empreendimentos. Cores oficiais EBM (#003D6B navy / #A4001B vinho). Snapshot extraído do Power BI EBM em 02/05/2026 18:39. Sub-filtros de Modalidade (Associativo/SPBE) e Momento (Lançamento/Estoque) presentes mas pendentes de extração."
-}
-</script>
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<meta name="theme-color" content="#003D6B" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="EBM Esteira" />
 <title>EBM — Esteira Comercial</title>
+<link rel="icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%23003D6B'/><text x='32' y='44' font-family='Arial Black' font-size='28' font-weight='900' fill='%23fff' text-anchor='middle'>EBM</text></svg>" />
+<link rel="apple-touch-icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect width='180' height='180' rx='40' fill='%23003D6B'/><text x='90' y='118' font-family='Arial Black' font-size='72' font-weight='900' fill='%23fff' text-anchor='middle'>EBM</text></svg>" />
+<link rel="manifest" href='data:application/json;charset=utf-8,{"name":"EBM Esteira Comercial","short_name":"EBM Esteira","description":"Dashboard da Diretoria Comercial EBM","start_url":".","display":"standalone","orientation":"any","background_color":"%23003D6B","theme_color":"%23003D6B","icons":[{"src":"data:image/svg+xml;utf8,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 192 192%27><rect width=%27192%27 height=%27192%27 rx=%2742%27 fill=%27%23003D6B%27/><text x=%2796%27 y=%27124%27 font-family=%27Arial Black%27 font-size=%2776%27 font-weight=%27900%27 fill=%27%23fff%27 text-anchor=%27middle%27>EBM</text></svg>","sizes":"192x192","type":"image/svg+xml"},{"src":"data:image/svg+xml;utf8,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 512 512%27><rect width=%27512%27 height=%27512%27 rx=%27112%27 fill=%27%23003D6B%27/><text x=%27256%27 y=%27332%27 font-family=%27Arial Black%27 font-size=%27200%27 font-weight=%27900%27 fill=%27%23fff%27 text-anchor=%27middle%27>EBM</text></svg>","sizes":"512x512","type":"image/svg+xml"}]}' />
 <style>
   :root {
     color-scheme: light;
@@ -432,6 +433,121 @@
 
   /* Foco visível (a11y) */
   *:focus-visible { outline: 2px solid var(--ebm-navy); outline-offset: 2px; }
+
+  /* === Onda 11: Polish === */
+
+  /* Animações de entrada */
+  @keyframes fadeUp { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+  @keyframes pulseGlow { 0%,100% { box-shadow: 0 0 0 0 rgba(0,61,107,0.0); } 50% { box-shadow: 0 0 0 4px rgba(0,61,107,0.18); } }
+  .kpi, .diretor, .summary-card, .funnel .step, .ticket-card { animation: fadeUp .35s ease both; }
+  .kpi:nth-child(2) { animation-delay: .05s; } .kpi:nth-child(3) { animation-delay: .1s; }
+  .diretor { transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease; cursor: pointer; }
+  .diretor:hover:not(.is-total) { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,61,107,0.12); border-color: var(--ebm-navy); }
+  .diretor.is-total { cursor: default; }
+  .diretor:not(.is-total)::after { content: '🔍'; position: absolute; top: 8px; right: 12px; font-size: 12px; opacity: 0; transition: opacity .15s; }
+  .diretor { position: relative; }
+  .diretor:hover:not(.is-total)::after { opacity: 0.55; }
+  body.dark .diretor:hover:not(.is-total) { box-shadow: 0 6px 16px rgba(255,255,255,0.05); border-color: #4a90c2; }
+
+  /* Diff badges (vs último snapshot) */
+  .diff-badge { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 700;
+    padding: 2px 8px; border-radius: 999px; margin-left: 8px; vertical-align: middle;
+    background: #f0f3f7; color: var(--ebm-muted); border: 1px solid var(--ebm-border); white-space: nowrap; }
+  .diff-badge.up   { background: #e6f4ee; color: #0F6E4D; border-color: #b8e0c9; }
+  .diff-badge.down { background: #fce8eb; color: #A4001B; border-color: #f1b9c2; }
+  body.dark .diff-badge { background: #1a2538; border-color: #2d3a52; color: #94a4be; }
+  body.dark .diff-badge.up { background: #15331f; color: #5fcf95; border-color: #275a3b; }
+  body.dark .diff-badge.down { background: #3a1a22; color: #ff8a9d; border-color: #5e2733; }
+
+  /* Modal de drill-down */
+  .modal-backdrop { position: fixed; inset: 0; background: rgba(0,30,55,0.55); z-index: 200;
+    display: none; align-items: center; justify-content: center; padding: 20px;
+    backdrop-filter: blur(4px); animation: fadeUp .2s ease; }
+  .modal-backdrop.show { display: flex; }
+  .modal { background: var(--ebm-card); border-radius: 14px; max-width: 720px; width: 100%; max-height: 86vh;
+    overflow: auto; box-shadow: 0 24px 60px rgba(0,0,0,.4); animation: fadeUp .25s ease;
+    border: 1px solid var(--ebm-border); }
+  .modal-head { display: flex; align-items: center; justify-content: space-between; padding: 18px 22px;
+    border-bottom: 1px solid var(--ebm-border); position: sticky; top: 0; background: var(--ebm-card); z-index: 1; }
+  .modal-head h3 { margin: 0; color: var(--ebm-navy); font-size: 18px; }
+  .modal-close { background: transparent; border: 1px solid var(--ebm-border); border-radius: 8px;
+    width: 32px; height: 32px; cursor: pointer; color: var(--ebm-muted); font-size: 16px; }
+  .modal-close:hover { color: var(--ebm-red); border-color: var(--ebm-red); }
+  .modal-body { padding: 22px; }
+  .modal-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 18px; }
+  .modal-stat { background: #f7f9fc; border-radius: 10px; padding: 12px; border: 1px solid var(--ebm-border); }
+  .modal-stat .lbl { font-size: 11px; color: var(--ebm-muted); text-transform: uppercase; letter-spacing: 0.4px; font-weight: 700; }
+  .modal-stat .val { font-size: 22px; color: var(--ebm-navy); font-weight: 800; margin-top: 4px; font-variant-numeric: tabular-nums; }
+  body.dark .modal-stat { background: #1a2538; }
+  body.dark .modal-stat .val { color: #d8e3f2; }
+  .modal-table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 13px; }
+  .modal-table th, .modal-table td { padding: 8px 10px; text-align: left; border-bottom: 1px solid var(--ebm-border); }
+  .modal-table th { background: #f0f3f7; color: var(--ebm-muted); font-size: 11px; text-transform: uppercase; letter-spacing: .4px; }
+  .modal-table td.num { text-align: right; font-variant-numeric: tabular-nums; }
+  body.dark .modal-table th { background: #1a2538; }
+
+  /* Modo Briefing (vertical, pra reuniões) */
+  body.briefing .wrap { max-width: 980px; }
+  body.briefing .sticky-header { padding: 14px 24px; }
+  body.briefing .sticky-header h1 { font-size: 28px; }
+  body.briefing #kpi-row .kpi.hero .value { font-size: 72px; line-height: 1; }
+  body.briefing #kpi-row .kpi .value { font-size: 44px; }
+  body.briefing .funnel .step { padding: 14px; }
+  body.briefing .diretor { padding: 18px; }
+  body.briefing .ticket-card .val { font-size: 28px; }
+  body.briefing .briefing-hide { display: none !important; }
+
+  /* Modo TV (kiosk auto-rotate) */
+  body.tv-mode .header-buttons, body.tv-mode .updated { opacity: 0.5; }
+  body.tv-mode::before { content: '📺 TV — auto-rotate ativo'; position: fixed; top: 12px; right: 12px;
+    background: var(--ebm-navy); color: white; padding: 6px 12px; border-radius: 999px; font-size: 11px;
+    font-weight: 700; z-index: 100; box-shadow: 0 4px 12px rgba(0,0,0,0.2); animation: pulseGlow 2s infinite; }
+  body.tv-mode .toggle button.active { animation: pulseGlow 1.5s infinite; }
+
+  /* Color-blind safe palette (toggle) */
+  body.cb-safe {
+    --ebm-red: #c44e00;        /* laranja escuro substitui vermelho */
+    --status-bad-bg: #fff1e6;
+    --status-bad-fg: #c44e00;
+  }
+  body.cb-safe.dark { --ebm-red: #ff8a3c; }
+  body.cb-safe .gauge-pct.bad, body.cb-safe .delta.down { color: #c44e00 !important; }
+  body.cb-safe .bullet .fill.bad { background: linear-gradient(90deg, #c44e00, #ff8a3c) !important; }
+  body.cb-safe .pct-badge.bad { background: #fff1e6 !important; color: #c44e00 !important; border-color: #ffd0a8 !important; }
+
+  /* Snapshot diff hint global (header) */
+  .snapshot-hint { font-size: 11px; color: var(--ebm-muted); padding: 4px 10px; background: #f0f3f7;
+    border: 1px solid var(--ebm-border); border-radius: 999px; margin-left: 10px; }
+  .snapshot-hint.has-diff { background: #fff7e6; border-color: #ffd99a; color: #8A5E13; font-weight: 700; }
+  body.dark .snapshot-hint { background: #1a2538; }
+  body.dark .snapshot-hint.has-diff { background: #3a2c14; border-color: #6a4f1f; color: #ffc864; }
+
+  /* Botões adicionais no header */
+  .btn-more { background: transparent; border: 1px solid var(--ebm-border); color: var(--ebm-muted);
+    padding: 6px 10px; border-radius: 8px; cursor: pointer; font-size: 13px; transition: all 0.15s; }
+  .btn-more:hover { color: var(--ebm-navy); border-color: var(--ebm-navy); }
+  body.dark .btn-more { color: #94a4be; border-color: #2d3a52; }
+  body.dark .btn-more:hover { color: #d8e3f2; border-color: #4a90c2; }
+
+  /* CountUp animation - pulse on update */
+  @keyframes countPulse { 0% { transform: scale(1); } 50% { transform: scale(1.04); } 100% { transform: scale(1); } }
+  .kpi .value.updating { animation: countPulse .4s ease; }
+
+  /* Tab transition */
+  .toggle button { transition: all 0.18s ease; }
+  .toggle button.active { transform: scale(1.02); }
+
+  @media (max-width: 700px) {
+    .modal { max-height: 92vh; }
+    .modal-head h3 { font-size: 15px; }
+    .modal-stat .val { font-size: 18px; }
+    body.briefing #kpi-row .kpi.hero .value { font-size: 48px; }
+    body.briefing #kpi-row .kpi .value { font-size: 30px; }
+  }
+  @media print {
+    .modal-backdrop, .snapshot-hint, .btn-more { display: none !important; }
+    body.tv-mode::before { display: none !important; }
+  }
 </style>
 </head>
 <body>
@@ -457,11 +573,17 @@
         <button role="tab" data-period="esteira" type="button">⚙ Esteira</button>
         <button role="tab" data-period="empreendimentos" type="button">🏢 Empreendimentos</button>
       </div>
-      <div class="updated">Última atualização BI: <strong id="last-update">02/05/2026 18:39:29</strong></div>
+      <div class="updated">
+        Última atualização BI: <strong id="last-update">02/05/2026 18:39:29</strong>
+        <span class="snapshot-hint" id="snapshot-hint" title="Variação dos KPIs desde a sua última visita"></span>
+      </div>
       <div class="header-buttons">
-        <button id="btn-refresh" class="btn-refresh" type="button" title="Atualização automática 2x/dia (8:30 e 20:30)" style="display:none;">↻ Snapshot</button>
+        <button id="btn-refresh" class="btn-refresh" type="button" title="Snapshot — peça ao Claude pra atualizar">↻ Snapshot</button>
         <button id="btn-print" class="btn-export" type="button" title="Imprimir / Salvar PDF (atalho: P)">🖨 PDF</button>
         <button id="btn-dark" class="btn-export" type="button" title="Alternar tema escuro (atalho: D)">🌙</button>
+        <button id="btn-cb" class="btn-more" type="button" title="Paleta para daltonismo (atalho: C)">🎨</button>
+        <button id="btn-briefing" class="btn-more" type="button" title="Modo Briefing — vertical, KPIs gigantes (atalho: B)">📋 Briefing</button>
+        <button id="btn-tv" class="btn-more" type="button" title="Modo TV — auto-rotaciona abas a cada 15s (atalho: T)">📺 TV</button>
         <button id="btn-present" class="btn-export" type="button" title="Modo apresentação (atalho: F)">⛶ Apresentação</button>
       </div>
     </div>
@@ -548,8 +670,8 @@
     <div class="kpis" style="margin-bottom:18px;grid-template-columns:1fr;">
       <div class="kpi andamento" style="text-align:center;padding:24px;">
         <div class="label">Esteira ativa neste momento</div>
-        <div class="value" style="font-size:42px;">R$56M</div>
-        <div class="sub">Soma de todas propostas em andamento (estágios 00–05) capturadas em 02/05/2026</div>
+        <div class="value" style="font-size:42px;">R$63M</div>
+        <div class="sub">Soma de todas propostas em andamento (estágios 00–05) — snapshot 02/05/2026 18:39</div>
       </div>
     </div>
 
@@ -602,10 +724,21 @@
   <footer class="note">
     Fonte: Power BI EBM — relatório "Esteira Comercial". Snapshot extraído via navegador em 02/05/2026 às 18:39.<br>
     Dados mensais (Jan–Abr) capturados individualmente. <strong>2026 YTD</strong> é a soma dos meses extraídos.
-    Vendas em Andamento (R$56M) é instantâneo no momento da extração — não varia por filtro de mês.<br>
+    Vendas em Andamento (R$63M) é instantâneo no momento da extração — não varia por filtro de mês.<br>
     Splits por Modalidade (Associativo/SPBE) e Momento (Lançamento/Estoque) referem-se a <strong>Abril/2026</strong>
     — Estoque é calculado por subtração (Total − Lançamento) para evitar uma extração extra.
   </footer>
+</div>
+
+<!-- Modal de drill-down (diretor → detalhamento mensal + regional) -->
+<div class="modal-backdrop" id="drill-modal" role="dialog" aria-modal="true" aria-labelledby="drill-title">
+  <div class="modal">
+    <div class="modal-head">
+      <h3 id="drill-title">Detalhamento</h3>
+      <button class="modal-close" id="drill-close" aria-label="Fechar (Esc)">✕</button>
+    </div>
+    <div class="modal-body" id="drill-body"></div>
+  </div>
 </div>
 
 <script>/*!
@@ -637,10 +770,10 @@
 
   // ---------- DATA ----------
   // Todos os dados são meses de 2026, capturados via Power BI público.
-  // Esteira ativa (andamento) é um snapshot único capturado em 02/05/2026 18:39
+  // Esteira ativa (andamento) é um snapshot único capturado em 01/05/2026 09:38
   // — reflete propostas em estágios 00–05 no momento da extração. Mesmo valor
   // usado em todos os meses e na aba MAI (mês vigente).
-  const ANDAMENTO_ATUAL = 55562415;
+  const ANDAMENTO_ATUAL = 63222804;
   function makeMonth(label, finalizadas, regionals, diretores) {
     const total = regionals.reduce((s,r)=>s+r.vgv, 0);
     const qtd   = regionals.reduce((s,r)=>s+r.qtd, 0);
@@ -702,49 +835,49 @@
     ),
     abr: makeMonth(
       "Abril / 2026",
-      60177854,  // Atualizado em 02/05/2026 18:39 — fechamento oficial do mês (era R$51,7M parcial em 01/05)
+      60177854,  // Atualizado em 02/05/2026 — fechamento oficial do mês (era R$51,7M parcial em 01/05)
       [
         { name: "Regional GO", vgv: 47284739, qtd: 108 },
         { name: "Regional SP", vgv: 7228864,  qtd: 14  },
         { name: "Regional DF", vgv: 5664250,  qtd: 16  },
       ],
       [
-        // Abril fechado em 02/05. Valores por diretor extraídos diretamente do BI em 02/05/2026 18:39.
+        // Abril fechado — valores oficiais Felipe/Paulo extraídos do BI em 02/05/2026 18:39
         { name: "Felipe",         projetado: 65396703,  realizado: 36856641, qtdProj: 113, qtdReal: 73,  pct: 51, status: "bad" },
         { name: "Paulo / Sérgio", projetado: 41404192,  realizado: 23321213, qtdProj: 114, qtdReal: 65,  pct: 45, status: "bad" },
         { name: "EBM Diretoria",  projetado: null,      realizado: null,     qtdProj: null, qtdReal: null, pct: null, status: "na" },
-        { name: "TOTAL",          projetado: 106800894, realizado: 60177854, qtdProj: 227, qtdReal: 138, pct: 49, status: "bad", isTotal: true },
+        { name: "TOTAL",          projetado: 106800894, realizado: 60177854, qtdProj: 227, qtdReal: 138, pct: 50, status: "bad", isTotal: true },
       ]
     ),
     mai: {
       label: "Maio / 2026 (mês vigente)",
       kpi: {
-        andamento: 55562415,
+        andamento: 63222804,
         finalizadas: 0,
-        total: 55562415,
+        total: 63222804,
       },
-      // Esteira ativa REAL extraída do BI em 02/05/2026 18:39
+      // Esteira ativa REAL extraída do BI em 01/05/2026 09:38
       funil: [
-        { name: "00 — Proposta",     vgv: 434469,   qtd: 2 },  // +R$1 ajuste de arredondamento
-        { name: "01 — Crédito",      vgv: 6094555,  qtd: 14 },
+        { name: "00 — Proposta",     vgv: 8465212,  qtd: 21 },  // +R$1 ajuste de arredondamento
+        { name: "01 — Crédito",      vgv: 6660932,  qtd: 16 },
         { name: "02 — Jurídico",     vgv: 2050035,  qtd: 6 },
-        { name: "03 — Assinatura",   vgv: 32105528, qtd: 50, highlight: true },
-        { name: "04 — Conferência",  vgv: 3123610,  qtd: 7 },
-        { name: "05 — Pendência",    vgv: 11754218, qtd: 31 },
+        { name: "03 — Assinatura",   vgv: 27839397, qtd: 41, highlight: true },
+        { name: "04 — Conferência",  vgv: 3325803,  qtd: 8 },
+        { name: "05 — Pendência",    vgv: 14881425, qtd: 38 },
         { name: "06 — Finalizado",   vgv: 0,        qtd: 0, last: true },
       ],
       regional: [
-        { name: "Regional GO", vgv: 48947515, qtd: 96 },
-        { name: "Regional DF", vgv: 4472500,  qtd: 10 },
-        { name: "Regional SP", vgv: 2142400,  qtd: 4  },
+        { name: "Regional GO", vgv: 53188225, qtd: 108 },
+        { name: "Regional DF", vgv: 5179000,  qtd: 12  },
+        { name: "Regional SP", vgv: 4855579,  qtd: 10  },
       ],
-      regionalTotal: { vgv: 55562415, qtd: 110 },
+      regionalTotal: { vgv: 63222804, qtd: 130 },
       regionalNote: "VGV das propostas em aberto (estágios 00-05) por Regional — Maio/2026.",
       diretores: [
         { name: "Felipe",         projetado: 62026937, realizado: 0, qtdProj: 111, qtdReal: 0,   pct: 0,  status: "bad" },
         { name: "Paulo / Sérgio", projetado: 39140401, realizado: 0, qtdProj: 108, qtdReal: 0,   pct: 0,  status: "bad" },
         { name: "EBM Diretoria",  projetado: null,     realizado: 0, qtdProj: null, qtdReal: 0,   pct: null, status: "na" },
-        { name: "TOTAL",          projetado: 101167337, realizado: 0, qtdProj: 219, qtdReal: 0,  pct: 0,  status: "bad", isTotal: true },
+        { name: "TOTAL",          projetado: 101167338, realizado: 0, qtdProj: 219, qtdReal: 0,  pct: 0,  status: "bad", isTotal: true },
       ],
     },
     ytd: {
@@ -801,26 +934,35 @@
       const badgeCls = pct >= 90 ? 'ok' : (pct >= 60 ? 'warn' : 'bad');
       pctBadge = `<span class="pct-badge ${badgeCls}">${pct}% meta</span>`;
     }
+    // Diff badges (vs último snapshot) — apenas em YTD/Abr/Mai
+    let diffFinHtml = '', diffActHtml = '';
+    if (window.__diffBadge) {
+      if (period === 'ytd')      diffFinHtml = window.__diffBadge((window.__diffSnap||{}).ytd_fin, 'val');
+      else if (period === 'abr') diffFinHtml = window.__diffBadge((window.__diffSnap||{}).abr_fin, 'val');
+      else if (period === 'mai') diffActHtml = window.__diffBadge((window.__diffSnap||{}).mai_act, 'val');
+    }
     // Hero: Vendas Finalizadas | Secundário 1: Andamento | Secundário 2: VGV Total
     el.innerHTML = `
       <div class="kpi hero finalizadas ${statusCls}">
-        <div class="label">📊 Vendas Finalizadas ${pctBadge}</div>
-        <div class="value">${fmtBRLshort(p.kpi.finalizadas)}</div>
+        <div class="label">📊 Vendas Finalizadas ${pctBadge}${diffFinHtml}</div>
+        <div class="value updating">${fmtBRLshort(p.kpi.finalizadas)}</div>
         <div class="sub">${fmtBRL(p.kpi.finalizadas)}</div>
         ${deltaFin}
         <div class="spark"><canvas id="spark-fin"></canvas></div>
       </div>
       <div class="kpi andamento">
-        <div class="label">⚙ Esteira Ativa</div>
-        <div class="value">${p.kpi.andamento==null ? '—' : fmtBRLshort(p.kpi.andamento)}</div>
+        <div class="label">⚙ Esteira Ativa ${diffActHtml}</div>
+        <div class="value updating">${p.kpi.andamento==null ? '—' : fmtBRLshort(p.kpi.andamento)}</div>
         <div class="sub">${p.kpi.andamento==null ? 'Não populado' : 'Estágios 00–05'}</div>
       </div>
       <div class="kpi total">
         <div class="label">💰 VGV Total</div>
-        <div class="value">${fmtBRLshort(p.kpi.total)}</div>
+        <div class="value updating">${fmtBRLshort(p.kpi.total)}</div>
         <div class="sub">Andamento + Finalizadas</div>
       </div>
     `;
+    // Remove a classe updating após animação
+    setTimeout(() => el.querySelectorAll('.kpi .value.updating').forEach(v => v.classList.remove('updating')), 500);
     // Sparkline embutido no KPI hero
     setTimeout(() => {
       const sparkEl = document.getElementById('spark-fin');
@@ -1237,7 +1379,7 @@
     const el = document.getElementById('funil');
     const hint = document.getElementById('funil-hint');
     if (period === 'mai') {
-      hint.textContent = '— Esteira ativa em Maio/2026: 110 propostas em aberto somando R$56M';
+      hint.textContent = '— Esteira ativa em Maio/2026: 130 propostas em aberto somando R$63M';
     } else if (period === 'ytd') {
       hint.textContent = '— Total finalizado Jan–Abr (vendas concluídas no ano)';
     } else {
@@ -1458,8 +1600,222 @@
     else if (k === 'p') { e.preventDefault(); window.print(); }
     else if (k === 'd') { e.preventDefault(); applyDark(!document.body.classList.contains('dark'), true); }
     else if (k === 'f') { e.preventDefault(); togglePresent(); }
-    else if (k === 'escape' && document.body.classList.contains('presentation')) { e.preventDefault(); togglePresent(); }
+    else if (k === 'b') { e.preventDefault(); toggleBriefing(); }
+    else if (k === 't') { e.preventDefault(); toggleTV(); }
+    else if (k === 'c') { e.preventDefault(); toggleCB(); }
+    else if (k === 'escape') {
+      if (document.getElementById('drill-modal').classList.contains('show')) { e.preventDefault(); closeDrill(); }
+      else if (document.body.classList.contains('presentation')) { e.preventDefault(); togglePresent(); }
+      else if (document.body.classList.contains('tv-mode')) { e.preventDefault(); toggleTV(); }
+    }
   });
+
+  // ============================================================
+  // ONDA 11: Diff vs último snapshot, Drill-down, Briefing, TV, CB
+  // ============================================================
+
+  // ---------- Diff vs último snapshot (localStorage) ----------
+  function currentSnapshotKey() {
+    const ts = document.getElementById('last-update').textContent.trim();
+    return ts;
+  }
+  function buildSnapshotPayload() {
+    return {
+      ts: currentSnapshotKey(),
+      ytd_fin: data.ytd.kpi.finalizadas,
+      ytd_qty: data.ytd.diretores.find(d=>d.isTotal).qtdReal,
+      ytd_pct: data.ytd.diretores.find(d=>d.isTotal).pct,
+      abr_fin: data.abr.kpi.finalizadas,
+      abr_pct: data.abr.diretores.find(d=>d.isTotal).pct,
+      mai_act: data.mai.kpi.andamento,
+      felipe_ytd: data.ytd.diretores.find(d=>d.name==='Felipe').realizado,
+      paulo_ytd:  data.ytd.diretores.find(d=>d.name==='Paulo / Sérgio').realizado
+    };
+  }
+  function computeDiff() {
+    const stored = safeGet('ebm-last-snapshot');
+    const cur = buildSnapshotPayload();
+    if (!stored) {
+      safeSet('ebm-last-snapshot', JSON.stringify(cur));
+      return null;
+    }
+    let prev;
+    try { prev = JSON.parse(stored); } catch(e) { return null; }
+    if (!prev || prev.ts === cur.ts) {
+      // mesmo snapshot — sem diff (só atualiza pra garantir formato)
+      safeSet('ebm-last-snapshot', JSON.stringify(cur));
+      return null;
+    }
+    const diff = {
+      prevTs: prev.ts,
+      ytd_fin: cur.ytd_fin - (prev.ytd_fin||0),
+      ytd_qty: cur.ytd_qty - (prev.ytd_qty||0),
+      ytd_pct: cur.ytd_pct - (prev.ytd_pct||0),
+      abr_fin: cur.abr_fin - (prev.abr_fin||0),
+      abr_pct: cur.abr_pct - (prev.abr_pct||0),
+      mai_act: (cur.mai_act||0) - (prev.mai_act||0),
+      felipe_ytd: cur.felipe_ytd - (prev.felipe_ytd||0),
+      paulo_ytd:  cur.paulo_ytd  - (prev.paulo_ytd||0)
+    };
+    safeSet('ebm-last-snapshot', JSON.stringify(cur));
+    return diff;
+  }
+  const __diff = computeDiff();
+  function diffBadgeHtml(delta, type) {
+    if (!__diff || delta === 0 || delta == null) return '';
+    const cls = delta > 0 ? 'up' : 'down';
+    const arrow = delta > 0 ? '↑' : '↓';
+    let txt;
+    if (type === 'pct') txt = Math.abs(delta).toFixed(1) + ' p.p.';
+    else if (type === 'qty') txt = fmtNum(Math.abs(delta));
+    else txt = fmtBRLshort(Math.abs(delta));
+    return `<span class="diff-badge ${cls}" title="Variação desde ${__diff.prevTs}">${arrow} ${txt}</span>`;
+  }
+  // Header snapshot hint
+  (function(){
+    const hint = document.getElementById('snapshot-hint');
+    if (!hint) return;
+    if (__diff) {
+      hint.classList.add('has-diff');
+      const sign = __diff.ytd_fin >= 0 ? '+' : '−';
+      hint.innerHTML = `🔔 ${sign}${fmtBRLshort(Math.abs(__diff.ytd_fin))} YTD desde ${__diff.prevTs}`;
+      hint.title = `YTD: ${__diff.ytd_fin>=0?'+':''}${fmtBRL(__diff.ytd_fin)} | Abril: ${__diff.abr_fin>=0?'+':''}${fmtBRL(__diff.abr_fin)} | Esteira Maio: ${__diff.mai_act>=0?'+':''}${fmtBRL(__diff.mai_act)}`;
+    } else {
+      hint.textContent = '— sem mudanças desde a última visita';
+    }
+  })();
+  // Expor pra renderKpis usar
+  window.__diffBadge = diffBadgeHtml;
+  window.__diffSnap = __diff;
+
+  // ---------- Drill-down clicável (diretores) ----------
+  const drillModal = document.getElementById('drill-modal');
+  const drillBody = document.getElementById('drill-body');
+  const drillTitle = document.getElementById('drill-title');
+  function openDrill(dirName) {
+    if (!dirName || dirName === 'TOTAL') return;
+    drillTitle.textContent = `📊 Drill-down — ${dirName}`;
+    // Coletar dados do diretor por mês
+    const months = ['jan','fev','mar','abr'];
+    const monthLabels = {jan:'Janeiro', fev:'Fevereiro', mar:'Março', abr:'Abril'};
+    const rows = months.map(m => {
+      const d = data[m].diretores.find(x => x.name === dirName);
+      if (!d || d.realizado == null) return null;
+      return { mes: monthLabels[m], proj: d.projetado, real: d.realizado, qreal: d.qtdReal, pct: d.pct };
+    }).filter(Boolean);
+
+    // Totais
+    const totProj = rows.reduce((s,r)=>s+(r.proj||0),0);
+    const totReal = rows.reduce((s,r)=>s+r.real,0);
+    const totQty = rows.reduce((s,r)=>s+(r.qreal||0),0);
+    const avgPct = totProj ? Math.round(totReal/totProj*100) : null;
+
+    // Stats grid
+    let statsHtml = `
+      <div class="modal-grid">
+        <div class="modal-stat"><div class="lbl">VGV YTD</div><div class="val">${fmtBRLshort(totReal)}</div></div>
+        <div class="modal-stat"><div class="lbl">Meta YTD</div><div class="val">${totProj?fmtBRLshort(totProj):'—'}</div></div>
+        <div class="modal-stat"><div class="lbl">% Atingimento</div><div class="val">${avgPct!=null?avgPct+'%':'—'}</div></div>
+        <div class="modal-stat"><div class="lbl">Unidades YTD</div><div class="val">${fmtNum(totQty)}</div></div>
+      </div>`;
+
+    // Tabela mensal
+    let tableHtml = `
+      <h4 style="margin:12px 0 8px;color:var(--ebm-navy);font-size:14px;">Performance mensal</h4>
+      <table class="modal-table">
+        <thead><tr><th>Mês</th><th class="num">Realizado</th><th class="num">Meta</th><th class="num">%</th><th class="num">Unid.</th></tr></thead>
+        <tbody>
+          ${rows.map(r => `<tr>
+            <td>${r.mes}</td>
+            <td class="num">${fmtBRLshort(r.real)}</td>
+            <td class="num">${r.proj?fmtBRLshort(r.proj):'—'}</td>
+            <td class="num"><strong style="color:${r.pct>=90?'#0F6E4D':(r.pct>=60?'#8A5E13':'#A4001B')}">${r.pct!=null?r.pct+'%':'—'}</strong></td>
+            <td class="num">${fmtNum(r.qreal)}</td>
+          </tr>`).join('')}
+        </tbody>
+      </table>`;
+
+    // Insights
+    const best = rows.slice().sort((a,b)=>(b.pct||0)-(a.pct||0))[0];
+    const worst = rows.slice().sort((a,b)=>(a.pct||0)-(b.pct||0))[0];
+    const insightsHtml = `
+      <h4 style="margin:18px 0 8px;color:var(--ebm-navy);font-size:14px;">💡 Insights</h4>
+      <ul style="margin:0;padding-left:20px;font-size:13px;line-height:1.7;color:var(--ebm-text);">
+        <li>Melhor mês: <strong>${best.mes}</strong> (${best.pct}% da meta — ${fmtBRLshort(best.real)})</li>
+        <li>Pior mês: <strong>${worst.mes}</strong> (${worst.pct}% da meta — ${fmtBRLshort(worst.real)})</li>
+        <li>Ticket médio YTD: <strong>${totQty?fmtBRLshort(totReal/totQty):'—'}</strong> por unidade</li>
+        ${avgPct!=null && avgPct<60 ? `<li style="color:var(--ebm-red);"><strong>⚠ Abaixo da meta YTD</strong> — gap de ${fmtBRLshort(totProj-totReal)}</li>` : ''}
+      </ul>`;
+
+    drillBody.innerHTML = statsHtml + tableHtml + insightsHtml;
+    drillModal.classList.add('show');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeDrill() {
+    drillModal.classList.remove('show');
+    document.body.style.overflow = '';
+  }
+  document.getElementById('drill-close').addEventListener('click', closeDrill);
+  drillModal.addEventListener('click', (e) => { if (e.target === drillModal) closeDrill(); });
+
+  // Delegação de click nos diretores
+  document.addEventListener('click', (e) => {
+    const dir = e.target.closest('.diretor');
+    if (!dir || dir.classList.contains('is-total')) return;
+    const nameEl = dir.querySelector('.name');
+    if (nameEl) openDrill(nameEl.textContent.trim());
+  });
+
+  // ---------- Modo Briefing ----------
+  function toggleBriefing() {
+    const on = !document.body.classList.contains('briefing');
+    document.body.classList.toggle('briefing', on);
+    document.getElementById('btn-briefing').textContent = on ? '↩ Sair Briefing' : '📋 Briefing';
+    safeSet('ebm-briefing', on ? '1' : '0');
+    setTimeout(() => {
+      const active = document.querySelector('#period-toggle button.active');
+      if (active) activate(active.dataset.period);
+    }, 50);
+  }
+  document.getElementById('btn-briefing').addEventListener('click', toggleBriefing);
+  if (safeGet('ebm-briefing') === '1') toggleBriefing();
+
+  // ---------- Modo TV (auto-rotate) ----------
+  let tvInterval = null;
+  function toggleTV() {
+    const on = !document.body.classList.contains('tv-mode');
+    document.body.classList.toggle('tv-mode', on);
+    document.getElementById('btn-tv').textContent = on ? '⏸ Sair TV' : '📺 TV';
+    if (on) {
+      const seq = ['ytd','jan','fev','mar','abr','mai','esteira','empreendimentos'];
+      let i = 0;
+      // Começa no primeiro do ciclo
+      activate(seq[0]);
+      tvInterval = setInterval(() => {
+        i = (i + 1) % seq.length;
+        activate(seq[i]);
+      }, 15000);
+    } else if (tvInterval) {
+      clearInterval(tvInterval);
+      tvInterval = null;
+    }
+  }
+  document.getElementById('btn-tv').addEventListener('click', toggleTV);
+
+  // ---------- Color-blind safe ----------
+  function toggleCB() {
+    const on = !document.body.classList.contains('cb-safe');
+    document.body.classList.toggle('cb-safe', on);
+    document.getElementById('btn-cb').title = on ? 'Voltar à paleta padrão (atalho: C)' : 'Paleta para daltonismo (atalho: C)';
+    safeSet('ebm-cb-safe', on ? '1' : '0');
+    setTimeout(() => {
+      renderTrend();
+      const active = document.querySelector('#period-toggle button.active');
+      if (active) activate(active.dataset.period);
+    }, 50);
+  }
+  document.getElementById('btn-cb').addEventListener('click', toggleCB);
+  if (safeGet('ebm-cb-safe') === '1') document.body.classList.add('cb-safe');
 
   setupNotes();
   setupEmp();
