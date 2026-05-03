@@ -499,9 +499,10 @@
 
   /* Modo TV (kiosk auto-rotate) */
   body.tv-mode .header-buttons, body.tv-mode .updated { opacity: 0.5; }
-  body.tv-mode::before { content: '📺 TV — auto-rotate ativo'; position: fixed; top: 12px; right: 12px;
-    background: var(--ebm-navy); color: white; padding: 6px 12px; border-radius: 999px; font-size: 11px;
-    font-weight: 700; z-index: 100; box-shadow: 0 4px 12px rgba(0,0,0,0.2); animation: pulseGlow 2s infinite; }
+  body.tv-mode::before { content: '📺 TV — auto-rotate 15s'; position: fixed; bottom: 16px; left: 16px;
+    background: var(--ebm-navy); color: white; padding: 8px 16px; border-radius: 999px; font-size: 12px;
+    font-weight: 700; z-index: 250; box-shadow: 0 6px 20px rgba(0,0,0,0.35); animation: pulseGlow 2s infinite;
+    pointer-events: none; }
   body.tv-mode .toggle button.active { animation: pulseGlow 1.5s infinite; }
 
   /* Color-blind safe palette (toggle) */
@@ -592,7 +593,7 @@
   <div id="kpi-row" class="kpis"></div>
 
   <!-- Tendência mensal (sparkline) -->
-  <div class="trend-card" id="trend-card-wrap">
+  <div class="trend-card briefing-hide" id="trend-card-wrap">
     <div class="trend-header">
       <div class="trend-title">📈 Tendência mensal — % atingimento da meta</div>
       <div class="trend-meta">Jan → Abr · meta = 100%</div>
@@ -601,8 +602,8 @@
   </div>
 
   <!-- Splits de Modalidade e Momento (Abril/2026) -->
-  <section id="splits-section">
-    <h2>🔀 Splits — Abril/2026 <span class="hint" style="color:var(--ebm-warn);">base: snapshot de 01/05 (totaliza R$51,8M — Abril fechou em R$60,2M após extração detalhada agendada)</span></h2>
+  <section id="splits-section" class="briefing-hide">
+    <h2>🔀 Splits — Abril/2026 <span class="hint" style="color:var(--ebm-warn);">base parcial: snapshot 01/05 (R$51,8M) — Abril fechou em R$60,2M (gap R$8,4M sem split detalhado pendente de extração)</span></h2>
     <div class="splits-grid">
       <div class="split-block">
         <div class="split-title">Por Modalidade</div>
@@ -721,7 +722,7 @@
   </section>
 
 
-  <footer class="note">
+  <footer class="note briefing-hide">
     Fonte: Power BI EBM — relatório "Esteira Comercial". Snapshot extraído via navegador em 02/05/2026 às 18:39.<br>
     Dados mensais (Jan–Abr) capturados individualmente. <strong>2026 YTD</strong> é a soma dos meses extraídos.
     Vendas em Andamento (R$63M) é instantâneo no momento da extração — não varia por filtro de mês.<br>
@@ -1547,7 +1548,20 @@
     loadNotes(period);
   }
   document.querySelectorAll('#period-toggle button').forEach(b => {
-    b.addEventListener('click', () => activate(b.dataset.period));
+    b.addEventListener('click', () => {
+      // Se TV mode ativo e user clicou manualmente, pausa o auto-rotate
+      if (document.body.classList.contains('tv-mode')) {
+        if (window.__tvInterval) { clearInterval(window.__tvInterval); window.__tvInterval = null; }
+        document.body.classList.remove('tv-mode');
+        const btnTv = document.getElementById('btn-tv');
+        if (btnTv) btnTv.textContent = '📺 TV';
+      }
+      // Fecha modal se aberto antes de trocar tab
+      const modal = document.getElementById('drill-modal');
+      if (modal && modal.classList.contains('show')) modal.classList.remove('show');
+      document.body.style.overflow = '';
+      activate(b.dataset.period);
+    });
   });
   document.getElementById('btn-refresh').addEventListener('click', () => {
     alert('Esse painel é um snapshot do BI extraído em 02/05/2026 18:39.\n\nPara atualizar os números, peça ao Claude:\n"Atualize o dashboard da esteira EBM."');
@@ -1596,7 +1610,18 @@
     if (e.target && typeof e.target.matches === 'function' && e.target.matches('input,textarea,[contenteditable="true"]')) return;
     if (e.metaKey || e.ctrlKey || e.altKey) return;
     const k = e.key.toLowerCase();
-    if (keyMap[k]) { e.preventDefault(); activate(keyMap[k]); }
+    if (keyMap[k]) {
+      e.preventDefault();
+      // Fecha modal e pausa TV se atalho de aba pressionado
+      const modal = document.getElementById('drill-modal');
+      if (modal && modal.classList.contains('show')) { modal.classList.remove('show'); document.body.style.overflow = ''; }
+      if (document.body.classList.contains('tv-mode')) {
+        if (window.__tvInterval) { clearInterval(window.__tvInterval); window.__tvInterval = null; }
+        document.body.classList.remove('tv-mode');
+        const btnTv = document.getElementById('btn-tv'); if (btnTv) btnTv.textContent = '📺 TV';
+      }
+      activate(keyMap[k]);
+    }
     else if (k === 'p') { e.preventDefault(); window.print(); }
     else if (k === 'd') { e.preventDefault(); applyDark(!document.body.classList.contains('dark'), true); }
     else if (k === 'f') { e.preventDefault(); togglePresent(); }
@@ -1681,7 +1706,13 @@
       hint.innerHTML = `🔔 ${sign}${fmtBRLshort(Math.abs(__diff.ytd_fin))} YTD desde ${__diff.prevTs}`;
       hint.title = `YTD: ${__diff.ytd_fin>=0?'+':''}${fmtBRL(__diff.ytd_fin)} | Abril: ${__diff.abr_fin>=0?'+':''}${fmtBRL(__diff.abr_fin)} | Esteira Maio: ${__diff.mai_act>=0?'+':''}${fmtBRL(__diff.mai_act)}`;
     } else {
-      hint.textContent = '— sem mudanças desde a última visita';
+      // Diferença entre primeira visita e mesmo snapshot
+      const stored = safeGet('ebm-last-snapshot');
+      let prev = null; try { prev = stored ? JSON.parse(stored) : null; } catch(e){}
+      if (!prev || prev.ts === currentSnapshotKey()) {
+        hint.textContent = '— snapshot atual, sem variação';
+        hint.title = 'Os números deste painel são idênticos ao último snapshot que você visualizou.';
+      }
     }
   })();
   // Expor pra renderKpis usar
@@ -1781,7 +1812,6 @@
   if (safeGet('ebm-briefing') === '1') toggleBriefing();
 
   // ---------- Modo TV (auto-rotate) ----------
-  let tvInterval = null;
   function toggleTV() {
     const on = !document.body.classList.contains('tv-mode');
     document.body.classList.toggle('tv-mode', on);
@@ -1789,15 +1819,16 @@
     if (on) {
       const seq = ['ytd','jan','fev','mar','abr','mai','esteira','empreendimentos'];
       let i = 0;
-      // Começa no primeiro do ciclo
       activate(seq[0]);
-      tvInterval = setInterval(() => {
+      window.__tvInterval = setInterval(() => {
+        // Pausa se modal aberto pra não atrapalhar leitura
+        if (document.getElementById('drill-modal').classList.contains('show')) return;
         i = (i + 1) % seq.length;
         activate(seq[i]);
       }, 15000);
-    } else if (tvInterval) {
-      clearInterval(tvInterval);
-      tvInterval = null;
+    } else if (window.__tvInterval) {
+      clearInterval(window.__tvInterval);
+      window.__tvInterval = null;
     }
   }
   document.getElementById('btn-tv').addEventListener('click', toggleTV);
