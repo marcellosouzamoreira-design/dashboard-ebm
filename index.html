@@ -2,7 +2,7 @@
 {
   "name": "Ebm Esteira Comercial",
   "schemaVersion": 1,
-  "description": "Dashboard da Esteira Comercial EBM — toggle por mês de 2026 (Jan/Fev/Mar/Abr/Mai) + 2026 YTD acumulado. KPIs (Andamento R$53M / Finalizadas / VGV Total), funil de propostas, gauges de meta por diretor (Felipe, Paulo/Sérgio, EBM Diretoria), distribuição por regional (DF/GO/SP) e top/bottom empreendimentos. Cores oficiais EBM (#003D6B navy / #A4001B vinho). Snapshot extraído do Power BI EBM em 04/05/2026 08:33 (refresh automático). Sub-filtros de Modalidade (Associativo/SPBE) e Momento (Lançamento/Estoque) presentes mas pendentes de extração."
+  "description": "Dashboard da Esteira Comercial EBM — toggle por mês de 2026 (Jan/Fev/Mar/Abr/Mai) + 2026 YTD acumulado. KPIs (Andamento R$53M / Finalizadas / VGV Total), funil de propostas, gauges de meta por diretor (Felipe, Paulo/Sérgio, EBM Diretoria), distribuição por regional (DF/GO/SP) e top/bottom empreendimentos. Cores oficiais EBM (#003D6B navy / #A4001B vinho). Snapshot extraído do Power BI EBM em 04/05/2026 19:15 (refresh automático). Sub-filtros de Modalidade (Associativo/SPBE) e Momento (Lançamento/Estoque) presentes mas pendentes de extração."
 }
 </script>
 <html lang="pt-BR">
@@ -456,7 +456,7 @@
         <button role="tab" data-period="esteira" type="button">⚙ Esteira</button>
         <button role="tab" data-period="empreendimentos" type="button">🏢 Empreendimentos</button>
       </div>
-      <div class="updated">Última atualização BI: <strong id="last-update">04/05/2026 08:33:51</strong></div>
+      <div class="updated">Última atualização BI: <strong id="last-update">04/05/2026 19:15:56</strong></div>
       <div class="header-buttons">
         <button id="btn-refresh" class="btn-refresh" type="button" title="Atualização automática 2x/dia (8:30 e 20:30)" style="display:none;">↻ Snapshot</button>
         <button id="btn-print" class="btn-export" type="button" title="Imprimir / Salvar PDF (atalho: P)">🖨 PDF</button>
@@ -548,7 +548,7 @@
       <div class="kpi andamento" style="text-align:center;padding:24px;">
         <div class="label">Esteira ativa neste momento</div>
         <div class="value" style="font-size:42px;">R$53M</div>
-        <div class="sub">Soma de todas propostas em andamento (estágios 00–05) capturadas em 04/05/2026 08:33</div>
+        <div class="sub">Soma de todas propostas em andamento (estágios 00–05) capturadas em 04/05/2026 19:15</div>
       </div>
     </div>
 
@@ -599,7 +599,7 @@
 
 
   <footer class="note">
-    Fonte: Power BI EBM — relatório "Esteira Comercial". Snapshot extraído via navegador em 04/05/2026 às 08:33 (refresh automático 2x/dia).<br>
+    Fonte: Power BI EBM — relatório "Esteira Comercial". Snapshot extraído via navegador em 04/05/2026 às 19:15 (refresh automático 2x/dia).<br>
     Dados mensais (Jan–Abr) capturados individualmente. <strong>2026 YTD</strong> é a soma dos meses extraídos.
     Vendas em Andamento (R$53M) é instantâneo no momento da extração — não varia por filtro de mês.<br>
     Splits por Modalidade (Associativo/SPBE) e Momento (Lançamento/Estoque) referem-se a <strong>Abril/2026</strong>
@@ -636,7 +636,7 @@
 
   // ---------- DATA ----------
   // Todos os dados são meses de 2026, capturados via Power BI público.
-  // Esteira ativa (andamento) é um snapshot único capturado em 04/05/2026 08:33
+  // Esteira ativa (andamento) é um snapshot único capturado em 04/05/2026 19:15
   // — reflete propostas em estágios 00–05 no momento da extração. Mesmo valor
   // usado em todos os meses e na aba MAI (mês vigente).
   const ANDAMENTO_ATUAL = 52640763;
@@ -701,14 +701,14 @@
     ),
     abr: makeMonth(
       "Abril / 2026",
-      60177854,  // Fechamento confirmado em 04/05/2026 08:33 (sem mudança vs snapshot 03/05 09:40)
+      60177854,  // Fechamento confirmado em 04/05/2026 19:15 (sem mudança vs snapshot 03/05 09:40)
       [
         { name: "Regional GO", vgv: 47284739, qtd: 108 },
         { name: "Regional SP", vgv: 7228864,  qtd: 14  },
         { name: "Regional DF", vgv: 5664250,  qtd: 16  },
       ],
       [
-        // Abril fechado. Valores por diretor extraídos do BI em 04/05/2026 08:33 (idênticos ao snapshot 03/05).
+        // Abril fechado. Valores por diretor extraídos do BI em 04/05/2026 19:15 (idênticos ao snapshot 03/05).
         { name: "Felipe",         projetado: 65396703,  realizado: 36856641, qtdProj: 113, qtdReal: 73,  pct: 51, status: "bad" },
         { name: "Paulo / Sérgio", projetado: 41404192,  realizado: 23321213, qtdProj: 114, qtdReal: 65,  pct: 45, status: "bad" },
         { name: "EBM Diretoria",  projetado: null,      realizado: null,     qtdProj: null, qtdReal: null, pct: null, status: "na" },
@@ -722,7 +722,7 @@
         finalizadas: 0,
         total: 52640763,
       },
-      // Esteira ativa REAL extraída do BI em 04/05/2026 08:33
+      // Esteira ativa REAL extraída do BI em 04/05/2026 19:15
       funil: [
         { name: "00 — Proposta",     vgv: 956468,    qtd: 3 },
         { name: "01 — Crédito",      vgv: 4418839,   qtd: 11 },
@@ -1407,7 +1407,7 @@
     b.addEventListener('click', () => activate(b.dataset.period));
   });
   document.getElementById('btn-refresh').addEventListener('click', () => {
-    alert('Esse painel é um snapshot do BI extraído em 04/05/2026 08:33.\n\nAtualização automática 2x/dia (8:30 e 20:30) via tarefa agendada.\n\nPara forçar refresh, peça ao Claude:\n"Atualize o dashboard da esteira EBM."');
+    alert('Esse painel é um snapshot do BI extraído em 04/05/2026 19:15.\n\nAtualização automática 2x/dia (8:30 e 20:30) via tarefa agendada.\n\nPara forçar refresh, peça ao Claude:\n"Atualize o dashboard da esteira EBM."');
   });
   document.getElementById('btn-print').addEventListener('click', () => window.print());
 
