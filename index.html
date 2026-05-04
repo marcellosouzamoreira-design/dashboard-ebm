@@ -16,9 +16,12 @@
     color-scheme: light;
     --ebm-navy: #003D6B;       /* azul navy oficial EBM */
     --ebm-red: #A4001B;        /* vinho oficial EBM */
+    --ebm-gold: #B07A1F;       /* dourado pra conquistas/destaque */
+    --ebm-gold-light: #E6C97A; /* tom claro do ouro */
     --ebm-charcoal: #1F2937;
     --ebm-bg: #F5F7FA;
     --ebm-card: #FFFFFF;
+    --ebm-card-grad: linear-gradient(135deg, #FFFFFF 0%, #F8FAFD 100%);
     --ebm-border: #E2E8EE;
     --ebm-text: #1A2332;       /* texto principal */
     --ebm-muted: #6B7585;      /* cinza secundário */
@@ -27,16 +30,36 @@
     --ebm-warn: #8A5E13;
     --ebm-placeholder: #FFF8EC;
     --ebm-soft: #fafafa;
+    --ebm-shadow-sm: 0 1px 2px rgba(0,30,55,0.05), 0 1px 1px rgba(0,30,55,0.04);
+    --ebm-shadow-md: 0 4px 8px rgba(0,30,55,0.06), 0 2px 4px rgba(0,30,55,0.04);
+    --ebm-shadow-lg: 0 10px 24px rgba(0,30,55,0.10), 0 4px 8px rgba(0,30,55,0.06);
+    --space-xs: 6px;
+    --space-sm: 12px;
+    --space-md: 20px;
+    --space-lg: 32px;
+    --space-xl: 48px;
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 14px;
+    --radius-xl: 20px;
+    --font-mono: 'SF Mono', 'Cascadia Code', 'Roboto Mono', 'Consolas', ui-monospace, monospace;
+    --font-display: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
   }
   body.dark {
     --ebm-navy: #4A9FE0;
     --ebm-red: #FF6675;
+    --ebm-gold: #E6C97A;
+    --ebm-gold-light: #FFE9B0;
     --ebm-charcoal: #C8D0DA;
     --ebm-bg: #0F1721;
     --ebm-card: #18222F;
+    --ebm-card-grad: linear-gradient(135deg, #1A2538 0%, #15202E 100%);
     --ebm-border: #2A3645;
     --ebm-text: #E5EAF0;
     --ebm-muted: #94A3B5;
+    --ebm-shadow-sm: 0 1px 2px rgba(0,0,0,0.3);
+    --ebm-shadow-md: 0 4px 8px rgba(0,0,0,0.4);
+    --ebm-shadow-lg: 0 10px 24px rgba(0,0,0,0.5);
     --ebm-ok: #2EBA85;
     --ebm-bad: #FF6675;
     --ebm-warn: #E0A648;
@@ -678,6 +701,204 @@
     .history-modal { max-height: 92vh; }
     .diff-pair-row { grid-template-columns: 1fr; gap: 4px; }
   }
+
+  /* === Onda 13: Layout polish === */
+
+  /* Background pattern sutil */
+  body { background-image:
+    linear-gradient(rgba(0,61,107,0.018) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,61,107,0.018) 1px, transparent 1px);
+    background-size: 24px 24px; background-position: -1px -1px; }
+  body.dark { background-image:
+    linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px); }
+
+  /* Tipografia tabular em todos os números */
+  .value, .sub, .vgv-side strong, .vgv-side, .gauge-pct, .delta, .ticket-card .val,
+  .modal-stat .val, .diff-vals, .hist-when, .hist-vals strong, .summary-card .val,
+  .emp-table td, .stage-vgv, .stage-qtd, .e-vgv, .e-qtd { font-variant-numeric: tabular-nums; }
+  .kpi .value { font-family: var(--font-display); font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+
+  /* Hero KPI MUITO maior */
+  #kpi-row { display: grid; grid-template-columns: 2.4fr 1fr 1fr; gap: var(--space-md); }
+  #kpi-row .kpi { background: var(--ebm-card-grad); border: 1px solid var(--ebm-border);
+    border-radius: var(--radius-lg); padding: var(--space-md) var(--space-md);
+    box-shadow: var(--ebm-shadow-sm); transition: box-shadow .2s, transform .2s; }
+  #kpi-row .kpi:hover { box-shadow: var(--ebm-shadow-md); }
+  #kpi-row .kpi.hero { padding: var(--space-lg); position: relative; overflow: hidden; }
+  #kpi-row .kpi.hero::before { content: ''; position: absolute; inset: 0;
+    background: radial-gradient(circle at top right, rgba(0,61,107,0.05), transparent 60%);
+    pointer-events: none; }
+  body.dark #kpi-row .kpi.hero::before { background: radial-gradient(circle at top right, rgba(74,159,224,0.08), transparent 60%); }
+  #kpi-row .kpi.hero .label { font-size: 13px; }
+  #kpi-row .kpi.hero .value { font-size: 64px; font-weight: 800; line-height: 1; margin: 14px 0 6px; }
+  #kpi-row .kpi .value { font-size: 32px; font-weight: 800; line-height: 1.1; margin: 8px 0 4px; }
+  #kpi-row .kpi .sub { font-size: 12px; color: var(--ebm-muted); }
+  #kpi-row .kpi.hero .sub { font-size: 13px; }
+  #kpi-row .kpi.hero.status-ok { border-top: 4px solid var(--ebm-ok); }
+  #kpi-row .kpi.hero.status-warn { border-top: 4px solid var(--ebm-warn); }
+  #kpi-row .kpi.hero.status-bad { border-top: 4px solid var(--ebm-red); }
+
+  /* Gauge circular SVG no KPI hero */
+  .gauge-circle { width: 120px; height: 120px; position: absolute; top: 18px; right: 18px; }
+  .gauge-circle svg { transform: rotate(-90deg); }
+  .gauge-circle circle { fill: none; stroke-width: 10; }
+  .gauge-circle .gauge-bg { stroke: var(--ebm-border); }
+  .gauge-circle .gauge-fg { stroke: var(--ebm-navy); transition: stroke-dasharray 1s ease; }
+  .gauge-circle .gauge-fg.ok { stroke: var(--ebm-ok); }
+  .gauge-circle .gauge-fg.warn { stroke: var(--ebm-warn); }
+  .gauge-circle .gauge-fg.bad { stroke: var(--ebm-red); }
+  .gauge-circle .gauge-fg.gold { stroke: var(--ebm-gold); }
+  .gauge-circle .gauge-text { position: absolute; inset: 0; display: flex; align-items: center;
+    justify-content: center; font-size: 20px; font-weight: 800; color: var(--ebm-navy);
+    font-variant-numeric: tabular-nums; }
+  body.dark .gauge-circle .gauge-text { color: var(--ebm-text); }
+
+  /* Cor "ouro" pra conquistas/destaque */
+  .badge-gold { background: linear-gradient(135deg, var(--ebm-gold), var(--ebm-gold-light));
+    color: white; padding: 3px 10px; border-radius: 999px; font-size: 11px; font-weight: 800;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.15); display: inline-flex; gap: 4px; align-items: center; }
+  .gauge-pct.gold { color: var(--ebm-gold); }
+  .gold-glow { box-shadow: 0 0 20px rgba(176,122,31,0.3), 0 0 40px rgba(176,122,31,0.15); }
+
+  /* Header redesign — agrupar Modos */
+  .modos-wrap { position: relative; }
+  .modos-menu { position: absolute; top: calc(100% + 6px); right: 0; background: var(--ebm-card);
+    border: 1px solid var(--ebm-border); border-radius: var(--radius-md);
+    box-shadow: var(--ebm-shadow-lg); min-width: 220px; padding: var(--space-xs); z-index: 110; display: none; }
+  .modos-menu.show { display: block; animation: fadeUp .15s ease; }
+  .modos-item { padding: 8px 12px; border-radius: var(--radius-sm); cursor: pointer; display: flex;
+    align-items: center; gap: 10px; font-size: 13px; color: var(--ebm-text);
+    border: 0; background: transparent; width: 100%; text-align: left; font-family: inherit; }
+  .modos-item:hover { background: rgba(0,61,107,0.07); }
+  body.dark .modos-item:hover { background: rgba(74,159,224,0.1); }
+  .modos-item.is-active { color: var(--ebm-navy); background: rgba(0,61,107,0.06); }
+  body.dark .modos-item.is-active { color: var(--ebm-text); background: rgba(74,159,224,0.15); }
+  .modos-item .modos-icon { font-size: 16px; width: 22px; }
+  .modos-item .modos-meta { font-size: 10px; color: var(--ebm-muted); margin-left: auto; }
+  .modos-divider { border-top: 1px solid var(--ebm-border); margin: 4px 0; }
+
+  /* Tabs com hierarquia visual */
+  #period-toggle { display: inline-flex; align-items: center; padding: 4px;
+    background: var(--ebm-bg); border-radius: var(--radius-md); border: 1px solid var(--ebm-border); }
+  #period-toggle button { padding: 6px 12px; font-size: 13px; font-weight: 600; cursor: pointer;
+    border: 0; background: transparent; color: var(--ebm-muted); border-radius: var(--radius-sm);
+    transition: all 0.15s; font-family: inherit; }
+  #period-toggle button:hover { color: var(--ebm-text); }
+  #period-toggle button.active { background: var(--ebm-card); color: var(--ebm-navy);
+    box-shadow: var(--ebm-shadow-sm); font-weight: 700; }
+  body.dark #period-toggle button.active { background: var(--ebm-soft); color: var(--ebm-text); }
+  /* Mês vigente destaque */
+  #period-toggle button[data-period="mai"] {
+    color: var(--ebm-gold); position: relative; padding-right: 22px; font-weight: 700; }
+  #period-toggle button[data-period="mai"]::after { content: ''; position: absolute; right: 8px; top: 50%;
+    transform: translateY(-50%); width: 7px; height: 7px; border-radius: 50%;
+    background: var(--ebm-gold); box-shadow: 0 0 0 0 var(--ebm-gold);
+    animation: pulseDot 1.8s infinite; }
+  @keyframes pulseDot { 0% { box-shadow: 0 0 0 0 rgba(176,122,31,0.7); } 70% { box-shadow: 0 0 0 8px rgba(176,122,31,0); } 100% { box-shadow: 0 0 0 0 rgba(176,122,31,0); } }
+  #period-toggle button[data-period="mai"].active { color: var(--ebm-gold); }
+  /* Separadores entre grupos de tabs */
+  #period-toggle .sep { display: inline-block; width: 1px; height: 18px; background: var(--ebm-border); margin: 0 4px; }
+
+  /* Section headers sticky com mini-título */
+  section h2, .trend-card .trend-header, .mai-regionais-section h3 {
+    position: sticky; top: 78px; z-index: 50; background: var(--ebm-bg);
+    padding-top: 8px; padding-bottom: 8px; margin-top: 0;
+    backdrop-filter: blur(8px) saturate(180%);
+    background: rgba(245,247,250,0.85);
+    border-bottom: 1px solid transparent;
+  }
+  body.dark section h2 { background: rgba(15,23,33,0.85); }
+  section { margin-bottom: var(--space-xl); }
+
+  /* Auto-hide header on scroll down */
+  .sticky-header { transition: transform 0.3s ease; }
+  body.scrolled-down .sticky-header { transform: translateY(-100%); }
+
+  /* Compact / Comfortable / Spacious modes */
+  body.density-compact #kpi-row .kpi.hero .value { font-size: 44px; }
+  body.density-compact section { margin-bottom: var(--space-md); }
+  body.density-compact #kpi-row { gap: var(--space-sm); }
+  body.density-spacious #kpi-row .kpi.hero .value { font-size: 84px; }
+  body.density-spacious section { margin-bottom: 80px; }
+  body.density-spacious #kpi-row { gap: var(--space-lg); }
+
+  /* Mobile: bottom navigation + FAB */
+  .bottom-nav { display: none; position: fixed; bottom: 0; left: 0; right: 0; z-index: 90;
+    background: var(--ebm-card); border-top: 1px solid var(--ebm-border);
+    padding: 6px 6px env(safe-area-inset-bottom); justify-content: space-around;
+    box-shadow: 0 -4px 12px rgba(0,30,55,0.06); }
+  .bottom-nav button { flex: 1; max-width: 80px; padding: 6px 4px; border: 0; background: transparent;
+    cursor: pointer; color: var(--ebm-muted); font-size: 10px; font-weight: 600; font-family: inherit;
+    display: flex; flex-direction: column; align-items: center; gap: 2px; border-radius: 8px; transition: color 0.15s; }
+  .bottom-nav button .bn-icon { font-size: 18px; }
+  .bottom-nav button.active { color: var(--ebm-navy); }
+  body.dark .bottom-nav button.active { color: var(--ebm-text); }
+  .bottom-nav button[data-period="mai"].active { color: var(--ebm-gold); }
+  .fab { display: none; position: fixed; bottom: 80px; right: 20px; z-index: 89;
+    width: 56px; height: 56px; border-radius: 50%; background: var(--ebm-navy); color: white;
+    border: 0; box-shadow: var(--ebm-shadow-lg); cursor: pointer; font-size: 22px;
+    transition: transform 0.15s; }
+  .fab:hover { transform: scale(1.05); }
+  .fab:active { transform: scale(0.95); }
+
+  @media (max-width: 700px) {
+    body { padding-bottom: 70px; }
+    .header-meta .toggle, #period-toggle { display: none; }
+    .bottom-nav { display: flex; }
+    .fab { display: flex; align-items: center; justify-content: center; }
+    #kpi-row { grid-template-columns: 1fr; gap: var(--space-sm); }
+    #kpi-row .kpi.hero .value { font-size: 48px; }
+    .gauge-circle { width: 80px; height: 80px; top: 12px; right: 12px; }
+    .gauge-circle .gauge-text { font-size: 14px; }
+    section h2 { top: 0; }
+    /* Sheet modal em mobile */
+    .modal-backdrop { align-items: flex-end; padding: 0; }
+    .modal, .comment-modal, .history-modal { border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+      max-height: 88vh; }
+    @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+    .modal-backdrop.show .modal, .modal-backdrop.show .comment-modal, .modal-backdrop.show .history-modal {
+      animation: slideUp 0.25s ease; }
+  }
+
+  /* Loading skeletons */
+  .skeleton { background: linear-gradient(90deg, var(--ebm-border) 0%, var(--ebm-soft) 50%, var(--ebm-border) 100%);
+    background-size: 200% 100%; animation: skeleton-pulse 1.4s infinite; border-radius: 4px;
+    color: transparent !important; }
+  @keyframes skeleton-pulse { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+  /* Ripple effect nos botões */
+  .ripple { position: relative; overflow: hidden; }
+  .ripple::after { content: ''; position: absolute; left: 50%; top: 50%; width: 5px; height: 5px;
+    background: rgba(0,61,107,0.4); opacity: 0; border-radius: 100%; transform: scale(1,1) translate(-50%,-50%);
+    transform-origin: 50% 50%; }
+  .ripple:focus:not(:active)::after { animation: ripple-anim 0.5s ease-out; }
+  @keyframes ripple-anim { 0% { transform: scale(0,0) translate(-50%,-50%); opacity: .35; }
+    100% { transform: scale(40,40) translate(-50%,-50%); opacity: 0; } }
+
+  /* Confetti container (when meta hits 100%) */
+  .confetti-container { position: fixed; inset: 0; pointer-events: none; z-index: 999; overflow: hidden; }
+  .confetti-piece { position: absolute; width: 10px; height: 10px; top: -10px;
+    animation: confetti-fall 3s linear forwards; }
+  @keyframes confetti-fall { 0% { transform: translateY(0) rotate(0); opacity: 1; }
+    100% { transform: translateY(110vh) rotate(720deg); opacity: 0; } }
+
+  /* Cards menos boxy: usa shadow ao invés de border quando possível */
+  .summary-card, .ticket-card, .reg-card, .funnel .step {
+    background: var(--ebm-card-grad); border-radius: var(--radius-md); box-shadow: var(--ebm-shadow-sm); }
+
+  /* Glassmorphism nos modais */
+  .modal-backdrop { background: rgba(0,30,55,0.45); backdrop-filter: blur(8px) saturate(180%); }
+  .modal, .cmdk, .history-modal, .comment-modal {
+    background: var(--ebm-card); backdrop-filter: blur(20px); }
+
+  /* Header denso melhor */
+  .header-buttons { gap: 4px; }
+  .btn-more, .btn-export, .btn-refresh, .cmdk-trigger { padding: 6px 12px; }
+
+  /* Trend chart maior e mais respirado */
+  .trend-card { padding: var(--space-md) var(--space-lg); }
+  .trend-chart-wrap { min-height: 240px; }
 </style>
 </head>
 <body>
@@ -696,31 +917,36 @@
         <button role="tab" data-period="fev" type="button">Fev</button>
         <button role="tab" data-period="mar" type="button">Mar</button>
         <button role="tab" data-period="abr" type="button">Abr</button>
-        <button role="tab" data-period="mai" type="button">Mai •</button>
+        <button role="tab" data-period="mai" type="button">Mai</button>
         <span class="sep" aria-hidden="true"></span>
         <button role="tab" data-period="ytd" class="active" type="button">2026 YTD</button>
         <span class="sep" aria-hidden="true"></span>
         <button role="tab" data-period="esteira" type="button">⚙ Esteira</button>
-        <button role="tab" data-period="empreendimentos" type="button">🏢 Empreendimentos</button>
+        <button role="tab" data-period="empreendimentos" type="button">🏢 Empreend.</button>
       </div>
       <div class="updated">
         Última atualização BI: <strong id="last-update">02/05/2026 18:39:29</strong>
         <span class="snapshot-hint" id="snapshot-hint" title="Variação dos KPIs desde a sua última visita"></span>
       </div>
       <div class="header-buttons">
-        <button id="btn-cmdk" class="cmdk-trigger" type="button" title="Busca rápida (Cmd/Ctrl + K)">🔍 Buscar <kbd>⌘K</kbd></button>
+        <button id="btn-cmdk" class="cmdk-trigger ripple" type="button" title="Busca rápida (Cmd/Ctrl + K)">🔍 Buscar <kbd>⌘K</kbd></button>
         <div class="bookmark-wrap">
-          <button id="btn-bookmarks" class="btn-more" type="button" title="Visões salvas">⭐ Visões</button>
+          <button id="btn-bookmarks" class="btn-more ripple" type="button" title="Visões salvas">⭐ Visões</button>
           <div class="bookmark-menu" id="bookmark-menu" role="menu"></div>
         </div>
-        <button id="btn-history" class="btn-more" type="button" title="Histórico de snapshots (atalho: H)">📜 Histórico</button>
-        <button id="btn-refresh" class="btn-refresh" type="button" title="Snapshot — peça ao Claude pra atualizar">↻ Snapshot</button>
-        <button id="btn-print" class="btn-export" type="button" title="Imprimir / Salvar PDF (atalho: P)">🖨 PDF</button>
-        <button id="btn-dark" class="btn-export" type="button" title="Alternar tema escuro (atalho: D)">🌙</button>
-        <button id="btn-cb" class="btn-more" type="button" title="Paleta para daltonismo (atalho: C)">🎨</button>
-        <button id="btn-briefing" class="btn-more" type="button" title="Modo Briefing — vertical, KPIs gigantes (atalho: B)">📋 Briefing</button>
-        <button id="btn-tv" class="btn-more" type="button" title="Modo TV — auto-rotaciona abas a cada 15s (atalho: T)">📺 TV</button>
-        <button id="btn-present" class="btn-export" type="button" title="Modo apresentação (atalho: F)">⛶ Apresentação</button>
+        <button id="btn-history" class="btn-more ripple" type="button" title="Histórico de snapshots (atalho: H)">📜 Histórico</button>
+        <button id="btn-dark" class="btn-export ripple" type="button" title="Alternar tema escuro (atalho: D)">🌙</button>
+        <div class="modos-wrap">
+          <button id="btn-modos" class="btn-more ripple" type="button" title="Modos de visualização">🎛 Modos ▾</button>
+          <div class="modos-menu" id="modos-menu" role="menu"></div>
+        </div>
+        <button id="btn-refresh" class="btn-refresh ripple" type="button" title="Snapshot — peça ao Claude pra atualizar">↻</button>
+        <!-- Botões legacy (escondidos, mantidos pra compatibilidade JS) -->
+        <button id="btn-print" type="button" hidden>🖨 PDF</button>
+        <button id="btn-cb" type="button" hidden>🎨</button>
+        <button id="btn-briefing" type="button" hidden>📋 Briefing</button>
+        <button id="btn-tv" type="button" hidden>📺 TV</button>
+        <button id="btn-present" type="button" hidden>⛶ Apresentação</button>
       </div>
     </div>
   </header>
@@ -881,6 +1107,19 @@
     — Estoque é calculado por subtração (Total − Lançamento) para evitar uma extração extra.
   </footer>
 </div>
+
+<!-- Bottom navigation (mobile) -->
+<nav class="bottom-nav" id="bottom-nav" aria-label="Navegação mobile">
+  <button data-period="ytd" type="button"><span class="bn-icon">📊</span><span>YTD</span></button>
+  <button data-period="abr" type="button"><span class="bn-icon">📅</span><span>Abr</span></button>
+  <button data-period="mai" type="button"><span class="bn-icon">⚡</span><span>Mai</span></button>
+  <button data-period="esteira" type="button"><span class="bn-icon">⚙</span><span>Esteira</span></button>
+  <button data-period="empreendimentos" type="button"><span class="bn-icon">🏢</span><span>Empr.</span></button>
+</nav>
+<!-- FAB (mobile Cmd+K) -->
+<button class="fab" id="fab" aria-label="Busca rápida" type="button">🔍</button>
+<!-- Confetti container -->
+<div class="confetti-container" id="confetti-container" aria-hidden="true"></div>
 
 <!-- Modal de drill-down (diretor → detalhamento mensal + regional) -->
 <div class="modal-backdrop" id="drill-modal" role="dialog" aria-modal="true" aria-labelledby="drill-title">
@@ -1133,10 +1372,29 @@
       else if (period === 'abr') diffFinHtml = window.__diffBadge((window.__diffSnap||{}).abr_fin, 'val');
       else if (period === 'mai') diffActHtml = window.__diffBadge((window.__diffSnap||{}).mai_act, 'val');
     }
+    // Gauge circular SVG no hero (% atingimento)
+    let gaugeHtml = '';
+    if (pct != null) {
+      const pctClamp = Math.min(pct, 200);
+      const circ = 2 * Math.PI * 45;
+      const dash = (pctClamp / 200) * circ;
+      const gCls = pct >= 100 ? 'gold' : (pct >= 90 ? 'ok' : (pct >= 60 ? 'warn' : 'bad'));
+      gaugeHtml = `
+        <div class="gauge-circle" aria-label="${pct}% da meta">
+          <svg width="120" height="120" viewBox="0 0 120 120">
+            <circle class="gauge-bg" cx="60" cy="60" r="45"></circle>
+            <circle class="gauge-fg ${gCls}" cx="60" cy="60" r="45"
+              stroke-dasharray="${dash} ${circ}" stroke-linecap="round"></circle>
+          </svg>
+          <div class="gauge-text">${pct}%</div>
+        </div>`;
+    }
     // Hero: Vendas Finalizadas | Secundário 1: Andamento | Secundário 2: VGV Total
+    const isWinner = pct != null && pct >= 100;
     el.innerHTML = `
-      <div class="kpi hero finalizadas ${statusCls}">
-        <div class="label">📊 Vendas Finalizadas ${pctBadge}${diffFinHtml}</div>
+      <div class="kpi hero finalizadas ${statusCls}${isWinner?' gold-glow':''}">
+        ${gaugeHtml}
+        <div class="label">📊 Vendas Finalizadas ${isWinner?'<span class="badge-gold">🏆 META BATIDA</span>':pctBadge}${diffFinHtml}</div>
         <div class="value updating">${fmtBRLshort(p.kpi.finalizadas)}</div>
         <div class="sub">${fmtBRL(p.kpi.finalizadas)}</div>
         ${deltaFin}
@@ -1153,7 +1411,10 @@
         <div class="sub">Andamento + Finalizadas</div>
       </div>
     `;
-    // Remove a classe updating após animação
+    // Confetti se bater meta
+    if (isWinner && !window.__celebratedFor || window.__celebratedFor !== period) {
+      if (isWinner) { window.__celebratedFor = period; if (window.__triggerConfetti) window.__triggerConfetti(); }
+    }
     setTimeout(() => el.querySelectorAll('.kpi .value.updating').forEach(v => v.classList.remove('updating')), 500);
     // Sparkline embutido no KPI hero
     setTimeout(() => {
@@ -2403,6 +2664,134 @@
     if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); openCmdk(); }
     else if (!e.metaKey && !e.ctrlKey && !e.altKey && e.key.toLowerCase() === 'h') { e.preventDefault(); openHistory(); }
   });
+
+  // ============================================================
+  // ONDA 13: Layout polish — Modos dropdown, mobile nav, microinterações
+  // ============================================================
+
+  // ---------- Modos dropdown ----------
+  function renderModosMenu() {
+    const isDark = document.body.classList.contains('dark');
+    const isB = document.body.classList.contains('briefing');
+    const isTV = document.body.classList.contains('tv-mode');
+    const isCB = document.body.classList.contains('cb-safe');
+    const isP = document.body.classList.contains('presentation');
+    const density = safeGet('ebm-density') || 'comfortable';
+    const items = [
+      {icon:'📋', label:'Briefing', meta:'B', active:isB, fn: toggleBriefing},
+      {icon:'📺', label:'TV (auto-rotate)', meta:'T', active:isTV, fn: toggleTV},
+      {icon:'⛶', label:'Apresentação', meta:'F', active:isP, fn: togglePresent},
+      {icon:'🎨', label:'Daltonismo', meta:'C', active:isCB, fn: toggleCB},
+      {sep:true},
+      {icon:'🖨', label:'Imprimir / PDF', meta:'P', active:false, fn: () => window.print()},
+      {sep:true},
+      {label:'Densidade:', sub:true},
+      {icon:'⊟', label:'Compacta', meta:'', active:density==='compact', fn: () => setDensity('compact')},
+      {icon:'☰', label:'Confortável', meta:'', active:density==='comfortable', fn: () => setDensity('comfortable')},
+      {icon:'≡', label:'Espaçada', meta:'', active:density==='spacious', fn: () => setDensity('spacious')},
+    ];
+    const menu = document.getElementById('modos-menu');
+    menu.innerHTML = items.map((it, i) => {
+      if (it.sep) return '<div class="modos-divider"></div>';
+      if (it.sub) return `<div style="font-size:10px;color:var(--ebm-muted);font-weight:700;text-transform:uppercase;padding:6px 12px 2px;letter-spacing:0.5px;">${it.label}</div>`;
+      return `<button class="modos-item ${it.active?'is-active':''}" data-i="${i}">
+        <span class="modos-icon">${it.icon}</span><span>${it.label}</span>
+        ${it.meta?`<span class="modos-meta">${it.meta}</span>`:''}
+      </button>`;
+    }).join('');
+    menu.querySelectorAll('.modos-item').forEach(el => {
+      el.addEventListener('click', () => {
+        const it = items[+el.dataset.i];
+        if (it && it.fn) { it.fn(); menu.classList.remove('show'); }
+      });
+    });
+  }
+  document.getElementById('btn-modos').addEventListener('click', (e) => {
+    e.stopPropagation();
+    const menu = document.getElementById('modos-menu');
+    if (!menu.classList.contains('show')) renderModosMenu();
+    menu.classList.toggle('show');
+  });
+  document.addEventListener('click', (e) => {
+    const menu = document.getElementById('modos-menu');
+    if (menu && !menu.contains(e.target) && e.target.id !== 'btn-modos') menu.classList.remove('show');
+  });
+
+  // ---------- Densidade ----------
+  function setDensity(d) {
+    document.body.classList.remove('density-compact','density-comfortable','density-spacious');
+    document.body.classList.add('density-' + d);
+    safeSet('ebm-density', d);
+  }
+  setDensity(safeGet('ebm-density') || 'comfortable');
+
+  // ---------- Bottom nav (mobile) ----------
+  document.querySelectorAll('.bottom-nav button').forEach(b => {
+    b.addEventListener('click', () => {
+      const period = b.dataset.period;
+      activate(period);
+      document.querySelectorAll('.bottom-nav button').forEach(x => x.classList.toggle('active', x===b));
+    });
+  });
+  // Sync bottom nav active state com tab principal
+  const _origActivate = activate;
+  window.activate = function(p) {
+    _origActivate(p);
+    document.querySelectorAll('.bottom-nav button').forEach(x => x.classList.toggle('active', x.dataset.period===p));
+  };
+  // Init: marca YTD como ativo no bottom nav
+  setTimeout(() => {
+    const active = document.querySelector('#period-toggle button.active');
+    if (active) {
+      const p = active.dataset.period;
+      document.querySelectorAll('.bottom-nav button').forEach(x => x.classList.toggle('active', x.dataset.period===p));
+    }
+  }, 100);
+
+  // ---------- FAB (mobile cmd+K) ----------
+  document.getElementById('fab').addEventListener('click', openCmdk);
+
+  // ---------- Auto-hide header on scroll down ----------
+  let lastScroll = 0;
+  let scrollTicking = false;
+  window.addEventListener('scroll', () => {
+    if (scrollTicking) return;
+    scrollTicking = true;
+    requestAnimationFrame(() => {
+      const cur = window.scrollY;
+      // Não esconde no topo (< 100px) ou em modos especiais
+      if (cur < 100 || document.body.classList.contains('presentation') || document.body.classList.contains('briefing')) {
+        document.body.classList.remove('scrolled-down');
+      } else if (cur > lastScroll + 8) {
+        document.body.classList.add('scrolled-down');
+      } else if (cur < lastScroll - 8) {
+        document.body.classList.remove('scrolled-down');
+      }
+      lastScroll = cur;
+      scrollTicking = false;
+    });
+  }, { passive: true });
+
+  // ---------- Confetti (quando bate meta) ----------
+  window.__triggerConfetti = function() {
+    const c = document.getElementById('confetti-container');
+    if (!c) return;
+    const colors = ['#003D6B','#A4001B','#B07A1F','#E6C97A','#0F6E4D'];
+    const N = 60;
+    for (let i = 0; i < N; i++) {
+      const piece = document.createElement('div');
+      piece.className = 'confetti-piece';
+      piece.style.left = Math.random()*100 + 'vw';
+      piece.style.background = colors[i%colors.length];
+      piece.style.animationDelay = (Math.random()*1.2) + 's';
+      piece.style.animationDuration = (2.4 + Math.random()*1.6) + 's';
+      piece.style.width = (6 + Math.random()*8) + 'px';
+      piece.style.height = (6 + Math.random()*8) + 'px';
+      piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+      c.appendChild(piece);
+      setTimeout(() => piece.remove(), 4500);
+    }
+  };
 
   setupNotes();
   setupEmp();
