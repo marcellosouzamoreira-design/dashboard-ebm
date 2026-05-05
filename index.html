@@ -1,30 +1,22 @@
-<!doctype html>
+<!doctype html><script type="application/json" id="cowork-artifact-meta">
+{
+  "name": "Ebm Esteira Comercial",
+  "schemaVersion": 1,
+  "description": "Dashboard da Esteira Comercial EBM — toggle por mês de 2026 (Jan/Fev/Mar/Abr) + 2026 YTD acumulado. KPIs (Andamento R$63M / Finalizadas / VGV Total), funil de propostas, gauges de meta por diretor (Felipe, Paulo/Sérgio, EBM Diretoria), distribuição por regional (DF/GO/SP) e top/bottom empreendimentos. Cores oficiais EBM (#003D6B navy / #A4001B vinho). Snapshot extraído do Power BI EBM em 01/05/2026 08:47. Sub-filtros de Modalidade (Associativo/SPBE) e Momento (Lançamento/Estoque) presentes mas pendentes de extração."
+}
+</script>
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-<meta name="theme-color" content="#003D6B" />
-<meta name="apple-mobile-web-app-capable" content="yes" />
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-<meta name="apple-mobile-web-app-title" content="EBM Esteira" />
-<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-<meta http-equiv="Pragma" content="no-cache" />
-<meta http-equiv="Expires" content="0" />
 <title>EBM — Esteira Comercial</title>
-<link rel="icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%23003D6B'/><text x='32' y='44' font-family='Arial Black' font-size='28' font-weight='900' fill='%23fff' text-anchor='middle'>EBM</text></svg>" />
-<link rel="apple-touch-icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect width='180' height='180' rx='40' fill='%23003D6B'/><text x='90' y='118' font-family='Arial Black' font-size='72' font-weight='900' fill='%23fff' text-anchor='middle'>EBM</text></svg>" />
-<link rel="manifest" href='data:application/json;charset=utf-8,{"name":"EBM Esteira Comercial","short_name":"EBM Esteira","description":"Dashboard da Diretoria Comercial EBM","start_url":".","display":"standalone","orientation":"any","background_color":"%23003D6B","theme_color":"%23003D6B","icons":[{"src":"data:image/svg+xml;utf8,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 192 192%27><rect width=%27192%27 height=%27192%27 rx=%2742%27 fill=%27%23003D6B%27/><text x=%2796%27 y=%27124%27 font-family=%27Arial Black%27 font-size=%2776%27 font-weight=%27900%27 fill=%27%23fff%27 text-anchor=%27middle%27>EBM</text></svg>","sizes":"192x192","type":"image/svg+xml"},{"src":"data:image/svg+xml;utf8,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 512 512%27><rect width=%27512%27 height=%27512%27 rx=%27112%27 fill=%27%23003D6B%27/><text x=%27256%27 y=%27332%27 font-family=%27Arial Black%27 font-size=%27200%27 font-weight=%27900%27 fill=%27%23fff%27 text-anchor=%27middle%27>EBM</text></svg>","sizes":"512x512","type":"image/svg+xml"}]}' />
 <style>
   :root {
     color-scheme: light;
     --ebm-navy: #003D6B;       /* azul navy oficial EBM */
     --ebm-red: #A4001B;        /* vinho oficial EBM */
-    --ebm-gold: #B07A1F;       /* dourado pra conquistas/destaque */
-    --ebm-gold-light: #E6C97A; /* tom claro do ouro */
     --ebm-charcoal: #1F2937;
     --ebm-bg: #F5F7FA;
     --ebm-card: #FFFFFF;
-    --ebm-card-grad: linear-gradient(135deg, #FFFFFF 0%, #F8FAFD 100%);
     --ebm-border: #E2E8EE;
     --ebm-text: #1A2332;       /* texto principal */
     --ebm-muted: #6B7585;      /* cinza secundário */
@@ -33,36 +25,16 @@
     --ebm-warn: #8A5E13;
     --ebm-placeholder: #FFF8EC;
     --ebm-soft: #fafafa;
-    --ebm-shadow-sm: 0 1px 2px rgba(0,30,55,0.05), 0 1px 1px rgba(0,30,55,0.04);
-    --ebm-shadow-md: 0 4px 8px rgba(0,30,55,0.06), 0 2px 4px rgba(0,30,55,0.04);
-    --ebm-shadow-lg: 0 10px 24px rgba(0,30,55,0.10), 0 4px 8px rgba(0,30,55,0.06);
-    --space-xs: 6px;
-    --space-sm: 12px;
-    --space-md: 20px;
-    --space-lg: 32px;
-    --space-xl: 48px;
-    --radius-sm: 6px;
-    --radius-md: 10px;
-    --radius-lg: 14px;
-    --radius-xl: 20px;
-    --font-mono: 'SF Mono', 'Cascadia Code', 'Roboto Mono', 'Consolas', ui-monospace, monospace;
-    --font-display: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
   }
   body.dark {
     --ebm-navy: #4A9FE0;
     --ebm-red: #FF6675;
-    --ebm-gold: #E6C97A;
-    --ebm-gold-light: #FFE9B0;
     --ebm-charcoal: #C8D0DA;
     --ebm-bg: #0F1721;
     --ebm-card: #18222F;
-    --ebm-card-grad: linear-gradient(135deg, #1A2538 0%, #15202E 100%);
     --ebm-border: #2A3645;
     --ebm-text: #E5EAF0;
     --ebm-muted: #94A3B5;
-    --ebm-shadow-sm: 0 1px 2px rgba(0,0,0,0.3);
-    --ebm-shadow-md: 0 4px 8px rgba(0,0,0,0.4);
-    --ebm-shadow-lg: 0 10px 24px rgba(0,0,0,0.5);
     --ebm-ok: #2EBA85;
     --ebm-bad: #FF6675;
     --ebm-warn: #E0A648;
@@ -459,449 +431,6 @@
 
   /* Foco visível (a11y) */
   *:focus-visible { outline: 2px solid var(--ebm-navy); outline-offset: 2px; }
-
-  /* === Onda 11: Polish === */
-
-  /* Animações de entrada */
-  @keyframes fadeUp { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
-  @keyframes pulseGlow { 0%,100% { box-shadow: 0 0 0 0 rgba(0,61,107,0.0); } 50% { box-shadow: 0 0 0 4px rgba(0,61,107,0.18); } }
-  .kpi, .diretor, .summary-card, .funnel .step, .ticket-card { animation: fadeUp .35s ease both; }
-  .kpi:nth-child(2) { animation-delay: .05s; } .kpi:nth-child(3) { animation-delay: .1s; }
-  .diretor { transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease; cursor: pointer; }
-  .diretor:hover:not(.is-total) { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,61,107,0.12); border-color: var(--ebm-navy); }
-  .diretor.is-total { cursor: default; }
-  .diretor:not(.is-total)::after { content: '🔍'; position: absolute; top: 8px; right: 12px; font-size: 12px; opacity: 0; transition: opacity .15s; }
-  .diretor { position: relative; }
-  .diretor:hover:not(.is-total)::after { opacity: 0.55; }
-  body.dark .diretor:hover:not(.is-total) { box-shadow: 0 6px 16px rgba(255,255,255,0.05); border-color: #4a90c2; }
-
-  /* Diff badges (vs último snapshot) */
-  .diff-badge { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 700;
-    padding: 2px 8px; border-radius: 999px; margin-left: 8px; vertical-align: middle;
-    background: #f0f3f7; color: var(--ebm-muted); border: 1px solid var(--ebm-border); white-space: nowrap; }
-  .diff-badge.up   { background: #e6f4ee; color: #0F6E4D; border-color: #b8e0c9; }
-  .diff-badge.down { background: #fce8eb; color: #A4001B; border-color: #f1b9c2; }
-  body.dark .diff-badge { background: #1a2538; border-color: #2d3a52; color: #94a4be; }
-  body.dark .diff-badge.up { background: #15331f; color: #5fcf95; border-color: #275a3b; }
-  body.dark .diff-badge.down { background: #3a1a22; color: #ff8a9d; border-color: #5e2733; }
-
-  /* Modal de drill-down */
-  .modal-backdrop { position: fixed; inset: 0; background: rgba(0,30,55,0.55); z-index: 200;
-    display: none; align-items: center; justify-content: center; padding: 20px;
-    backdrop-filter: blur(4px); animation: fadeUp .2s ease; }
-  .modal-backdrop.show { display: flex; }
-  .modal { background: var(--ebm-card); border-radius: 14px; max-width: 720px; width: 100%; max-height: 86vh;
-    overflow: auto; box-shadow: 0 24px 60px rgba(0,0,0,.4); animation: fadeUp .25s ease;
-    border: 1px solid var(--ebm-border); }
-  .modal-head { display: flex; align-items: center; justify-content: space-between; padding: 18px 22px;
-    border-bottom: 1px solid var(--ebm-border); position: sticky; top: 0; background: var(--ebm-card); z-index: 1; }
-  .modal-head h3 { margin: 0; color: var(--ebm-navy); font-size: 18px; }
-  .modal-close { background: transparent; border: 1px solid var(--ebm-border); border-radius: 8px;
-    width: 32px; height: 32px; cursor: pointer; color: var(--ebm-muted); font-size: 16px; }
-  .modal-close:hover { color: var(--ebm-red); border-color: var(--ebm-red); }
-  .modal-body { padding: 22px; }
-  .modal-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 18px; }
-  .modal-stat { background: #f7f9fc; border-radius: 10px; padding: 12px; border: 1px solid var(--ebm-border); }
-  .modal-stat .lbl { font-size: 11px; color: var(--ebm-muted); text-transform: uppercase; letter-spacing: 0.4px; font-weight: 700; }
-  .modal-stat .val { font-size: 22px; color: var(--ebm-navy); font-weight: 800; margin-top: 4px; font-variant-numeric: tabular-nums; }
-  body.dark .modal-stat { background: #1a2538; }
-  body.dark .modal-stat .val { color: #d8e3f2; }
-  .modal-table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 13px; }
-  .modal-table th, .modal-table td { padding: 8px 10px; text-align: left; border-bottom: 1px solid var(--ebm-border); }
-  .modal-table th { background: #f0f3f7; color: var(--ebm-muted); font-size: 11px; text-transform: uppercase; letter-spacing: .4px; }
-  .modal-table td.num { text-align: right; font-variant-numeric: tabular-nums; }
-  body.dark .modal-table th { background: #1a2538; }
-
-  /* Modo Briefing (vertical, pra reuniões) */
-  body.briefing .wrap { max-width: 980px; }
-  body.briefing .sticky-header { padding: 14px 24px; }
-  body.briefing .sticky-header h1 { font-size: 28px; }
-  body.briefing #kpi-row .kpi.hero .value { font-size: 72px; line-height: 1; }
-  body.briefing #kpi-row .kpi .value { font-size: 44px; }
-  body.briefing .funnel .step { padding: 14px; }
-  body.briefing .diretor { padding: 18px; }
-  body.briefing .ticket-card .val { font-size: 28px; }
-  body.briefing .briefing-hide { display: none !important; }
-
-  /* Modo TV (kiosk auto-rotate) */
-  body.tv-mode .header-buttons, body.tv-mode .updated { opacity: 0.5; }
-  body.tv-mode::before { content: '📺 TV — auto-rotate 15s'; position: fixed; bottom: 16px; left: 16px;
-    background: var(--ebm-navy); color: white; padding: 8px 16px; border-radius: 999px; font-size: 12px;
-    font-weight: 700; z-index: 250; box-shadow: 0 6px 20px rgba(0,0,0,0.35); animation: pulseGlow 2s infinite;
-    pointer-events: none; }
-  body.tv-mode .toggle button.active { animation: pulseGlow 1.5s infinite; }
-
-  /* Color-blind safe palette (toggle) */
-  body.cb-safe {
-    --ebm-red: #c44e00;        /* laranja escuro substitui vermelho */
-    --status-bad-bg: #fff1e6;
-    --status-bad-fg: #c44e00;
-  }
-  body.cb-safe.dark { --ebm-red: #ff8a3c; }
-  body.cb-safe .gauge-pct.bad, body.cb-safe .delta.down { color: #c44e00 !important; }
-  body.cb-safe .bullet .fill.bad { background: linear-gradient(90deg, #c44e00, #ff8a3c) !important; }
-  body.cb-safe .pct-badge.bad { background: #fff1e6 !important; color: #c44e00 !important; border-color: #ffd0a8 !important; }
-
-  /* Snapshot diff hint global (header) */
-  .snapshot-hint { font-size: 11px; color: var(--ebm-muted); padding: 4px 10px; background: #f0f3f7;
-    border: 1px solid var(--ebm-border); border-radius: 999px; margin-left: 10px; }
-  .snapshot-hint.has-diff { background: #fff7e6; border-color: #ffd99a; color: #8A5E13; font-weight: 700; }
-  body.dark .snapshot-hint { background: #1a2538; }
-  body.dark .snapshot-hint.has-diff { background: #3a2c14; border-color: #6a4f1f; color: #ffc864; }
-
-  /* Botões adicionais no header */
-  .btn-more { background: transparent; border: 1px solid var(--ebm-border); color: var(--ebm-muted);
-    padding: 6px 10px; border-radius: 8px; cursor: pointer; font-size: 13px; transition: all 0.15s; }
-  .btn-more:hover { color: var(--ebm-navy); border-color: var(--ebm-navy); }
-  body.dark .btn-more { color: #94a4be; border-color: #2d3a52; }
-  body.dark .btn-more:hover { color: #d8e3f2; border-color: #4a90c2; }
-
-  /* CountUp animation - pulse on update */
-  @keyframes countPulse { 0% { transform: scale(1); } 50% { transform: scale(1.04); } 100% { transform: scale(1); } }
-  .kpi .value.updating { animation: countPulse .4s ease; }
-
-  /* Tab transition */
-  .toggle button { transition: all 0.18s ease; }
-  .toggle button.active { transform: scale(1.02); }
-
-  @media (max-width: 700px) {
-    .modal { max-height: 92vh; }
-    .modal-head h3 { font-size: 15px; }
-    .modal-stat .val { font-size: 18px; }
-    body.briefing #kpi-row .kpi.hero .value { font-size: 48px; }
-    body.briefing #kpi-row .kpi .value { font-size: 30px; }
-  }
-  @media print {
-    .modal-backdrop, .snapshot-hint, .btn-more { display: none !important; }
-    body.tv-mode::before { display: none !important; }
-  }
-
-  /* === Onda 12: Produtividade + Histórico === */
-
-  /* Command Palette (Cmd+K) */
-  .cmdk-backdrop { position: fixed; inset: 0; background: rgba(0,30,55,0.6); z-index: 300;
-    display: none; align-items: flex-start; justify-content: center; padding: 80px 20px;
-    backdrop-filter: blur(6px); }
-  .cmdk-backdrop.show { display: flex; animation: fadeUp .15s ease; }
-  .cmdk { background: var(--ebm-card); border-radius: 14px; max-width: 600px; width: 100%;
-    box-shadow: 0 24px 60px rgba(0,0,0,.5); border: 1px solid var(--ebm-border); overflow: hidden;
-    animation: fadeUp .2s ease; }
-  .cmdk-input-wrap { display: flex; align-items: center; padding: 14px 18px; border-bottom: 1px solid var(--ebm-border); gap: 12px; }
-  .cmdk-input-wrap::before { content: '🔍'; font-size: 18px; }
-  .cmdk-input { flex: 1; border: 0; outline: 0; background: transparent; font-size: 16px; color: var(--ebm-text);
-    font-family: inherit; }
-  .cmdk-input::placeholder { color: var(--ebm-muted); }
-  .cmdk-results { max-height: 60vh; overflow-y: auto; padding: 8px 0; }
-  .cmdk-section-label { font-size: 10px; font-weight: 700; color: var(--ebm-muted); text-transform: uppercase;
-    letter-spacing: 0.6px; padding: 8px 18px 4px; }
-  .cmdk-item { padding: 10px 18px; cursor: pointer; display: flex; align-items: center; gap: 12px;
-    transition: background 0.1s; }
-  .cmdk-item.active, .cmdk-item:hover { background: rgba(0,61,107,0.07); }
-  body.dark .cmdk-item.active, body.dark .cmdk-item:hover { background: rgba(74,159,224,0.1); }
-  .cmdk-icon { font-size: 16px; width: 24px; text-align: center; }
-  .cmdk-label { flex: 1; color: var(--ebm-text); font-size: 14px; font-weight: 500; }
-  .cmdk-meta { font-size: 11px; color: var(--ebm-muted); }
-  .cmdk-empty { padding: 32px; text-align: center; color: var(--ebm-muted); font-size: 13px; }
-  .cmdk-footer { padding: 8px 18px; border-top: 1px solid var(--ebm-border); font-size: 11px;
-    color: var(--ebm-muted); display: flex; gap: 14px; justify-content: center; }
-  .cmdk-kbd { display: inline-block; padding: 1px 6px; background: rgba(0,0,0,0.06); border-radius: 4px;
-    font-family: ui-monospace, monospace; font-size: 10px; }
-  body.dark .cmdk-kbd { background: rgba(255,255,255,0.08); }
-
-  /* Bookmarks dropdown */
-  .bookmark-wrap { position: relative; }
-  .bookmark-menu { position: absolute; top: calc(100% + 6px); right: 0; background: var(--ebm-card);
-    border: 1px solid var(--ebm-border); border-radius: 10px; box-shadow: 0 8px 24px rgba(0,0,0,0.15);
-    min-width: 240px; max-width: 320px; padding: 6px; z-index: 110; display: none; }
-  .bookmark-menu.show { display: block; animation: fadeUp .15s ease; }
-  .bm-item { padding: 8px 10px; border-radius: 6px; cursor: pointer; display: flex;
-    justify-content: space-between; align-items: center; gap: 8px; font-size: 13px; color: var(--ebm-text); }
-  .bm-item:hover { background: rgba(0,61,107,0.07); }
-  body.dark .bm-item:hover { background: rgba(74,159,224,0.1); }
-  .bm-item .bm-name { flex: 1; font-weight: 600; }
-  .bm-item .bm-meta { font-size: 10px; color: var(--ebm-muted); }
-  .bm-item .bm-del { color: var(--ebm-muted); padding: 2px 6px; border-radius: 4px; cursor: pointer; }
-  .bm-item .bm-del:hover { color: var(--ebm-red); background: rgba(164,0,27,0.08); }
-  .bm-divider { border-top: 1px solid var(--ebm-border); margin: 4px 0; }
-  .bm-empty { padding: 14px; text-align: center; font-size: 12px; color: var(--ebm-muted); }
-  .bm-add { padding: 8px 10px; cursor: pointer; color: var(--ebm-navy); font-weight: 600; font-size: 13px;
-    text-align: center; border-radius: 6px; }
-  .bm-add:hover { background: rgba(0,61,107,0.07); }
-  body.dark .bm-add { color: #4a90c2; }
-
-  /* Filtros combináveis nos empreendimentos */
-  .filter-chips { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
-  .chip-filter { background: transparent; border: 1px solid var(--ebm-border); border-radius: 999px;
-    padding: 4px 12px; font-size: 11px; font-weight: 600; cursor: pointer; color: var(--ebm-muted);
-    transition: all .15s; font-family: inherit; }
-  .chip-filter:hover { border-color: var(--ebm-navy); color: var(--ebm-navy); }
-  .chip-filter.active { background: var(--ebm-navy); color: white; border-color: var(--ebm-navy); }
-  .chip-filter.reg-DF.active { background: var(--ebm-warn); border-color: var(--ebm-warn); }
-  .chip-filter.reg-GO.active { background: var(--ebm-navy); border-color: var(--ebm-navy); }
-  .chip-filter.reg-SP.active { background: var(--ebm-bad); border-color: var(--ebm-bad); }
-  body.dark .chip-filter { color: #94a4be; border-color: #2d3a52; }
-  body.dark .chip-filter:hover { color: #d8e3f2; border-color: #4a90c2; }
-  body.dark .chip-filter.active { color: white; }
-  .filter-summary { font-size: 11px; color: var(--ebm-muted); margin-left: 8px; }
-
-  /* Comentário em empreendimento */
-  .emp-table tr.has-note td:nth-child(2) .nm::after { content: ' 💬'; font-size: 11px; }
-  .emp-table tr { cursor: pointer; }
-  .comment-modal { background: var(--ebm-card); border-radius: 12px; max-width: 500px; width: 100%;
-    border: 1px solid var(--ebm-border); padding: 20px; }
-  .comment-modal h3 { margin: 0 0 14px; color: var(--ebm-navy); font-size: 16px; }
-  .comment-modal textarea { width: 100%; min-height: 120px; padding: 10px; border: 1px solid var(--ebm-border);
-    border-radius: 8px; resize: vertical; font-family: inherit; font-size: 13px; color: var(--ebm-text);
-    background: var(--ebm-bg); box-sizing: border-box; }
-  .comment-modal .actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 12px; }
-  .comment-modal button { padding: 8px 14px; border-radius: 8px; border: 1px solid var(--ebm-border);
-    cursor: pointer; font-size: 13px; font-family: inherit; }
-  .comment-modal .btn-save { background: var(--ebm-navy); color: white; border-color: var(--ebm-navy); }
-  .comment-modal .btn-save:hover { opacity: 0.9; }
-  .comment-modal .btn-clear { color: var(--ebm-red); border-color: var(--ebm-red); background: white; }
-  body.dark .comment-modal .btn-clear { background: transparent; }
-
-  /* Histórico de snapshots */
-  .history-modal { background: var(--ebm-card); border-radius: 14px; max-width: 800px; width: 100%; max-height: 86vh;
-    overflow: hidden; border: 1px solid var(--ebm-border); display: flex; flex-direction: column; }
-  .history-list { flex: 1; overflow-y: auto; padding: 8px 0; }
-  .hist-item { display: flex; align-items: center; padding: 10px 18px; gap: 12px; cursor: pointer;
-    border-bottom: 1px solid var(--ebm-border); transition: background 0.1s; }
-  .hist-item:hover { background: rgba(0,61,107,0.04); }
-  body.dark .hist-item:hover { background: rgba(74,159,224,0.08); }
-  .hist-item.selected { background: rgba(0,61,107,0.08); border-left: 3px solid var(--ebm-navy); padding-left: 15px; }
-  .hist-item.selected-b { background: rgba(164,0,27,0.08); border-left: 3px solid var(--ebm-red); padding-left: 15px; }
-  .hist-when { font-weight: 700; color: var(--ebm-text); min-width: 160px; font-variant-numeric: tabular-nums; font-size: 13px; }
-  .hist-vals { flex: 1; font-size: 12px; color: var(--ebm-muted); display: flex; gap: 14px; flex-wrap: wrap; }
-  .hist-vals strong { color: var(--ebm-text); }
-  .hist-actions { font-size: 10px; color: var(--ebm-muted); }
-  .hist-controls { padding: 10px 18px; border-top: 1px solid var(--ebm-border); background: #fafafa;
-    display: flex; align-items: center; gap: 12px; font-size: 12px; }
-  body.dark .hist-controls { background: var(--ebm-soft); }
-  .hist-diff-view { padding: 18px; }
-  .diff-pair-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; align-items: center;
-    padding: 8px 0; border-bottom: 1px solid var(--ebm-border); }
-  .diff-pair-row:last-child { border-bottom: 0; }
-  .diff-label { font-size: 12px; color: var(--ebm-muted); font-weight: 600; }
-  .diff-vals { font-variant-numeric: tabular-nums; font-size: 13px; }
-  .diff-delta { font-size: 13px; font-weight: 700; }
-  .diff-delta.up { color: #0F6E4D; }
-  .diff-delta.down { color: var(--ebm-red); }
-
-  /* Botão palette hint */
-  .cmdk-trigger { background: rgba(0,61,107,0.05); border: 1px solid var(--ebm-border); padding: 4px 10px;
-    border-radius: 8px; font-size: 11px; color: var(--ebm-muted); cursor: pointer; display: inline-flex;
-    align-items: center; gap: 6px; transition: all .15s; }
-  .cmdk-trigger:hover { background: rgba(0,61,107,0.1); color: var(--ebm-navy); border-color: var(--ebm-navy); }
-  body.dark .cmdk-trigger { background: rgba(74,159,224,0.05); }
-  .cmdk-trigger kbd { background: rgba(0,0,0,0.06); padding: 1px 4px; border-radius: 3px;
-    font-family: ui-monospace, monospace; font-size: 10px; font-weight: 700; }
-  body.dark .cmdk-trigger kbd { background: rgba(255,255,255,0.1); }
-
-  @media (max-width: 700px) {
-    .cmdk-backdrop { padding: 16px; }
-    .cmdk-input { font-size: 14px; }
-    .history-modal { max-height: 92vh; }
-    .diff-pair-row { grid-template-columns: 1fr; gap: 4px; }
-  }
-
-  /* === Onda 13: Layout polish === */
-
-  /* Background pattern sutil */
-  body { background-image:
-    linear-gradient(rgba(0,61,107,0.018) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0,61,107,0.018) 1px, transparent 1px);
-    background-size: 24px 24px; background-position: -1px -1px; }
-  body.dark { background-image:
-    linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px); }
-
-  /* Tipografia tabular em todos os números */
-  .value, .sub, .vgv-side strong, .vgv-side, .gauge-pct, .delta, .ticket-card .val,
-  .modal-stat .val, .diff-vals, .hist-when, .hist-vals strong, .summary-card .val,
-  .emp-table td, .stage-vgv, .stage-qtd, .e-vgv, .e-qtd { font-variant-numeric: tabular-nums; }
-  .kpi .value { font-family: var(--font-display); font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
-
-  /* Hero KPI MUITO maior */
-  #kpi-row { display: grid; grid-template-columns: 2.4fr 1fr 1fr; gap: var(--space-md); }
-  #kpi-row .kpi { background: var(--ebm-card-grad); border: 1px solid var(--ebm-border);
-    border-radius: var(--radius-lg); padding: var(--space-md) var(--space-md);
-    box-shadow: var(--ebm-shadow-sm); transition: box-shadow .2s, transform .2s; }
-  #kpi-row .kpi:hover { box-shadow: var(--ebm-shadow-md); }
-  #kpi-row .kpi.hero { padding: var(--space-lg); position: relative; overflow: hidden; }
-  #kpi-row .kpi.hero::before { content: ''; position: absolute; inset: 0;
-    background: radial-gradient(circle at top right, rgba(0,61,107,0.05), transparent 60%);
-    pointer-events: none; }
-  body.dark #kpi-row .kpi.hero::before { background: radial-gradient(circle at top right, rgba(74,159,224,0.08), transparent 60%); }
-  #kpi-row .kpi.hero .label { font-size: 13px; }
-  #kpi-row .kpi.hero .value { font-size: 64px; font-weight: 800; line-height: 1; margin: 14px 0 6px; }
-  #kpi-row .kpi .value { font-size: 32px; font-weight: 800; line-height: 1.1; margin: 8px 0 4px; }
-  #kpi-row .kpi .sub { font-size: 12px; color: var(--ebm-muted); }
-  #kpi-row .kpi.hero .sub { font-size: 13px; }
-  #kpi-row .kpi.hero.status-ok { border-top: 4px solid var(--ebm-ok); }
-  #kpi-row .kpi.hero.status-warn { border-top: 4px solid var(--ebm-warn); }
-  #kpi-row .kpi.hero.status-bad { border-top: 4px solid var(--ebm-red); }
-
-  /* Gauge circular SVG no KPI hero */
-  .gauge-circle { width: 120px; height: 120px; position: absolute; top: 18px; right: 18px; }
-  .gauge-circle svg { transform: rotate(-90deg); }
-  .gauge-circle circle { fill: none; stroke-width: 10; }
-  .gauge-circle .gauge-bg { stroke: var(--ebm-border); }
-  .gauge-circle .gauge-fg { stroke: var(--ebm-navy); transition: stroke-dasharray 1s ease; }
-  .gauge-circle .gauge-fg.ok { stroke: var(--ebm-ok); }
-  .gauge-circle .gauge-fg.warn { stroke: var(--ebm-warn); }
-  .gauge-circle .gauge-fg.bad { stroke: var(--ebm-red); }
-  .gauge-circle .gauge-fg.gold { stroke: var(--ebm-gold); }
-  .gauge-circle .gauge-text { position: absolute; inset: 0; display: flex; align-items: center;
-    justify-content: center; font-size: 20px; font-weight: 800; color: var(--ebm-navy);
-    font-variant-numeric: tabular-nums; }
-  body.dark .gauge-circle .gauge-text { color: var(--ebm-text); }
-
-  /* Cor "ouro" pra conquistas/destaque */
-  .badge-gold { background: linear-gradient(135deg, var(--ebm-gold), var(--ebm-gold-light));
-    color: white; padding: 3px 10px; border-radius: 999px; font-size: 11px; font-weight: 800;
-    text-shadow: 0 1px 2px rgba(0,0,0,0.15); display: inline-flex; gap: 4px; align-items: center; }
-  .gauge-pct.gold { color: var(--ebm-gold); }
-  .gold-glow { box-shadow: 0 0 20px rgba(176,122,31,0.3), 0 0 40px rgba(176,122,31,0.15); }
-
-  /* Header redesign — agrupar Modos */
-  .modos-wrap { position: relative; }
-  .modos-menu { position: absolute; top: calc(100% + 6px); right: 0; background: var(--ebm-card);
-    border: 1px solid var(--ebm-border); border-radius: var(--radius-md);
-    box-shadow: var(--ebm-shadow-lg); min-width: 220px; padding: var(--space-xs); z-index: 110; display: none; }
-  .modos-menu.show { display: block; animation: fadeUp .15s ease; }
-  .modos-item { padding: 8px 12px; border-radius: var(--radius-sm); cursor: pointer; display: flex;
-    align-items: center; gap: 10px; font-size: 13px; color: var(--ebm-text);
-    border: 0; background: transparent; width: 100%; text-align: left; font-family: inherit; }
-  .modos-item:hover { background: rgba(0,61,107,0.07); }
-  body.dark .modos-item:hover { background: rgba(74,159,224,0.1); }
-  .modos-item.is-active { color: var(--ebm-navy); background: rgba(0,61,107,0.06); }
-  body.dark .modos-item.is-active { color: var(--ebm-text); background: rgba(74,159,224,0.15); }
-  .modos-item .modos-icon { font-size: 16px; width: 22px; }
-  .modos-item .modos-meta { font-size: 10px; color: var(--ebm-muted); margin-left: auto; }
-  .modos-divider { border-top: 1px solid var(--ebm-border); margin: 4px 0; }
-
-  /* Tabs com hierarquia visual */
-  #period-toggle { display: inline-flex; align-items: center; padding: 4px;
-    background: var(--ebm-bg); border-radius: var(--radius-md); border: 1px solid var(--ebm-border); }
-  #period-toggle button { padding: 6px 12px; font-size: 13px; font-weight: 600; cursor: pointer;
-    border: 0; background: transparent; color: var(--ebm-muted); border-radius: var(--radius-sm);
-    transition: all 0.15s; font-family: inherit; }
-  #period-toggle button:hover { color: var(--ebm-text); }
-  #period-toggle button.active { background: var(--ebm-card); color: var(--ebm-navy);
-    box-shadow: var(--ebm-shadow-sm); font-weight: 700; }
-  body.dark #period-toggle button.active { background: var(--ebm-soft); color: var(--ebm-text); }
-  /* Mês vigente destaque */
-  #period-toggle button[data-period="mai"] {
-    color: var(--ebm-gold); position: relative; padding-right: 22px; font-weight: 700; }
-  #period-toggle button[data-period="mai"]::after { content: ''; position: absolute; right: 8px; top: 50%;
-    transform: translateY(-50%); width: 7px; height: 7px; border-radius: 50%;
-    background: var(--ebm-gold); box-shadow: 0 0 0 0 var(--ebm-gold);
-    animation: pulseDot 1.8s infinite; }
-  @keyframes pulseDot { 0% { box-shadow: 0 0 0 0 rgba(176,122,31,0.7); } 70% { box-shadow: 0 0 0 8px rgba(176,122,31,0); } 100% { box-shadow: 0 0 0 0 rgba(176,122,31,0); } }
-  #period-toggle button[data-period="mai"].active { color: var(--ebm-gold); }
-  /* Separadores entre grupos de tabs */
-  #period-toggle .sep { display: inline-block; width: 1px; height: 18px; background: var(--ebm-border); margin: 0 4px; }
-
-  /* Section headers sticky com mini-título */
-  section h2, .trend-card .trend-header, .mai-regionais-section h3 {
-    position: sticky; top: 78px; z-index: 50; background: var(--ebm-bg);
-    padding-top: 8px; padding-bottom: 8px; margin-top: 0;
-    backdrop-filter: blur(8px) saturate(180%);
-    background: rgba(245,247,250,0.85);
-    border-bottom: 1px solid transparent;
-  }
-  body.dark section h2 { background: rgba(15,23,33,0.85); }
-  section { margin-bottom: var(--space-xl); }
-
-  /* Auto-hide header on scroll down */
-  .sticky-header { transition: transform 0.3s ease; }
-  body.scrolled-down .sticky-header { transform: translateY(-100%); }
-
-  /* Compact / Comfortable / Spacious modes */
-  body.density-compact #kpi-row .kpi.hero .value { font-size: 44px; }
-  body.density-compact section { margin-bottom: var(--space-md); }
-  body.density-compact #kpi-row { gap: var(--space-sm); }
-  body.density-spacious #kpi-row .kpi.hero .value { font-size: 84px; }
-  body.density-spacious section { margin-bottom: 80px; }
-  body.density-spacious #kpi-row { gap: var(--space-lg); }
-
-  /* Mobile: bottom navigation + FAB */
-  .bottom-nav { display: none; position: fixed; bottom: 0; left: 0; right: 0; z-index: 90;
-    background: var(--ebm-card); border-top: 1px solid var(--ebm-border);
-    padding: 6px 6px env(safe-area-inset-bottom); justify-content: space-around;
-    box-shadow: 0 -4px 12px rgba(0,30,55,0.06); }
-  .bottom-nav button { flex: 1; max-width: 80px; padding: 6px 4px; border: 0; background: transparent;
-    cursor: pointer; color: var(--ebm-muted); font-size: 10px; font-weight: 600; font-family: inherit;
-    display: flex; flex-direction: column; align-items: center; gap: 2px; border-radius: 8px; transition: color 0.15s; }
-  .bottom-nav button .bn-icon { font-size: 18px; }
-  .bottom-nav button.active { color: var(--ebm-navy); }
-  body.dark .bottom-nav button.active { color: var(--ebm-text); }
-  .bottom-nav button[data-period="mai"].active { color: var(--ebm-gold); }
-  .fab { display: none; position: fixed; bottom: 80px; right: 20px; z-index: 89;
-    width: 56px; height: 56px; border-radius: 50%; background: var(--ebm-navy); color: white;
-    border: 0; box-shadow: var(--ebm-shadow-lg); cursor: pointer; font-size: 22px;
-    transition: transform 0.15s; }
-  .fab:hover { transform: scale(1.05); }
-  .fab:active { transform: scale(0.95); }
-
-  @media (max-width: 700px) {
-    body { padding-bottom: 70px; }
-    .header-meta .toggle, #period-toggle { display: none; }
-    .bottom-nav { display: flex; }
-    .fab { display: flex; align-items: center; justify-content: center; }
-    #kpi-row { grid-template-columns: 1fr; gap: var(--space-sm); }
-    #kpi-row .kpi.hero .value { font-size: 48px; }
-    .gauge-circle { width: 80px; height: 80px; top: 12px; right: 12px; }
-    .gauge-circle .gauge-text { font-size: 14px; }
-    section h2 { top: 0; }
-    /* Sheet modal em mobile */
-    .modal-backdrop { align-items: flex-end; padding: 0; }
-    .modal, .comment-modal, .history-modal { border-radius: var(--radius-xl) var(--radius-xl) 0 0;
-      max-height: 88vh; }
-    @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-    .modal-backdrop.show .modal, .modal-backdrop.show .comment-modal, .modal-backdrop.show .history-modal {
-      animation: slideUp 0.25s ease; }
-  }
-
-  /* Loading skeletons */
-  .skeleton { background: linear-gradient(90deg, var(--ebm-border) 0%, var(--ebm-soft) 50%, var(--ebm-border) 100%);
-    background-size: 200% 100%; animation: skeleton-pulse 1.4s infinite; border-radius: 4px;
-    color: transparent !important; }
-  @keyframes skeleton-pulse { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
-
-  /* Ripple effect nos botões */
-  .ripple { position: relative; overflow: hidden; }
-  .ripple::after { content: ''; position: absolute; left: 50%; top: 50%; width: 5px; height: 5px;
-    background: rgba(0,61,107,0.4); opacity: 0; border-radius: 100%; transform: scale(1,1) translate(-50%,-50%);
-    transform-origin: 50% 50%; }
-  .ripple:focus:not(:active)::after { animation: ripple-anim 0.5s ease-out; }
-  @keyframes ripple-anim { 0% { transform: scale(0,0) translate(-50%,-50%); opacity: .35; }
-    100% { transform: scale(40,40) translate(-50%,-50%); opacity: 0; } }
-
-  /* Confetti container (when meta hits 100%) */
-  .confetti-container { position: fixed; inset: 0; pointer-events: none; z-index: 999; overflow: hidden; }
-  .confetti-piece { position: absolute; width: 10px; height: 10px; top: -10px;
-    animation: confetti-fall 3s linear forwards; }
-  @keyframes confetti-fall { 0% { transform: translateY(0) rotate(0); opacity: 1; }
-    100% { transform: translateY(110vh) rotate(720deg); opacity: 0; } }
-
-  /* Cards menos boxy: usa shadow ao invés de border quando possível */
-  .summary-card, .ticket-card, .reg-card, .funnel .step {
-    background: var(--ebm-card-grad); border-radius: var(--radius-md); box-shadow: var(--ebm-shadow-sm); }
-
-  /* Glassmorphism nos modais */
-  .modal-backdrop { background: rgba(0,30,55,0.45); backdrop-filter: blur(8px) saturate(180%); }
-  .modal, .cmdk, .history-modal, .comment-modal {
-    background: var(--ebm-card); backdrop-filter: blur(20px); }
-
-  /* Header denso melhor */
-  .header-buttons { gap: 4px; }
-  .btn-more, .btn-export, .btn-refresh, .cmdk-trigger { padding: 6px 12px; }
-
-  /* Trend chart maior e mais respirado */
-  .trend-card { padding: var(--space-md) var(--space-lg); }
-  .trend-chart-wrap { min-height: 240px; }
 </style>
 </head>
 <body>
@@ -920,36 +449,19 @@
         <button role="tab" data-period="fev" type="button">Fev</button>
         <button role="tab" data-period="mar" type="button">Mar</button>
         <button role="tab" data-period="abr" type="button">Abr</button>
-        <button role="tab" data-period="mai" type="button">Mai</button>
+        <button role="tab" data-period="mai" type="button">Mai •</button>
         <span class="sep" aria-hidden="true"></span>
         <button role="tab" data-period="ytd" class="active" type="button">2026 YTD</button>
         <span class="sep" aria-hidden="true"></span>
         <button role="tab" data-period="esteira" type="button">⚙ Esteira</button>
-        <button role="tab" data-period="empreendimentos" type="button">🏢 Empreend.</button>
+        <button role="tab" data-period="empreendimentos" type="button">🏢 Empreendimentos</button>
       </div>
-      <div class="updated">
-        Última atualização BI: <strong id="last-update">05/05/2026 09:37:19</strong>
-        <span class="snapshot-hint" id="snapshot-hint" title="Variação dos KPIs desde a sua última visita"></span>
-      </div>
+      <div class="updated">Última atualização BI: <strong id="last-update">05/05/2026 18:32:32</strong></div>
       <div class="header-buttons">
-        <button id="btn-cmdk" class="cmdk-trigger ripple" type="button" title="Busca rápida (Cmd/Ctrl + K)">🔍 Buscar <kbd>⌘K</kbd></button>
-        <div class="bookmark-wrap">
-          <button id="btn-bookmarks" class="btn-more ripple" type="button" title="Visões salvas">⭐ Visões</button>
-          <div class="bookmark-menu" id="bookmark-menu" role="menu"></div>
-        </div>
-        <button id="btn-history" class="btn-more ripple" type="button" title="Histórico de snapshots (atalho: H)">📜 Histórico</button>
-        <button id="btn-dark" class="btn-export ripple" type="button" title="Alternar tema escuro (atalho: D)">🌙</button>
-        <div class="modos-wrap">
-          <button id="btn-modos" class="btn-more ripple" type="button" title="Modos de visualização">🎛 Modos ▾</button>
-          <div class="modos-menu" id="modos-menu" role="menu"></div>
-        </div>
-        <button id="btn-refresh" class="btn-refresh ripple" type="button" title="Snapshot — peça ao Claude pra atualizar">↻</button>
-        <!-- Botões legacy (escondidos, mantidos pra compatibilidade JS) -->
-        <button id="btn-print" type="button" hidden>🖨 PDF</button>
-        <button id="btn-cb" type="button" hidden>🎨</button>
-        <button id="btn-briefing" type="button" hidden>📋 Briefing</button>
-        <button id="btn-tv" type="button" hidden>📺 TV</button>
-        <button id="btn-present" type="button" hidden>⛶ Apresentação</button>
+        <button id="btn-refresh" class="btn-refresh" type="button" title="Atualização automática 2x/dia (8:30 e 20:30)" style="display:none;">↻ Snapshot</button>
+        <button id="btn-print" class="btn-export" type="button" title="Imprimir / Salvar PDF (atalho: P)">🖨 PDF</button>
+        <button id="btn-dark" class="btn-export" type="button" title="Alternar tema escuro (atalho: D)">🌙</button>
+        <button id="btn-present" class="btn-export" type="button" title="Modo apresentação (atalho: F)">⛶ Apresentação</button>
       </div>
     </div>
   </header>
@@ -957,7 +469,7 @@
   <div id="kpi-row" class="kpis"></div>
 
   <!-- Tendência mensal (sparkline) -->
-  <div class="trend-card briefing-hide" id="trend-card-wrap">
+  <div class="trend-card" id="trend-card-wrap">
     <div class="trend-header">
       <div class="trend-title">📈 Tendência mensal — % atingimento da meta</div>
       <div class="trend-meta">Jan → Abr · meta = 100%</div>
@@ -966,8 +478,8 @@
   </div>
 
   <!-- Splits de Modalidade e Momento (Abril/2026) -->
-  <section id="splits-section" class="briefing-hide">
-    <h2>🔀 Splits — Abril/2026 <span class="hint" style="color:var(--ebm-warn);">base parcial: snapshot 01/05 (R$51,8M) — Abril fechou em R$60,2M (gap R$8,4M sem split detalhado pendente de extração)</span></h2>
+  <section id="splits-section">
+    <h2>🔀 Splits — Abril/2026 <span class="hint" style="color:var(--ebm-warn);">base: snapshot de 01/05 (totaliza R$51,8M — Abril fechou em R$60,2M após extração detalhada agendada)</span></h2>
     <div class="splits-grid">
       <div class="split-block">
         <div class="split-title">Por Modalidade</div>
@@ -1036,7 +548,7 @@
       <div class="kpi andamento" style="text-align:center;padding:24px;">
         <div class="label">Esteira ativa neste momento</div>
         <div class="value" style="font-size:42px;">R$53M</div>
-        <div class="sub">Soma de todas propostas em andamento (estágios 00–05) — snapshot 05/05/2026 09:37</div>
+        <div class="sub">Soma de todas propostas em andamento (estágios 00–05) capturadas em 05/05/2026 18:32</div>
       </div>
     </div>
 
@@ -1050,29 +562,13 @@
   <section id="empreendimentos-section">
     <h2>🏢 Empreendimentos — Lista Completa & Ranking <span class="hint">base: Março/2026 (mês com extração detalhada)</span></h2>
 
-    <div style="display:flex;gap:8px;margin-bottom:10px;align-items:center;flex-wrap:wrap;">
+    <div style="display:flex;gap:8px;margin-bottom:14px;align-items:center;flex-wrap:wrap;">
       <span style="font-size:12px;font-weight:700;color:var(--ebm-muted);text-transform:uppercase;letter-spacing:0.5px;">Ordenar por:</span>
       <button type="button" class="chip-rank active" data-sort="vgv">VGV ↓</button>
       <button type="button" class="chip-rank" data-sort="qtd">Unidades ↓</button>
       <button type="button" class="chip-rank" data-sort="pct">% Meta ↓</button>
       <button type="button" class="chip-rank" data-sort="nome">Nome A→Z</button>
       <input type="text" id="emp-search" aria-label="Buscar empreendimento" placeholder="Buscar empreendimento..." style="margin-left:auto;padding:6px 12px;border:1px solid var(--ebm-border);border-radius:999px;font-size:12px;width:240px;">
-    </div>
-    <div style="display:flex;gap:8px;margin-bottom:14px;align-items:center;flex-wrap:wrap;">
-      <span style="font-size:12px;font-weight:700;color:var(--ebm-muted);text-transform:uppercase;letter-spacing:0.5px;">Filtrar:</span>
-      <div class="filter-chips" id="emp-filter-region">
-        <button type="button" class="chip-filter active" data-reg="ALL">Todas regionais</button>
-        <button type="button" class="chip-filter reg-DF" data-reg="DF">DF</button>
-        <button type="button" class="chip-filter reg-GO" data-reg="GO">GO</button>
-        <button type="button" class="chip-filter reg-SP" data-reg="SP">SP</button>
-      </div>
-      <span style="color:var(--ebm-border);">|</span>
-      <div class="filter-chips" id="emp-filter-status">
-        <button type="button" class="chip-filter active" data-st="ALL">Todos</button>
-        <button type="button" class="chip-filter" data-st="active">Com vendas</button>
-        <button type="button" class="chip-filter" data-st="zero">Sem vendas</button>
-      </div>
-      <span class="filter-summary" id="emp-filter-summary"></span>
     </div>
 
     <table class="emp-table" id="emp-table"></table>
@@ -1102,77 +598,13 @@
   </section>
 
 
-  <footer class="note briefing-hide">
-    Fonte: Power BI EBM — relatório "Esteira Comercial". Snapshot extraído via navegador em 05/05/2026 às 09:37.<br>
+  <footer class="note">
+    Fonte: Power BI EBM — relatório "Esteira Comercial". Snapshot extraído via navegador em 05/05/2026 às 18:32 (refresh automático 2x/dia).<br>
     Dados mensais (Jan–Abr) capturados individualmente. <strong>2026 YTD</strong> é a soma dos meses extraídos.
     Vendas em Andamento (R$53M) é instantâneo no momento da extração — não varia por filtro de mês.<br>
     Splits por Modalidade (Associativo/SPBE) e Momento (Lançamento/Estoque) referem-se a <strong>Abril/2026</strong>
     — Estoque é calculado por subtração (Total − Lançamento) para evitar uma extração extra.
   </footer>
-</div>
-
-<!-- Bottom navigation (mobile) -->
-<nav class="bottom-nav" id="bottom-nav" aria-label="Navegação mobile">
-  <button data-period="ytd" type="button"><span class="bn-icon">📊</span><span>YTD</span></button>
-  <button data-period="abr" type="button"><span class="bn-icon">📅</span><span>Abr</span></button>
-  <button data-period="mai" type="button"><span class="bn-icon">⚡</span><span>Mai</span></button>
-  <button data-period="esteira" type="button"><span class="bn-icon">⚙</span><span>Esteira</span></button>
-  <button data-period="empreendimentos" type="button"><span class="bn-icon">🏢</span><span>Empr.</span></button>
-</nav>
-<!-- FAB (mobile Cmd+K) -->
-<button class="fab" id="fab" aria-label="Busca rápida" type="button">🔍</button>
-<!-- Confetti container -->
-<div class="confetti-container" id="confetti-container" aria-hidden="true"></div>
-
-<!-- Modal de drill-down (diretor → detalhamento mensal + regional) -->
-<div class="modal-backdrop" id="drill-modal" role="dialog" aria-modal="true" aria-labelledby="drill-title">
-  <div class="modal">
-    <div class="modal-head">
-      <h3 id="drill-title">Detalhamento</h3>
-      <button class="modal-close" id="drill-close" aria-label="Fechar (Esc)">✕</button>
-    </div>
-    <div class="modal-body" id="drill-body"></div>
-  </div>
-</div>
-
-<!-- Command Palette (Cmd+K) -->
-<div class="cmdk-backdrop" id="cmdk-backdrop" role="dialog" aria-modal="true" aria-label="Busca rápida">
-  <div class="cmdk">
-    <div class="cmdk-input-wrap">
-      <input type="text" class="cmdk-input" id="cmdk-input" placeholder="Buscar empreendimentos, abas, diretores, ações..." autocomplete="off" spellcheck="false">
-    </div>
-    <div class="cmdk-results" id="cmdk-results"></div>
-    <div class="cmdk-footer">
-      <span><span class="cmdk-kbd">↑↓</span> navegar</span>
-      <span><span class="cmdk-kbd">↵</span> selecionar</span>
-      <span><span class="cmdk-kbd">esc</span> fechar</span>
-    </div>
-  </div>
-</div>
-
-<!-- Modal de Histórico de snapshots -->
-<div class="modal-backdrop" id="history-modal" role="dialog" aria-modal="true" aria-label="Histórico">
-  <div class="history-modal">
-    <div class="modal-head">
-      <h3>📜 Histórico de Snapshots</h3>
-      <button class="modal-close" id="history-close" aria-label="Fechar">✕</button>
-    </div>
-    <div class="hist-controls" id="hist-controls"></div>
-    <div class="history-list" id="history-list"></div>
-  </div>
-</div>
-
-<!-- Modal de comentário em empreendimento -->
-<div class="modal-backdrop" id="comment-modal" role="dialog" aria-modal="true" aria-label="Comentário">
-  <div class="comment-modal">
-    <h3 id="comment-title">Comentário</h3>
-    <textarea id="comment-text" placeholder="Anotações sobre este empreendimento (visíveis só pra você, salvas no navegador)..."></textarea>
-    <div class="actions">
-      <button class="btn-clear" id="comment-clear">Limpar</button>
-      <button id="comment-cancel">Cancelar</button>
-      <button class="btn-save" id="comment-save">Salvar</button>
-    </div>
-  </div>
 </div>
 
 <script>/*!
@@ -1204,10 +636,10 @@
 
   // ---------- DATA ----------
   // Todos os dados são meses de 2026, capturados via Power BI público.
-  // Esteira ativa (andamento) é um snapshot único capturado em 01/05/2026 09:38
+  // Esteira ativa (andamento) é um snapshot único capturado em 05/05/2026 08:31
   // — reflete propostas em estágios 00–05 no momento da extração. Mesmo valor
   // usado em todos os meses e na aba MAI (mês vigente).
-  const ANDAMENTO_ATUAL = 53000000;
+  const ANDAMENTO_ATUAL = 52640763;
   function makeMonth(label, finalizadas, regionals, diretores) {
     const total = regionals.reduce((s,r)=>s+r.vgv, 0);
     const qtd   = regionals.reduce((s,r)=>s+r.qtd, 0);
@@ -1269,56 +701,58 @@
     ),
     abr: makeMonth(
       "Abril / 2026",
-      60177854,  // Atualizado em 02/05/2026 — fechamento oficial do mês (era R$51,7M parcial em 01/05)
+      60177854,  // Fechamento reconfirmado em 05/05/2026 18:32 (sem mudança vs snapshot 05/05 08:31)
       [
         { name: "Regional GO", vgv: 47284739, qtd: 108 },
         { name: "Regional SP", vgv: 7228864,  qtd: 14  },
         { name: "Regional DF", vgv: 5664250,  qtd: 16  },
       ],
       [
-        // Abril fechado — valores oficiais Felipe/Paulo extraídos do BI em 05/05/2026 09:37
+        // Abril fechado. Valores por diretor reconfirmados do BI em 05/05/2026 18:32 (idênticos ao snapshot 05/05 08:31).
         { name: "Felipe",         projetado: 65396703,  realizado: 36856641, qtdProj: 113, qtdReal: 73,  pct: 51, status: "bad" },
         { name: "Paulo / Sérgio", projetado: 41404192,  realizado: 23321213, qtdProj: 114, qtdReal: 65,  pct: 45, status: "bad" },
         { name: "EBM Diretoria",  projetado: null,      realizado: null,     qtdProj: null, qtdReal: null, pct: null, status: "na" },
-        { name: "TOTAL",          projetado: 106800894, realizado: 60177854, qtdProj: 227, qtdReal: 138, pct: 50, status: "bad", isTotal: true },
+        { name: "TOTAL",          projetado: 106800894, realizado: 60177854, qtdProj: 227, qtdReal: 138, pct: 49, status: "bad", isTotal: true },
       ]
     ),
     mai: {
       label: "Maio / 2026 (mês vigente)",
       kpi: {
-        andamento: 53000000,
+        andamento: 52640763,
         finalizadas: 0,
-        total: 53000000,
+        total: 52640763,
       },
-      // Esteira ativa REAL extraída do BI em 01/05/2026 09:38
+      // Esteira ativa REAL reconfirmada do BI em 05/05/2026 18:32 (KPI/Funil/Regional idênticos vs snapshot 05/05 08:31)
       funil: [
-        { name: "00 — Proposta",     vgv: 8465212,  qtd: 21 },  // +R$1 ajuste de arredondamento
-        { name: "01 — Crédito",      vgv: 6660932,  qtd: 16 },
-        { name: "02 — Jurídico",     vgv: 2050035,  qtd: 6 },
-        { name: "03 — Assinatura",   vgv: 27839397, qtd: 41, highlight: true },
-        { name: "04 — Conferência",  vgv: 3325803,  qtd: 8 },
-        { name: "05 — Pendência",    vgv: 14881425, qtd: 38 },
-        { name: "06 — Finalizado",   vgv: 0,        qtd: 0, last: true },
+        { name: "00 — Proposta",     vgv: 956468,    qtd: 3 },
+        { name: "01 — Crédito",      vgv: 4418839,   qtd: 11 },
+        { name: "02 — Jurídico",     vgv: 2050035,   qtd: 6 },
+        { name: "03 — Assinatura",   vgv: 23840734,  qtd: 39, highlight: true },
+        { name: "04 — Conferência",  vgv: 9620469,   qtd: 14 },
+        { name: "05 — Pendência",    vgv: 11754218,  qtd: 31 },
+        { name: "06 — Finalizado",   vgv: 0,         qtd: 0, last: true },
       ],
       regional: [
-        { name: "Regional GO", vgv: 53188225, qtd: 108 },
-        { name: "Regional DF", vgv: 5179000,  qtd: 12  },
-        { name: "Regional SP", vgv: 4855579,  qtd: 10  },
+        { name: "Regional GO", vgv: 46841863, qtd: 92 },
+        { name: "Regional DF", vgv: 4106500,  qtd: 9  },
+        { name: "Regional SP", vgv: 1692400,  qtd: 3  },
       ],
-      regionalTotal: { vgv: 53000000, qtd: 110 },
-      regionalNote: "VGV das propostas em aberto (estágios 00-05) por Regional — Maio/2026.",
+      regionalTotal: { vgv: 52640763, qtd: 104 },
+      regionalNote: "VGV das propostas em aberto (estágios 00-05) por Regional — Maio/2026 (parcial 05/05).",
+      // Maio diretores: BI agora reporta valores ativos por diretor (R$26.3M Felipe / R$20.9M Paulo / R$4.35M EBM Diretoria + R$1.07M não atribuído).
+      // Status pct vem direto do BI (42%/43%/42% — Abaixo da Meta).
       diretores: [
-        { name: "Felipe",         projetado: 62026937, realizado: 0, qtdProj: 111, qtdReal: 0,   pct: 0,  status: "bad" },
-        { name: "Paulo / Sérgio", projetado: 39140401, realizado: 0, qtdProj: 108, qtdReal: 0,   pct: 0,  status: "bad" },
-        { name: "EBM Diretoria",  projetado: null,     realizado: 0, qtdProj: null, qtdReal: 0,   pct: null, status: "na" },
-        { name: "TOTAL",          projetado: 101167338, realizado: 0, qtdProj: 219, qtdReal: 0,  pct: 0,  status: "bad", isTotal: true },
+        { name: "Felipe",         projetado: 62026937, realizado: 26354426, qtdProj: 111, qtdReal: 42, pct: 42, status: "bad" },
+        { name: "Paulo / Sérgio", projetado: 39140401, realizado: 20871262, qtdProj: 108, qtdReal: 58, pct: 43, status: "bad" },
+        { name: "EBM Diretoria",  projetado: null,     realizado: 4350000,  qtdProj: null, qtdReal: 1,  pct: null, status: "na" },
+        { name: "TOTAL",          projetado: 101167337, realizado: 52640763, qtdProj: 219, qtdReal: 104, pct: 42, status: "bad", isTotal: true },
       ],
     },
     ytd: {
       label: "2026 YTD (Jan–Abr acumulado)",
       kpi: {
         andamento: ANDAMENTO_ATUAL,
-        finalizadas: 81708983 + 74952478 + 95422416 + 60177854,   // 312,261,731 (Abril atualizado em 02/05)
+        finalizadas: 81708983 + 74952478 + 95422416 + 60177854,   // 312,261,731 (Abril confirmado em 05/05)
         total:       81708983 + 74952478 + 95422416 + 60177854 + ANDAMENTO_ATUAL,
       },
       funil: [
@@ -1330,7 +764,7 @@
         { name: "Regional SP", vgv: 4069886+3184763+6490902+7228864,     qtd: 6+5+15+14 },       // 20,974,415 / 40
       ],
       regionalTotal: { vgv: 312261731, qtd: 703 },
-      regionalNote: "Soma de Jan–Abr 2026 (Abril atualizado em 02/05).",
+      regionalNote: "Soma de Jan–Abr 2026 (Abril confirmado em 05/05).",
       diretores: [
         { name: "Felipe",         projetado: 55275088+68625050+68475570+65396703,  realizado: 45592156+50163105+55922437+36856641, qtdProj: 96+108+107+113, qtdReal: 78+102+118+73,  pct: 73, status: "bad" },
         { name: "Paulo / Sérgio", projetado: 35833188+35692124+30472083+41404192,  realizado: 34909827+22329373+38415979+23321213, qtdProj: 98+98+84+114,   qtdReal: 98+59+104+65,   pct: 83, status: "bad" },
@@ -1368,57 +802,26 @@
       const badgeCls = pct >= 90 ? 'ok' : (pct >= 60 ? 'warn' : 'bad');
       pctBadge = `<span class="pct-badge ${badgeCls}">${pct}% meta</span>`;
     }
-    // Diff badges (vs último snapshot) — apenas em YTD/Abr/Mai
-    let diffFinHtml = '', diffActHtml = '';
-    if (window.__diffBadge) {
-      if (period === 'ytd')      diffFinHtml = window.__diffBadge((window.__diffSnap||{}).ytd_fin, 'val');
-      else if (period === 'abr') diffFinHtml = window.__diffBadge((window.__diffSnap||{}).abr_fin, 'val');
-      else if (period === 'mai') diffActHtml = window.__diffBadge((window.__diffSnap||{}).mai_act, 'val');
-    }
-    // Gauge circular SVG no hero (% atingimento)
-    let gaugeHtml = '';
-    if (pct != null) {
-      const pctClamp = Math.min(pct, 200);
-      const circ = 2 * Math.PI * 45;
-      const dash = (pctClamp / 200) * circ;
-      const gCls = pct >= 100 ? 'gold' : (pct >= 90 ? 'ok' : (pct >= 60 ? 'warn' : 'bad'));
-      gaugeHtml = `
-        <div class="gauge-circle" aria-label="${pct}% da meta">
-          <svg width="120" height="120" viewBox="0 0 120 120">
-            <circle class="gauge-bg" cx="60" cy="60" r="45"></circle>
-            <circle class="gauge-fg ${gCls}" cx="60" cy="60" r="45"
-              stroke-dasharray="${dash} ${circ}" stroke-linecap="round"></circle>
-          </svg>
-          <div class="gauge-text">${pct}%</div>
-        </div>`;
-    }
     // Hero: Vendas Finalizadas | Secundário 1: Andamento | Secundário 2: VGV Total
-    const isWinner = pct != null && pct >= 100;
     el.innerHTML = `
-      <div class="kpi hero finalizadas ${statusCls}${isWinner?' gold-glow':''}">
-        ${gaugeHtml}
-        <div class="label">📊 Vendas Finalizadas ${isWinner?'<span class="badge-gold">🏆 META BATIDA</span>':pctBadge}${diffFinHtml}</div>
-        <div class="value updating">${fmtBRLshort(p.kpi.finalizadas)}</div>
+      <div class="kpi hero finalizadas ${statusCls}">
+        <div class="label">📊 Vendas Finalizadas ${pctBadge}</div>
+        <div class="value">${fmtBRLshort(p.kpi.finalizadas)}</div>
         <div class="sub">${fmtBRL(p.kpi.finalizadas)}</div>
         ${deltaFin}
         <div class="spark"><canvas id="spark-fin"></canvas></div>
       </div>
       <div class="kpi andamento">
-        <div class="label">⚙ Esteira Ativa ${diffActHtml}</div>
-        <div class="value updating">${p.kpi.andamento==null ? '—' : fmtBRLshort(p.kpi.andamento)}</div>
+        <div class="label">⚙ Esteira Ativa</div>
+        <div class="value">${p.kpi.andamento==null ? '—' : fmtBRLshort(p.kpi.andamento)}</div>
         <div class="sub">${p.kpi.andamento==null ? 'Não populado' : 'Estágios 00–05'}</div>
       </div>
       <div class="kpi total">
         <div class="label">💰 VGV Total</div>
-        <div class="value updating">${fmtBRLshort(p.kpi.total)}</div>
+        <div class="value">${fmtBRLshort(p.kpi.total)}</div>
         <div class="sub">Andamento + Finalizadas</div>
       </div>
     `;
-    // Confetti se bater meta
-    if (isWinner && !window.__celebratedFor || window.__celebratedFor !== period) {
-      if (isWinner) { window.__celebratedFor = period; if (window.__triggerConfetti) window.__triggerConfetti(); }
-    }
-    setTimeout(() => el.querySelectorAll('.kpi .value.updating').forEach(v => v.classList.remove('updating')), 500);
     // Sparkline embutido no KPI hero
     setTimeout(() => {
       const sparkEl = document.getElementById('spark-fin');
@@ -1569,9 +972,6 @@
 
   let empSort = 'vgv';
   let empSearch = '';
-  let empRegion = 'ALL';
-  let empStatusF = 'ALL';
-  function getEmpNote(name) { return safeGet('ebm-emp-note-' + name) || ''; }
   function renderEmpTable() {
     const headers = `<thead><tr>
       <th>#</th><th>Empreendimento</th>
@@ -1582,9 +982,6 @@
       const s = empSearch.toLowerCase();
       list = list.filter(e => e.nome.toLowerCase().includes(s));
     }
-    if (empRegion !== 'ALL') list = list.filter(e => e.reg === empRegion);
-    if (empStatusF === 'active') list = list.filter(e => e.vgv > 0);
-    if (empStatusF === 'zero') list = list.filter(e => e.vgv === 0);
     const sorters = {
       vgv:  (a,b) => b.vgv - a.vgv,
       qtd:  (a,b) => b.qtd - a.qtd,
@@ -1592,16 +989,12 @@
       nome: (a,b) => a.nome.localeCompare(b.nome, 'pt-BR'),
     };
     list.sort(sorters[empSort]);
-    const totVgv = list.reduce((s,e)=>s+e.vgv,0);
-    const totQty = list.reduce((s,e)=>s+e.qtd,0);
     const rows = list.map((e, i) => {
       const pctTxt = e.pct == null ? 'n/a' : (e.pct + '%');
       const pctCls = e.pct == null ? 'na' : (e.pct >= 100 ? 'ok' : 'bad');
       const vgvTxt = e.vgv === 0 ? '<span class="empty">—</span>' : fmtBRL(e.vgv);
       const qtdTxt = e.qtd === 0 ? '<span class="empty">—</span>' : fmtNum(e.qtd);
-      const hasNote = getEmpNote(e.nome) ? ' has-note' : '';
-      const escName = e.nome.replace(/"/g,'&quot;');
-      return `<tr class="emp-row${hasNote}" data-emp-name="${escName}">
+      return `<tr>
         <td>${i+1}</td>
         <td><span class="reg-tag reg-${e.reg}">${e.reg}</span><span class="nm">${e.nome}</span></td>
         <td>${vgvTxt}</td>
@@ -1610,12 +1003,6 @@
       </tr>`;
     }).join('');
     document.getElementById('emp-table').innerHTML = headers + '<tbody>' + rows + '</tbody>';
-    // Atualiza summary de filtro
-    const sum = document.getElementById('emp-filter-summary');
-    if (sum) {
-      const totAll = empreendimentos.length;
-      sum.textContent = `${list.length} de ${totAll} empreend. · ${fmtBRLshort(totVgv)} · ${totQty} unid.`;
-    }
   }
   // ---------- Empreendimentos na esteira agrupados por Regional (aba Mai) ----------
   function renderMaiRegionais() {
@@ -1851,7 +1238,7 @@
     const el = document.getElementById('funil');
     const hint = document.getElementById('funil-hint');
     if (period === 'mai') {
-      hint.textContent = '— Esteira ativa em Maio/2026: 110 propostas em aberto somando R$53M';
+      hint.textContent = '— Esteira ativa em Maio/2026: 104 propostas em aberto somando R$53M';
     } else if (period === 'ytd') {
       hint.textContent = '— Total finalizado Jan–Abr (vendas concluídas no ano)';
     } else {
@@ -2019,23 +1406,10 @@
     loadNotes(period);
   }
   document.querySelectorAll('#period-toggle button').forEach(b => {
-    b.addEventListener('click', () => {
-      // Se TV mode ativo e user clicou manualmente, pausa o auto-rotate
-      if (document.body.classList.contains('tv-mode')) {
-        if (window.__tvInterval) { clearInterval(window.__tvInterval); window.__tvInterval = null; }
-        document.body.classList.remove('tv-mode');
-        const btnTv = document.getElementById('btn-tv');
-        if (btnTv) btnTv.textContent = '📺 TV';
-      }
-      // Fecha modal se aberto antes de trocar tab
-      const modal = document.getElementById('drill-modal');
-      if (modal && modal.classList.contains('show')) modal.classList.remove('show');
-      document.body.style.overflow = '';
-      activate(b.dataset.period);
-    });
+    b.addEventListener('click', () => activate(b.dataset.period));
   });
   document.getElementById('btn-refresh').addEventListener('click', () => {
-    alert('Esse painel é um snapshot do BI extraído em 05/05/2026 09:37.\n\nPara atualizar os números, peça ao Claude:\n"Atualize o dashboard da esteira EBM."');
+    alert('Esse painel é um snapshot do BI extraído em 05/05/2026 18:32.\n\nAtualização automática 2x/dia (8:30 e 20:30) via tarefa agendada.\n\nPara forçar refresh, peça ao Claude:\n"Atualize o dashboard da esteira EBM."');
   });
   document.getElementById('btn-print').addEventListener('click', () => window.print());
 
@@ -2081,720 +1455,12 @@
     if (e.target && typeof e.target.matches === 'function' && e.target.matches('input,textarea,[contenteditable="true"]')) return;
     if (e.metaKey || e.ctrlKey || e.altKey) return;
     const k = e.key.toLowerCase();
-    if (keyMap[k]) {
-      e.preventDefault();
-      // Fecha modal e pausa TV se atalho de aba pressionado
-      const modal = document.getElementById('drill-modal');
-      if (modal && modal.classList.contains('show')) { modal.classList.remove('show'); document.body.style.overflow = ''; }
-      if (document.body.classList.contains('tv-mode')) {
-        if (window.__tvInterval) { clearInterval(window.__tvInterval); window.__tvInterval = null; }
-        document.body.classList.remove('tv-mode');
-        const btnTv = document.getElementById('btn-tv'); if (btnTv) btnTv.textContent = '📺 TV';
-      }
-      activate(keyMap[k]);
-    }
+    if (keyMap[k]) { e.preventDefault(); activate(keyMap[k]); }
     else if (k === 'p') { e.preventDefault(); window.print(); }
     else if (k === 'd') { e.preventDefault(); applyDark(!document.body.classList.contains('dark'), true); }
     else if (k === 'f') { e.preventDefault(); togglePresent(); }
-    else if (k === 'b') { e.preventDefault(); toggleBriefing(); }
-    else if (k === 't') { e.preventDefault(); toggleTV(); }
-    else if (k === 'c') { e.preventDefault(); toggleCB(); }
-    else if (k === 'escape') {
-      if (document.getElementById('drill-modal').classList.contains('show')) { e.preventDefault(); closeDrill(); }
-      else if (document.body.classList.contains('presentation')) { e.preventDefault(); togglePresent(); }
-      else if (document.body.classList.contains('tv-mode')) { e.preventDefault(); toggleTV(); }
-    }
+    else if (k === 'escape' && document.body.classList.contains('presentation')) { e.preventDefault(); togglePresent(); }
   });
-
-  // ============================================================
-  // ONDA 11: Diff vs último snapshot, Drill-down, Briefing, TV, CB
-  // ============================================================
-
-  // ---------- Diff vs último snapshot (localStorage) ----------
-  function currentSnapshotKey() {
-    const ts = document.getElementById('last-update').textContent.trim();
-    return ts;
-  }
-  function buildSnapshotPayload() {
-    return {
-      ts: currentSnapshotKey(),
-      ytd_fin: data.ytd.kpi.finalizadas,
-      ytd_qty: data.ytd.diretores.find(d=>d.isTotal).qtdReal,
-      ytd_pct: data.ytd.diretores.find(d=>d.isTotal).pct,
-      abr_fin: data.abr.kpi.finalizadas,
-      abr_pct: data.abr.diretores.find(d=>d.isTotal).pct,
-      mai_act: data.mai.kpi.andamento,
-      felipe_ytd: data.ytd.diretores.find(d=>d.name==='Felipe').realizado,
-      paulo_ytd:  data.ytd.diretores.find(d=>d.name==='Paulo / Sérgio').realizado
-    };
-  }
-  function computeDiff() {
-    const stored = safeGet('ebm-last-snapshot');
-    const cur = buildSnapshotPayload();
-    if (!stored) {
-      safeSet('ebm-last-snapshot', JSON.stringify(cur));
-      return null;
-    }
-    let prev;
-    try { prev = JSON.parse(stored); } catch(e) { return null; }
-    if (!prev || prev.ts === cur.ts) {
-      // mesmo snapshot — sem diff (só atualiza pra garantir formato)
-      safeSet('ebm-last-snapshot', JSON.stringify(cur));
-      return null;
-    }
-    const diff = {
-      prevTs: prev.ts,
-      ytd_fin: cur.ytd_fin - (prev.ytd_fin||0),
-      ytd_qty: cur.ytd_qty - (prev.ytd_qty||0),
-      ytd_pct: cur.ytd_pct - (prev.ytd_pct||0),
-      abr_fin: cur.abr_fin - (prev.abr_fin||0),
-      abr_pct: cur.abr_pct - (prev.abr_pct||0),
-      mai_act: (cur.mai_act||0) - (prev.mai_act||0),
-      felipe_ytd: cur.felipe_ytd - (prev.felipe_ytd||0),
-      paulo_ytd:  cur.paulo_ytd  - (prev.paulo_ytd||0)
-    };
-    safeSet('ebm-last-snapshot', JSON.stringify(cur));
-    return diff;
-  }
-  const __diff = computeDiff();
-  function diffBadgeHtml(delta, type) {
-    if (!__diff || delta === 0 || delta == null) return '';
-    const cls = delta > 0 ? 'up' : 'down';
-    const arrow = delta > 0 ? '↑' : '↓';
-    let txt;
-    if (type === 'pct') txt = Math.abs(delta).toFixed(1) + ' p.p.';
-    else if (type === 'qty') txt = fmtNum(Math.abs(delta));
-    else txt = fmtBRLshort(Math.abs(delta));
-    return `<span class="diff-badge ${cls}" title="Variação desde ${__diff.prevTs}">${arrow} ${txt}</span>`;
-  }
-  // Header snapshot hint
-  (function(){
-    const hint = document.getElementById('snapshot-hint');
-    if (!hint) return;
-    if (__diff) {
-      hint.classList.add('has-diff');
-      const sign = __diff.ytd_fin >= 0 ? '+' : '−';
-      hint.innerHTML = `🔔 ${sign}${fmtBRLshort(Math.abs(__diff.ytd_fin))} YTD desde ${__diff.prevTs}`;
-      hint.title = `YTD: ${__diff.ytd_fin>=0?'+':''}${fmtBRL(__diff.ytd_fin)} | Abril: ${__diff.abr_fin>=0?'+':''}${fmtBRL(__diff.abr_fin)} | Esteira Maio: ${__diff.mai_act>=0?'+':''}${fmtBRL(__diff.mai_act)}`;
-    } else {
-      // Diferença entre primeira visita e mesmo snapshot
-      const stored = safeGet('ebm-last-snapshot');
-      let prev = null; try { prev = stored ? JSON.parse(stored) : null; } catch(e){}
-      if (!prev || prev.ts === currentSnapshotKey()) {
-        hint.textContent = '— snapshot atual, sem variação';
-        hint.title = 'Os números deste painel são idênticos ao último snapshot que você visualizou.';
-      }
-    }
-  })();
-  // Expor pra renderKpis usar
-  window.__diffBadge = diffBadgeHtml;
-  window.__diffSnap = __diff;
-
-  // ---------- Drill-down clicável (diretores) ----------
-  const drillModal = document.getElementById('drill-modal');
-  const drillBody = document.getElementById('drill-body');
-  const drillTitle = document.getElementById('drill-title');
-  function openDrill(dirName) {
-    if (!dirName || dirName === 'TOTAL') return;
-    drillTitle.textContent = `📊 Drill-down — ${dirName}`;
-    // Coletar dados do diretor por mês
-    const months = ['jan','fev','mar','abr'];
-    const monthLabels = {jan:'Janeiro', fev:'Fevereiro', mar:'Março', abr:'Abril'};
-    const rows = months.map(m => {
-      const d = data[m].diretores.find(x => x.name === dirName);
-      if (!d || d.realizado == null) return null;
-      return { mes: monthLabels[m], proj: d.projetado, real: d.realizado, qreal: d.qtdReal, pct: d.pct };
-    }).filter(Boolean);
-
-    // Totais
-    const totProj = rows.reduce((s,r)=>s+(r.proj||0),0);
-    const totReal = rows.reduce((s,r)=>s+r.real,0);
-    const totQty = rows.reduce((s,r)=>s+(r.qreal||0),0);
-    const avgPct = totProj ? Math.round(totReal/totProj*100) : null;
-
-    // Stats grid
-    let statsHtml = `
-      <div class="modal-grid">
-        <div class="modal-stat"><div class="lbl">VGV YTD</div><div class="val">${fmtBRLshort(totReal)}</div></div>
-        <div class="modal-stat"><div class="lbl">Meta YTD</div><div class="val">${totProj?fmtBRLshort(totProj):'—'}</div></div>
-        <div class="modal-stat"><div class="lbl">% Atingimento</div><div class="val">${avgPct!=null?avgPct+'%':'—'}</div></div>
-        <div class="modal-stat"><div class="lbl">Unidades YTD</div><div class="val">${fmtNum(totQty)}</div></div>
-      </div>`;
-
-    // Tabela mensal
-    let tableHtml = `
-      <h4 style="margin:12px 0 8px;color:var(--ebm-navy);font-size:14px;">Performance mensal</h4>
-      <table class="modal-table">
-        <thead><tr><th>Mês</th><th class="num">Realizado</th><th class="num">Meta</th><th class="num">%</th><th class="num">Unid.</th></tr></thead>
-        <tbody>
-          ${rows.map(r => `<tr>
-            <td>${r.mes}</td>
-            <td class="num">${fmtBRLshort(r.real)}</td>
-            <td class="num">${r.proj?fmtBRLshort(r.proj):'—'}</td>
-            <td class="num"><strong style="color:${r.pct>=90?'#0F6E4D':(r.pct>=60?'#8A5E13':'#A4001B')}">${r.pct!=null?r.pct+'%':'—'}</strong></td>
-            <td class="num">${fmtNum(r.qreal)}</td>
-          </tr>`).join('')}
-        </tbody>
-      </table>`;
-
-    // Insights
-    const best = rows.slice().sort((a,b)=>(b.pct||0)-(a.pct||0))[0];
-    const worst = rows.slice().sort((a,b)=>(a.pct||0)-(b.pct||0))[0];
-    const insightsHtml = `
-      <h4 style="margin:18px 0 8px;color:var(--ebm-navy);font-size:14px;">💡 Insights</h4>
-      <ul style="margin:0;padding-left:20px;font-size:13px;line-height:1.7;color:var(--ebm-text);">
-        <li>Melhor mês: <strong>${best.mes}</strong> (${best.pct}% da meta — ${fmtBRLshort(best.real)})</li>
-        <li>Pior mês: <strong>${worst.mes}</strong> (${worst.pct}% da meta — ${fmtBRLshort(worst.real)})</li>
-        <li>Ticket médio YTD: <strong>${totQty?fmtBRLshort(totReal/totQty):'—'}</strong> por unidade</li>
-        ${avgPct!=null && avgPct<60 ? `<li style="color:var(--ebm-red);"><strong>⚠ Abaixo da meta YTD</strong> — gap de ${fmtBRLshort(totProj-totReal)}</li>` : ''}
-      </ul>`;
-
-    drillBody.innerHTML = statsHtml + tableHtml + insightsHtml;
-    drillModal.classList.add('show');
-    document.body.style.overflow = 'hidden';
-  }
-  function closeDrill() {
-    drillModal.classList.remove('show');
-    document.body.style.overflow = '';
-  }
-  document.getElementById('drill-close').addEventListener('click', closeDrill);
-  drillModal.addEventListener('click', (e) => { if (e.target === drillModal) closeDrill(); });
-
-  // Delegação de click nos diretores
-  document.addEventListener('click', (e) => {
-    const dir = e.target.closest('.diretor');
-    if (!dir || dir.classList.contains('is-total')) return;
-    const nameEl = dir.querySelector('.name');
-    if (nameEl) openDrill(nameEl.textContent.trim());
-  });
-
-  // ---------- Modo Briefing ----------
-  function toggleBriefing() {
-    const on = !document.body.classList.contains('briefing');
-    document.body.classList.toggle('briefing', on);
-    document.getElementById('btn-briefing').textContent = on ? '↩ Sair Briefing' : '📋 Briefing';
-    safeSet('ebm-briefing', on ? '1' : '0');
-    setTimeout(() => {
-      const active = document.querySelector('#period-toggle button.active');
-      if (active) activate(active.dataset.period);
-    }, 50);
-  }
-  document.getElementById('btn-briefing').addEventListener('click', toggleBriefing);
-  if (safeGet('ebm-briefing') === '1') toggleBriefing();
-
-  // ---------- Modo TV (auto-rotate) ----------
-  function toggleTV() {
-    const on = !document.body.classList.contains('tv-mode');
-    document.body.classList.toggle('tv-mode', on);
-    document.getElementById('btn-tv').textContent = on ? '⏸ Sair TV' : '📺 TV';
-    if (on) {
-      const seq = ['ytd','jan','fev','mar','abr','mai','esteira','empreendimentos'];
-      let i = 0;
-      activate(seq[0]);
-      window.__tvInterval = setInterval(() => {
-        // Pausa se modal aberto pra não atrapalhar leitura
-        if (document.getElementById('drill-modal').classList.contains('show')) return;
-        i = (i + 1) % seq.length;
-        activate(seq[i]);
-      }, 15000);
-    } else if (window.__tvInterval) {
-      clearInterval(window.__tvInterval);
-      window.__tvInterval = null;
-    }
-  }
-  document.getElementById('btn-tv').addEventListener('click', toggleTV);
-
-  // ---------- Color-blind safe ----------
-  function toggleCB() {
-    const on = !document.body.classList.contains('cb-safe');
-    document.body.classList.toggle('cb-safe', on);
-    document.getElementById('btn-cb').title = on ? 'Voltar à paleta padrão (atalho: C)' : 'Paleta para daltonismo (atalho: C)';
-    safeSet('ebm-cb-safe', on ? '1' : '0');
-    setTimeout(() => {
-      renderTrend();
-      const active = document.querySelector('#period-toggle button.active');
-      if (active) activate(active.dataset.period);
-    }, 50);
-  }
-  document.getElementById('btn-cb').addEventListener('click', toggleCB);
-  if (safeGet('ebm-cb-safe') === '1') document.body.classList.add('cb-safe');
-
-  // ============================================================
-  // ONDA 12: Cmd+K, Bookmarks, Filtros, Comentários, Histórico
-  // ============================================================
-
-  // ---------- Command Palette (Cmd+K) ----------
-  function buildCmdkIndex() {
-    const items = [];
-    // Tabs
-    const tabs = [
-      {label:'Janeiro 2026', icon:'📅', period:'jan', meta:'Jan'},
-      {label:'Fevereiro 2026', icon:'📅', period:'fev', meta:'Fev'},
-      {label:'Março 2026', icon:'📅', period:'mar', meta:'Mar'},
-      {label:'Abril 2026', icon:'📅', period:'abr', meta:'Abr'},
-      {label:'Maio 2026', icon:'📅', period:'mai', meta:'Mai (vigente)'},
-      {label:'2026 YTD', icon:'📊', period:'ytd', meta:'Acumulado'},
-      {label:'Esteira Ativa', icon:'⚙', period:'esteira', meta:'Funil'},
-      {label:'Empreendimentos', icon:'🏢', period:'empreendimentos', meta:'Lista completa'}
-    ];
-    tabs.forEach(t => items.push({...t, kind:'tab', section:'Abas',
-      action: () => activate(t.period)}));
-    // Diretores (drill-down)
-    ['Felipe','Paulo / Sérgio'].forEach(d => items.push({
-      kind:'diretor', section:'Diretores', icon:'👤', label:`Drill-down ${d}`,
-      meta:'Detalhamento mensal', action: () => openDrill(d)
-    }));
-    // Empreendimentos
-    empreendimentos.forEach(e => items.push({
-      kind:'emp', section:'Empreendimentos', icon:'🏢', label:e.nome,
-      meta:`${e.reg} · ${e.vgv?fmtBRLshort(e.vgv):'sem vendas'}`,
-      action: () => { activate('empreendimentos'); empSearch = e.nome; renderEmpTable();
-        const search = document.getElementById('emp-search'); if(search) search.value = e.nome;
-        openComment(e.nome); }
-    }));
-    // Ações
-    const acts = [
-      {label:'Modo Briefing', icon:'📋', action: toggleBriefing, meta:'Atalho B'},
-      {label:'Modo TV', icon:'📺', action: toggleTV, meta:'Atalho T'},
-      {label:'Modo Apresentação', icon:'⛶', action: togglePresent, meta:'Atalho F'},
-      {label:'Tema Escuro', icon:'🌙', action: () => applyDark(!document.body.classList.contains('dark'),true), meta:'Atalho D'},
-      {label:'Paleta Daltonismo', icon:'🎨', action: toggleCB, meta:'Atalho C'},
-      {label:'Imprimir / PDF', icon:'🖨', action: () => window.print(), meta:'Atalho P'},
-      {label:'Histórico de snapshots', icon:'📜', action: () => openHistory(), meta:'Atalho H'},
-      {label:'Salvar visão atual', icon:'⭐', action: () => saveBookmarkPrompt(), meta:'Bookmark'},
-    ];
-    acts.forEach(a => items.push({...a, kind:'action', section:'Ações'}));
-    return items;
-  }
-  const cmdkBackdrop = document.getElementById('cmdk-backdrop');
-  const cmdkInput = document.getElementById('cmdk-input');
-  const cmdkResults = document.getElementById('cmdk-results');
-  let cmdkIdx = 0, cmdkFiltered = [];
-  function fuzzyMatch(item, q) {
-    if (!q) return true;
-    const text = (item.label + ' ' + (item.meta||'')).toLowerCase();
-    const tokens = q.toLowerCase().split(/\s+/).filter(Boolean);
-    return tokens.every(t => text.includes(t));
-  }
-  function renderCmdk() {
-    const all = buildCmdkIndex();
-    cmdkFiltered = all.filter(i => fuzzyMatch(i, cmdkInput.value));
-    if (cmdkFiltered.length === 0) {
-      cmdkResults.innerHTML = '<div class="cmdk-empty">Nenhum resultado para essa busca</div>';
-      return;
-    }
-    // Group by section
-    const groups = {};
-    cmdkFiltered.forEach((it, i) => { it._idx = i; (groups[it.section] = groups[it.section] || []).push(it); });
-    let html = '';
-    Object.keys(groups).forEach(sec => {
-      html += `<div class="cmdk-section-label">${sec}</div>`;
-      groups[sec].forEach(it => {
-        const cls = it._idx === cmdkIdx ? 'active' : '';
-        html += `<div class="cmdk-item ${cls}" data-idx="${it._idx}">
-          <span class="cmdk-icon">${it.icon}</span>
-          <span class="cmdk-label">${it.label}</span>
-          <span class="cmdk-meta">${it.meta||''}</span>
-        </div>`;
-      });
-    });
-    cmdkResults.innerHTML = html;
-    // Click handlers
-    cmdkResults.querySelectorAll('.cmdk-item').forEach(el => {
-      el.addEventListener('click', () => { cmdkIdx = +el.dataset.idx; runCmdkActive(); });
-      el.addEventListener('mouseenter', () => { cmdkIdx = +el.dataset.idx;
-        cmdkResults.querySelectorAll('.cmdk-item').forEach(x => x.classList.toggle('active', +x.dataset.idx===cmdkIdx)); });
-    });
-  }
-  function openCmdk() {
-    cmdkBackdrop.classList.add('show');
-    cmdkInput.value = ''; cmdkIdx = 0;
-    renderCmdk();
-    setTimeout(() => cmdkInput.focus(), 50);
-  }
-  function closeCmdk() { cmdkBackdrop.classList.remove('show'); }
-  function runCmdkActive() {
-    const it = cmdkFiltered[cmdkIdx];
-    if (!it) return;
-    closeCmdk();
-    setTimeout(() => it.action(), 50);
-  }
-  cmdkInput.addEventListener('input', () => { cmdkIdx = 0; renderCmdk(); });
-  cmdkInput.addEventListener('keydown', (e) => {
-    if (e.key === 'ArrowDown') { e.preventDefault(); cmdkIdx = Math.min(cmdkIdx+1, cmdkFiltered.length-1); renderCmdk(); }
-    else if (e.key === 'ArrowUp') { e.preventDefault(); cmdkIdx = Math.max(cmdkIdx-1, 0); renderCmdk(); }
-    else if (e.key === 'Enter') { e.preventDefault(); runCmdkActive(); }
-    else if (e.key === 'Escape') { e.preventDefault(); closeCmdk(); }
-  });
-  cmdkBackdrop.addEventListener('click', (e) => { if (e.target === cmdkBackdrop) closeCmdk(); });
-  document.getElementById('btn-cmdk').addEventListener('click', openCmdk);
-
-  // ---------- Bookmarks (Visões salvas) ----------
-  function getBookmarks() { try { return JSON.parse(safeGet('ebm-bookmarks')||'[]'); } catch(e){ return []; } }
-  function setBookmarks(arr) { safeSet('ebm-bookmarks', JSON.stringify(arr)); }
-  function captureView() {
-    const active = document.querySelector('#period-toggle button.active');
-    return {
-      name: '',
-      ts: Date.now(),
-      period: active ? active.dataset.period : 'ytd',
-      dark: document.body.classList.contains('dark'),
-      briefing: document.body.classList.contains('briefing'),
-      cb: document.body.classList.contains('cb-safe'),
-      empSort, empSearch, empRegion, empStatusF
-    };
-  }
-  function applyView(v) {
-    if (v.dark !== document.body.classList.contains('dark')) applyDark(v.dark, false);
-    if (v.briefing !== document.body.classList.contains('briefing')) toggleBriefing();
-    if (v.cb !== document.body.classList.contains('cb-safe')) toggleCB();
-    empSort = v.empSort || 'vgv'; empSearch = v.empSearch || '';
-    empRegion = v.empRegion || 'ALL'; empStatusF = v.empStatusF || 'ALL';
-    const search = document.getElementById('emp-search'); if (search) search.value = empSearch;
-    document.querySelectorAll('.chip-rank').forEach(c => c.classList.toggle('active', c.dataset.sort===empSort));
-    document.querySelectorAll('#emp-filter-region .chip-filter').forEach(c => c.classList.toggle('active', c.dataset.reg===empRegion));
-    document.querySelectorAll('#emp-filter-status .chip-filter').forEach(c => c.classList.toggle('active', c.dataset.st===empStatusF));
-    activate(v.period);
-  }
-  function saveBookmarkPrompt() {
-    const name = prompt('Nome da visão (ex: "Reunião segunda 9h", "Foco GO Maio"):');
-    if (!name || !name.trim()) return;
-    const v = captureView(); v.name = name.trim();
-    const bms = getBookmarks(); bms.push(v); setBookmarks(bms); renderBookmarks();
-  }
-  function deleteBookmark(idx) {
-    const bms = getBookmarks(); bms.splice(idx,1); setBookmarks(bms); renderBookmarks();
-  }
-  function renderBookmarks() {
-    const menu = document.getElementById('bookmark-menu');
-    const bms = getBookmarks();
-    let html = '';
-    if (bms.length === 0) html += '<div class="bm-empty">Nenhuma visão salva</div>';
-    else {
-      bms.forEach((b, i) => {
-        const flags = [b.dark?'🌙':null, b.briefing?'📋':null, b.cb?'🎨':null, b.empRegion!=='ALL'?b.empRegion:null].filter(Boolean).join(' ');
-        html += `<div class="bm-item" data-idx="${i}">
-          <div style="flex:1;min-width:0;">
-            <div class="bm-name">${b.name}</div>
-            <div class="bm-meta">${b.period.toUpperCase()} ${flags?'· '+flags:''}</div>
-          </div>
-          <span class="bm-del" data-del="${i}" title="Remover">✕</span>
-        </div>`;
-      });
-      html += '<div class="bm-divider"></div>';
-    }
-    html += '<div class="bm-add" id="bm-add">⭐ Salvar visão atual</div>';
-    menu.innerHTML = html;
-    menu.querySelectorAll('.bm-item').forEach(el => {
-      el.addEventListener('click', (e) => {
-        if (e.target.classList.contains('bm-del')) { e.stopPropagation(); deleteBookmark(+e.target.dataset.del); return; }
-        const bm = bms[+el.dataset.idx]; if (bm) { applyView(bm); menu.classList.remove('show'); }
-      });
-    });
-    document.getElementById('bm-add').addEventListener('click', () => { menu.classList.remove('show'); saveBookmarkPrompt(); });
-  }
-  document.getElementById('btn-bookmarks').addEventListener('click', (e) => {
-    e.stopPropagation();
-    const menu = document.getElementById('bookmark-menu');
-    if (!menu.classList.contains('show')) renderBookmarks();
-    menu.classList.toggle('show');
-  });
-  document.addEventListener('click', (e) => {
-    const menu = document.getElementById('bookmark-menu');
-    if (menu && !menu.contains(e.target) && e.target.id !== 'btn-bookmarks') menu.classList.remove('show');
-  });
-
-  // ---------- Filtros de empreendimentos ----------
-  document.querySelectorAll('#emp-filter-region .chip-filter').forEach(c => {
-    c.addEventListener('click', () => {
-      document.querySelectorAll('#emp-filter-region .chip-filter').forEach(x => x.classList.remove('active'));
-      c.classList.add('active'); empRegion = c.dataset.reg; renderEmpTable();
-    });
-  });
-  document.querySelectorAll('#emp-filter-status .chip-filter').forEach(c => {
-    c.addEventListener('click', () => {
-      document.querySelectorAll('#emp-filter-status .chip-filter').forEach(x => x.classList.remove('active'));
-      c.classList.add('active'); empStatusF = c.dataset.st; renderEmpTable();
-    });
-  });
-
-  // ---------- Comentários por empreendimento ----------
-  const commentModal = document.getElementById('comment-modal');
-  const commentText = document.getElementById('comment-text');
-  const commentTitle = document.getElementById('comment-title');
-  let currentEmp = null;
-  function openComment(name) {
-    currentEmp = name;
-    commentTitle.textContent = '💬 ' + name;
-    commentText.value = getEmpNote(name);
-    commentModal.classList.add('show');
-    document.body.style.overflow = 'hidden';
-    setTimeout(() => commentText.focus(), 50);
-  }
-  function closeComment() { commentModal.classList.remove('show'); document.body.style.overflow = ''; }
-  document.getElementById('comment-cancel').addEventListener('click', closeComment);
-  document.getElementById('comment-save').addEventListener('click', () => {
-    if (!currentEmp) return;
-    const v = commentText.value.trim();
-    if (v) safeSet('ebm-emp-note-' + currentEmp, v);
-    else { try { localStorage.removeItem('ebm-emp-note-' + currentEmp); } catch(e){} }
-    closeComment();
-    if (document.querySelector('#period-toggle button.active')?.dataset.period === 'empreendimentos') renderEmpTable();
-  });
-  document.getElementById('comment-clear').addEventListener('click', () => {
-    if (confirm('Limpar comentário deste empreendimento?')) {
-      commentText.value = '';
-      if (currentEmp) try { localStorage.removeItem('ebm-emp-note-' + currentEmp); } catch(e){}
-      closeComment();
-      if (document.querySelector('#period-toggle button.active')?.dataset.period === 'empreendimentos') renderEmpTable();
-    }
-  });
-  commentModal.addEventListener('click', (e) => { if (e.target === commentModal) closeComment(); });
-  // Click row de empreendimento -> abre comentário
-  document.addEventListener('click', (e) => {
-    const row = e.target.closest('.emp-row');
-    if (row && row.dataset.empName) openComment(row.dataset.empName);
-  });
-
-  // ---------- Histórico de snapshots ----------
-  const HIST_MAX = 30;
-  function getHistory() { try { return JSON.parse(safeGet('ebm-snap-history')||'[]'); } catch(e){ return []; } }
-  function setHistory(h) { safeSet('ebm-snap-history', JSON.stringify(h)); }
-  function appendSnapshotIfNew() {
-    const cur = buildSnapshotPayload();
-    const h = getHistory();
-    if (h.length && h[h.length-1].ts === cur.ts) return;
-    h.push(cur);
-    while (h.length > HIST_MAX) h.shift();
-    setHistory(h);
-  }
-  appendSnapshotIfNew();
-
-  const histModal = document.getElementById('history-modal');
-  const histList = document.getElementById('history-list');
-  const histControls = document.getElementById('hist-controls');
-  let histSelA = null, histSelB = null;
-  function openHistory() {
-    histSelA = null; histSelB = null;
-    renderHistory();
-    histModal.classList.add('show');
-    document.body.style.overflow = 'hidden';
-  }
-  function closeHistory() { histModal.classList.remove('show'); document.body.style.overflow = ''; }
-  document.getElementById('history-close').addEventListener('click', closeHistory);
-  histModal.addEventListener('click', (e) => { if (e.target === histModal) closeHistory(); });
-  document.getElementById('btn-history').addEventListener('click', openHistory);
-
-  function renderHistory() {
-    const h = getHistory();
-    if (h.length === 0) {
-      histList.innerHTML = '<div class="cmdk-empty">Sem snapshots no histórico ainda</div>';
-      histControls.innerHTML = '';
-      return;
-    }
-    // Controls
-    let ctrl = `<div style="flex:1;color:var(--ebm-muted);">
-      <strong>${h.length}</strong> snapshot${h.length>1?'s':''} salvo${h.length>1?'s':''}.
-      Clique 1× para selecionar A · 2× outro para comparar B vs A.
-    </div>`;
-    if (histSelA != null && histSelB != null) {
-      ctrl += `<button class="btn-more" id="hist-clear-sel">Limpar seleção</button>`;
-    }
-    histControls.innerHTML = ctrl;
-    if (histSelA!=null && histSelB!=null) {
-      document.getElementById('hist-clear-sel').addEventListener('click', () => { histSelA=null; histSelB=null; renderHistory(); });
-    }
-    // List (most recent first)
-    let html = '';
-    for (let i = h.length - 1; i >= 0; i--) {
-      const s = h[i];
-      const cls = i===histSelA ? 'selected' : (i===histSelB ? 'selected-b' : '');
-      const tag = i===histSelA ? '<span style="color:var(--ebm-navy);font-weight:700;">A</span>'
-                : i===histSelB ? '<span style="color:var(--ebm-red);font-weight:700;">B</span>' : '';
-      html += `<div class="hist-item ${cls}" data-idx="${i}">
-        <div class="hist-when">${s.ts}</div>
-        <div class="hist-vals">
-          <span>YTD: <strong>${fmtBRLshort(s.ytd_fin)}</strong></span>
-          <span>Abr: <strong>${fmtBRLshort(s.abr_fin)}</strong></span>
-          <span>Mai esteira: <strong>${s.mai_act?fmtBRLshort(s.mai_act):'—'}</strong></span>
-        </div>
-        <div class="hist-actions">${tag}</div>
-      </div>`;
-    }
-    if (histSelA!=null && histSelB!=null) {
-      const A = h[histSelA], B = h[histSelB];
-      const fields = [
-        {key:'ytd_fin', lbl:'YTD Vendas Finalizadas', fmt:'val'},
-        {key:'ytd_qty', lbl:'YTD Unidades', fmt:'qty'},
-        {key:'ytd_pct', lbl:'YTD % Atingimento', fmt:'pp'},
-        {key:'abr_fin', lbl:'Abril Finalizadas', fmt:'val'},
-        {key:'abr_pct', lbl:'Abril %', fmt:'pp'},
-        {key:'mai_act', lbl:'Maio Esteira Ativa', fmt:'val'},
-        {key:'felipe_ytd', lbl:'Felipe YTD', fmt:'val'},
-        {key:'paulo_ytd', lbl:'Paulo YTD', fmt:'val'}
-      ];
-      html += `<div class="hist-diff-view">
-        <h4 style="margin:0 0 10px;color:var(--ebm-navy);font-size:14px;">Diff: ${A.ts} → ${B.ts}</h4>`;
-      fields.forEach(f => {
-        const a = A[f.key]||0, b = B[f.key]||0; const delta = b-a;
-        const fmt = (v) => f.fmt==='val' ? fmtBRLshort(v) : (f.fmt==='qty' ? fmtNum(v) : v.toFixed(1)+'%');
-        const dFmt = (v) => f.fmt==='val' ? fmtBRLshort(Math.abs(v)) : (f.fmt==='qty' ? fmtNum(Math.abs(v)) : Math.abs(v).toFixed(1)+' p.p.');
-        const cls = delta > 0 ? 'up' : (delta < 0 ? 'down' : '');
-        const arrow = delta > 0 ? '↑' : (delta < 0 ? '↓' : '→');
-        html += `<div class="diff-pair-row">
-          <div class="diff-label">${f.lbl}</div>
-          <div class="diff-vals">${fmt(a)} → <strong>${fmt(b)}</strong></div>
-          <div class="diff-delta ${cls}">${arrow} ${delta===0?'sem alteração':dFmt(delta)}</div>
-        </div>`;
-      });
-      html += '</div>';
-    }
-    histList.innerHTML = html;
-    histList.querySelectorAll('.hist-item').forEach(el => {
-      el.addEventListener('click', () => {
-        const i = +el.dataset.idx;
-        if (histSelA == null) histSelA = i;
-        else if (histSelB == null && i !== histSelA) histSelB = i;
-        else { histSelA = i; histSelB = null; }
-        renderHistory();
-      });
-    });
-  }
-
-  // Atalhos: K (palette), H (histórico)
-  document.addEventListener('keydown', (e) => {
-    if (e.target && typeof e.target.matches === 'function' && e.target.matches('input,textarea,[contenteditable="true"]')) return;
-    if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); openCmdk(); }
-    else if (!e.metaKey && !e.ctrlKey && !e.altKey && e.key.toLowerCase() === 'h') { e.preventDefault(); openHistory(); }
-  });
-
-  // ============================================================
-  // ONDA 13: Layout polish — Modos dropdown, mobile nav, microinterações
-  // ============================================================
-
-  // ---------- Modos dropdown ----------
-  function renderModosMenu() {
-    const isDark = document.body.classList.contains('dark');
-    const isB = document.body.classList.contains('briefing');
-    const isTV = document.body.classList.contains('tv-mode');
-    const isCB = document.body.classList.contains('cb-safe');
-    const isP = document.body.classList.contains('presentation');
-    const density = safeGet('ebm-density') || 'comfortable';
-    const items = [
-      {icon:'📋', label:'Briefing', meta:'B', active:isB, fn: toggleBriefing},
-      {icon:'📺', label:'TV (auto-rotate)', meta:'T', active:isTV, fn: toggleTV},
-      {icon:'⛶', label:'Apresentação', meta:'F', active:isP, fn: togglePresent},
-      {icon:'🎨', label:'Daltonismo', meta:'C', active:isCB, fn: toggleCB},
-      {sep:true},
-      {icon:'🖨', label:'Imprimir / PDF', meta:'P', active:false, fn: () => window.print()},
-      {sep:true},
-      {label:'Densidade:', sub:true},
-      {icon:'⊟', label:'Compacta', meta:'', active:density==='compact', fn: () => setDensity('compact')},
-      {icon:'☰', label:'Confortável', meta:'', active:density==='comfortable', fn: () => setDensity('comfortable')},
-      {icon:'≡', label:'Espaçada', meta:'', active:density==='spacious', fn: () => setDensity('spacious')},
-    ];
-    const menu = document.getElementById('modos-menu');
-    menu.innerHTML = items.map((it, i) => {
-      if (it.sep) return '<div class="modos-divider"></div>';
-      if (it.sub) return `<div style="font-size:10px;color:var(--ebm-muted);font-weight:700;text-transform:uppercase;padding:6px 12px 2px;letter-spacing:0.5px;">${it.label}</div>`;
-      return `<button class="modos-item ${it.active?'is-active':''}" data-i="${i}">
-        <span class="modos-icon">${it.icon}</span><span>${it.label}</span>
-        ${it.meta?`<span class="modos-meta">${it.meta}</span>`:''}
-      </button>`;
-    }).join('');
-    menu.querySelectorAll('.modos-item').forEach(el => {
-      el.addEventListener('click', () => {
-        const it = items[+el.dataset.i];
-        if (it && it.fn) { it.fn(); menu.classList.remove('show'); }
-      });
-    });
-  }
-  document.getElementById('btn-modos').addEventListener('click', (e) => {
-    e.stopPropagation();
-    const menu = document.getElementById('modos-menu');
-    if (!menu.classList.contains('show')) renderModosMenu();
-    menu.classList.toggle('show');
-  });
-  document.addEventListener('click', (e) => {
-    const menu = document.getElementById('modos-menu');
-    if (menu && !menu.contains(e.target) && e.target.id !== 'btn-modos') menu.classList.remove('show');
-  });
-
-  // ---------- Densidade ----------
-  function setDensity(d) {
-    document.body.classList.remove('density-compact','density-comfortable','density-spacious');
-    document.body.classList.add('density-' + d);
-    safeSet('ebm-density', d);
-  }
-  setDensity(safeGet('ebm-density') || 'comfortable');
-
-  // ---------- Bottom nav (mobile) ----------
-  document.querySelectorAll('.bottom-nav button').forEach(b => {
-    b.addEventListener('click', () => {
-      const period = b.dataset.period;
-      activate(period);
-      document.querySelectorAll('.bottom-nav button').forEach(x => x.classList.toggle('active', x===b));
-    });
-  });
-  // Sync bottom nav active state com tab principal
-  const _origActivate = activate;
-  window.activate = function(p) {
-    _origActivate(p);
-    document.querySelectorAll('.bottom-nav button').forEach(x => x.classList.toggle('active', x.dataset.period===p));
-  };
-  // Init: marca YTD como ativo no bottom nav
-  setTimeout(() => {
-    const active = document.querySelector('#period-toggle button.active');
-    if (active) {
-      const p = active.dataset.period;
-      document.querySelectorAll('.bottom-nav button').forEach(x => x.classList.toggle('active', x.dataset.period===p));
-    }
-  }, 100);
-
-  // ---------- FAB (mobile cmd+K) ----------
-  document.getElementById('fab').addEventListener('click', openCmdk);
-
-  // ---------- Auto-hide header on scroll down ----------
-  let lastScroll = 0;
-  let scrollTicking = false;
-  window.addEventListener('scroll', () => {
-    if (scrollTicking) return;
-    scrollTicking = true;
-    requestAnimationFrame(() => {
-      const cur = window.scrollY;
-      // Não esconde no topo (< 100px) ou em modos especiais
-      if (cur < 100 || document.body.classList.contains('presentation') || document.body.classList.contains('briefing')) {
-        document.body.classList.remove('scrolled-down');
-      } else if (cur > lastScroll + 8) {
-        document.body.classList.add('scrolled-down');
-      } else if (cur < lastScroll - 8) {
-        document.body.classList.remove('scrolled-down');
-      }
-      lastScroll = cur;
-      scrollTicking = false;
-    });
-  }, { passive: true });
-
-  // ---------- Confetti (quando bate meta) ----------
-  window.__triggerConfetti = function() {
-    const c = document.getElementById('confetti-container');
-    if (!c) return;
-    const colors = ['#003D6B','#A4001B','#B07A1F','#E6C97A','#0F6E4D'];
-    const N = 60;
-    for (let i = 0; i < N; i++) {
-      const piece = document.createElement('div');
-      piece.className = 'confetti-piece';
-      piece.style.left = Math.random()*100 + 'vw';
-      piece.style.background = colors[i%colors.length];
-      piece.style.animationDelay = (Math.random()*1.2) + 's';
-      piece.style.animationDuration = (2.4 + Math.random()*1.6) + 's';
-      piece.style.width = (6 + Math.random()*8) + 'px';
-      piece.style.height = (6 + Math.random()*8) + 'px';
-      piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
-      c.appendChild(piece);
-      setTimeout(() => piece.remove(), 4500);
-    }
-  };
 
   setupNotes();
   setupEmp();
@@ -2874,16 +1540,8 @@
   window.__renderSplits = renderSplits;
   renderSplits();
 
-  // Defesa: garante reset de modos transientes na carga (não persistem)
-  document.body.classList.remove('esteira-mode','empreendimentos-mode','tv-mode','presentation','scrolled-down');
-  const _kpiRow = document.getElementById('kpi-row');
-  if (_kpiRow) _kpiRow.style.display = '';
-
   // initial: 2026 YTD acumulado é a visão padrão mais útil pro diretor comercial
-  try { activate('ytd'); } catch(e) {
-    console.error('[EBM] activate(ytd) falhou:', e);
-    if (_kpiRow) _kpiRow.innerHTML = '<div style="padding:24px;color:var(--ebm-red);">⚠ Erro ao renderizar KPIs. Pressione Cmd+Shift+R para recarregar.</div>';
-  }
+  activate('ytd');
 })();
 </script>
 </body>
