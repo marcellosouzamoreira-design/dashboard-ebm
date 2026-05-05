@@ -7,6 +7,9 @@
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 <meta name="apple-mobile-web-app-title" content="EBM Esteira" />
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="Expires" content="0" />
 <title>EBM — Esteira Comercial</title>
 <link rel="icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%23003D6B'/><text x='32' y='44' font-family='Arial Black' font-size='28' font-weight='900' fill='%23fff' text-anchor='middle'>EBM</text></svg>" />
 <link rel="apple-touch-icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect width='180' height='180' rx='40' fill='%23003D6B'/><text x='90' y='118' font-family='Arial Black' font-size='72' font-weight='900' fill='%23fff' text-anchor='middle'>EBM</text></svg>" />
@@ -2871,8 +2874,16 @@
   window.__renderSplits = renderSplits;
   renderSplits();
 
+  // Defesa: garante reset de modos transientes na carga (não persistem)
+  document.body.classList.remove('esteira-mode','empreendimentos-mode','tv-mode','presentation','scrolled-down');
+  const _kpiRow = document.getElementById('kpi-row');
+  if (_kpiRow) _kpiRow.style.display = '';
+
   // initial: 2026 YTD acumulado é a visão padrão mais útil pro diretor comercial
-  activate('ytd');
+  try { activate('ytd'); } catch(e) {
+    console.error('[EBM] activate(ytd) falhou:', e);
+    if (_kpiRow) _kpiRow.innerHTML = '<div style="padding:24px;color:var(--ebm-red);">⚠ Erro ao renderizar KPIs. Pressione Cmd+Shift+R para recarregar.</div>';
+  }
 })();
 </script>
 </body>
