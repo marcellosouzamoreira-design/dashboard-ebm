@@ -2,7 +2,7 @@
 {
   "name": "Ebm Esteira Comercial",
   "schemaVersion": 1,
-  "description": "Dashboard da Esteira Comercial EBM — toggle por mês de 2026 (Jan/Fev/Mar/Abr) + 2026 YTD acumulado. KPIs (Andamento R$63M / Finalizadas / VGV Total), funil de propostas, gauges de meta por diretor (Felipe, Paulo/Sérgio, EBM Diretoria), distribuição por regional (DF/GO/SP) e top/bottom empreendimentos. Cores oficiais EBM (#003D6B navy / #A4001B vinho). Snapshot extraído do Power BI EBM em 01/05/2026 08:47. Sub-filtros de Modalidade (Associativo/SPBE) e Momento (Lançamento/Estoque) presentes mas pendentes de extração."
+  "description": "Dashboard da Esteira Comercial EBM — toggle por mês de 2026 (Jan/Fev/Mar/Abr) + 2026 YTD acumulado. KPIs (Andamento R$63M / Finalizadas / VGV Total), funil de propostas, gauges de meta por diretor (Felipe, Paulo/Sérgio, EBM Diretoria), distribuição por regional (DF/GO/SP) e top/bottom empreendimentos. Cores oficiais EBM (#003D6B navy / #A4001B vinho). Snapshot extraído do Power BI EBM em 06/05/2026 18:33 (refresh diário automático). Sub-filtros de Modalidade (Associativo/SPBE) e Momento (Lançamento/Estoque) presentes mas pendentes de extração."
 }
 </script>
 <html lang="pt-BR">
@@ -456,7 +456,7 @@
         <button role="tab" data-period="esteira" type="button">⚙ Esteira</button>
         <button role="tab" data-period="empreendimentos" type="button">🏢 Empreendimentos</button>
       </div>
-      <div class="updated">Última atualização BI: <strong id="last-update">05/05/2026 18:32:32</strong></div>
+      <div class="updated">Última atualização BI: <strong id="last-update">06/05/2026 18:33:34</strong></div>
       <div class="header-buttons">
         <button id="btn-refresh" class="btn-refresh" type="button" title="Atualização automática 2x/dia (8:30 e 20:30)" style="display:none;">↻ Snapshot</button>
         <button id="btn-print" class="btn-export" type="button" title="Imprimir / Salvar PDF (atalho: P)">🖨 PDF</button>
@@ -548,7 +548,7 @@
       <div class="kpi andamento" style="text-align:center;padding:24px;">
         <div class="label">Esteira ativa neste momento</div>
         <div class="value" style="font-size:42px;">R$53M</div>
-        <div class="sub">Soma de todas propostas em andamento (estágios 00–05) capturadas em 05/05/2026 18:32</div>
+        <div class="sub">Soma de todas propostas em andamento (estágios 00–05) capturadas em 06/05/2026 18:33</div>
       </div>
     </div>
 
@@ -701,14 +701,14 @@
     ),
     abr: makeMonth(
       "Abril / 2026",
-      60177854,  // Fechamento reconfirmado em 05/05/2026 18:32 (sem mudança vs snapshot 05/05 08:31)
+      60177854,  // Fechamento reconfirmado em 06/05/2026 18:33 (idêntico ao snapshot 05/05 18:32 — sem deltas transacionais nas últimas 24h)
       [
         { name: "Regional GO", vgv: 47284739, qtd: 108 },
         { name: "Regional SP", vgv: 7228864,  qtd: 14  },
         { name: "Regional DF", vgv: 5664250,  qtd: 16  },
       ],
       [
-        // Abril fechado. Valores por diretor reconfirmados do BI em 05/05/2026 18:32 (idênticos ao snapshot 05/05 08:31).
+        // Abril fechado. Valores por diretor reconfirmados do BI em 06/05/2026 18:33 (idênticos ao snapshot 05/05 18:32 — Felipe 51% / Paulo 45%, sem mudança).
         { name: "Felipe",         projetado: 65396703,  realizado: 36856641, qtdProj: 113, qtdReal: 73,  pct: 51, status: "bad" },
         { name: "Paulo / Sérgio", projetado: 41404192,  realizado: 23321213, qtdProj: 114, qtdReal: 65,  pct: 45, status: "bad" },
         { name: "EBM Diretoria",  projetado: null,      realizado: null,     qtdProj: null, qtdReal: null, pct: null, status: "na" },
@@ -722,7 +722,7 @@
         finalizadas: 0,
         total: 52640763,
       },
-      // Esteira ativa REAL reconfirmada do BI em 05/05/2026 18:32 (KPI/Funil/Regional idênticos vs snapshot 05/05 08:31)
+      // Esteira ativa REAL reconfirmada do BI em 06/05/2026 18:33 (KPI/Funil/Regional/Diretores TODOS idênticos vs snapshot 05/05 18:32 — esteira congelada nas últimas 24h)
       funil: [
         { name: "00 — Proposta",     vgv: 956468,    qtd: 3 },
         { name: "01 — Crédito",      vgv: 4418839,   qtd: 11 },
