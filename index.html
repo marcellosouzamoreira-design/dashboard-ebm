@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- build-id: 20260507-195616 -->
+<!-- build-id: 20260507-200622 -->
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8" />
@@ -968,7 +968,7 @@
 
   <!-- Splits de Modalidade e Momento (Abril/2026) -->
   <section id="splits-section" class="briefing-hide">
-    <h2>🔀 Splits — Abril/2026 <span class="hint" style="color:var(--ebm-warn);">base parcial: snapshot 01/05 (R$51,8M) — Abril fechou em R$60,2M (gap R$8,4M sem split detalhado pendente de extração)</span></h2>
+    <h2>🔀 Splits — Abril/2026 <span class="hint" style="color:var(--ebm-warn);">base parcial: snapshot 01/05 (R$51,8M) — Abril REVISADO em 07/05 fechou em R$86,5M (gap R$34,7M reclassificado pós-snapshot, sem split detalhado)</span></h2>
     <div class="splits-grid">
       <div class="split-block">
         <div class="split-title">Por Modalidade</div>
@@ -1415,9 +1415,10 @@
         <div class="sub">Andamento + Finalizadas</div>
       </div>
     `;
-    // Confetti se bater meta
-    if (isWinner && !window.__celebratedFor || window.__celebratedFor !== period) {
-      if (isWinner) { window.__celebratedFor = period; if (window.__triggerConfetti) window.__triggerConfetti(); }
+    // Confetti se bater meta (operator precedence corrigido)
+    if (isWinner && window.__celebratedFor !== period) {
+      window.__celebratedFor = period;
+      if (window.__triggerConfetti) window.__triggerConfetti();
     }
     setTimeout(() => el.querySelectorAll('.kpi .value.updating').forEach(v => v.classList.remove('updating')), 500);
     // Sparkline embutido no KPI hero
