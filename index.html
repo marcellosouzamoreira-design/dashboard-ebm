@@ -1035,7 +1035,7 @@
     <div class="kpis" style="margin-bottom:18px;grid-template-columns:1fr;">
       <div class="kpi andamento" style="text-align:center;padding:24px;">
         <div class="label">Esteira ativa neste momento</div>
-        <div class="value" style="font-size:42px;">R$53M</div>
+        <div class="value" style="font-size:42px;">R$23M</div>
         <div class="sub">Soma de todas propostas em andamento (estágios 00–05) — snapshot 07/05/2026 15:31</div>
       </div>
     </div>
@@ -1105,7 +1105,7 @@
   <footer class="note briefing-hide">
     Fonte: Power BI EBM — relatório "Esteira Comercial". Snapshot extraído via navegador em 07/05/2026 às 15:31.<br>
     Dados mensais (Jan–Abr) capturados individualmente. <strong>2026 YTD</strong> é a soma dos meses extraídos.
-    Vendas em Andamento (R$53M) é instantâneo no momento da extração — não varia por filtro de mês.<br>
+    Vendas em Andamento Maio (R$23M) é instantâneo no momento da extração — não varia por filtro de mês.<br>
     Splits por Modalidade (Associativo/SPBE) e Momento (Lançamento/Estoque) referem-se a <strong>Abril/2026</strong>
     — Estoque é calculado por subtração (Total − Lançamento) para evitar uma extração extra.
   </footer>
@@ -1207,7 +1207,7 @@
   // Esteira ativa (andamento) é um snapshot único capturado em 01/05/2026 09:38
   // — reflete propostas em estágios 00–05 no momento da extração. Mesmo valor
   // usado em todos os meses e na aba MAI (mês vigente).
-  const ANDAMENTO_ATUAL = 53000000;
+  const ANDAMENTO_ATUAL = 22892654;
   function makeMonth(label, finalizadas, regionals, diretores) {
     const total = regionals.reduce((s,r)=>s+r.vgv, 0);
     const qtd   = regionals.reduce((s,r)=>s+r.qtd, 0);
@@ -1286,32 +1286,32 @@
     mai: {
       label: "Maio / 2026 (mês vigente)",
       kpi: {
-        andamento: 53000000,
-        finalizadas: 0,
-        total: 53000000,
+        andamento: 22892654,
+        finalizadas: 1239500,
+        total: 24132154,
       },
-      // Esteira ativa REAL extraída do BI em 01/05/2026 09:38
+      // Esteira + finalizadas Maio — extraída do BI em 07/05/2026 15:31
       funil: [
-        { name: "00 — Proposta",     vgv: 8465212,  qtd: 21 },  // +R$1 ajuste de arredondamento
-        { name: "01 — Crédito",      vgv: 6660932,  qtd: 16 },
-        { name: "02 — Jurídico",     vgv: 2050035,  qtd: 6 },
-        { name: "03 — Assinatura",   vgv: 27839397, qtd: 41, highlight: true },
-        { name: "04 — Conferência",  vgv: 3325803,  qtd: 8 },
-        { name: "05 — Pendência",    vgv: 14881425, qtd: 38 },
-        { name: "06 — Finalizado",   vgv: 0,        qtd: 0, last: true },
+        { name: "00 — Proposta",     vgv: 9298677,  qtd: 10 },
+        { name: "01 — Crédito",      vgv: 3174009,  qtd: 8 },
+        { name: "02 — Jurídico",     vgv: 1060335,  qtd: 3 },
+        { name: "03 — Assinatura",   vgv: 5746310,  qtd: 15, highlight: true },
+        { name: "04 — Conferência",  vgv: 0,        qtd: 0 },
+        { name: "05 — Pendência",    vgv: 3613323,  qtd: 9 },
+        { name: "06 — Finalizado",   vgv: 1239500,  qtd: 3, last: true },
       ],
       regional: [
-        { name: "Regional GO", vgv: 53188225, qtd: 108 },
-        { name: "Regional DF", vgv: 5179000,  qtd: 12  },
-        { name: "Regional SP", vgv: 4855579,  qtd: 10  },
+        { name: "Regional GO", vgv: 20842154, qtd: 40 },
+        { name: "Regional DF", vgv: 2240000,  qtd: 6  },
+        { name: "Regional SP", vgv: 1050000,  qtd: 2  },
       ],
-      regionalTotal: { vgv: 53000000, qtd: 110 },
-      regionalNote: "VGV das propostas em aberto (estágios 00-05) por Regional — Maio/2026.",
+      regionalTotal: { vgv: 24132154, qtd: 48 },
+      regionalNote: "Total Maio/2026 (esteira + finalizadas) por Regional — snapshot 07/05/2026 15:31.",
       diretores: [
-        { name: "Felipe",         projetado: 62026937, realizado: 0, qtdProj: 111, qtdReal: 0,   pct: 0,  status: "bad" },
-        { name: "Paulo / Sérgio", projetado: 39140401, realizado: 0, qtdProj: 108, qtdReal: 0,   pct: 0,  status: "bad" },
-        { name: "EBM Diretoria",  projetado: null,     realizado: 0, qtdProj: null, qtdReal: 0,   pct: null, status: "na" },
-        { name: "TOTAL",          projetado: 101167338, realizado: 0, qtdProj: 219, qtdReal: 0,  pct: 0,  status: "bad", isTotal: true },
+        { name: "Felipe",         projetado: 62026937, realizado: null, qtdProj: 111, qtdReal: null, pct: null, status: "na" },
+        { name: "Paulo / Sérgio", projetado: 39140401, realizado: null, qtdProj: 108, qtdReal: null, pct: null, status: "na" },
+        { name: "EBM Diretoria",  projetado: null,     realizado: 1239500, qtdProj: null, qtdReal: 3,   pct: null, status: "na" },
+        { name: "TOTAL",          projetado: 101167338, realizado: 1239500, qtdProj: 219, qtdReal: 3,  pct: 1,  status: "bad", isTotal: true },
       ],
     },
     ytd: {
@@ -1851,7 +1851,7 @@
     const el = document.getElementById('funil');
     const hint = document.getElementById('funil-hint');
     if (period === 'mai') {
-      hint.textContent = '— Esteira ativa em Maio/2026: 110 propostas em aberto somando R$53M';
+      hint.textContent = '— Esteira ativa em Maio/2026: 45 propostas em aberto + 3 finalizadas — total R$24M';
     } else if (period === 'ytd') {
       hint.textContent = '— Total finalizado Jan–Abr (vendas concluídas no ano)';
     } else {
