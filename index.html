@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- build-id: 20260509-022259 -->
+<!-- build-id: 20260509-023627 -->
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8" />
@@ -975,8 +975,9 @@
   .kpi-compare .cmp.neutral .cmp-val { color: var(--ebm-muted); }
 
   /* 16. Modo "Foco" — esconde tudo menos o KPI clicado */
-  body.focus-mode .wrap > *:not(header) { display: none !important; }
-  body.focus-mode #focus-kpi-display { display: flex; align-items: center; justify-content: center;
+  body.focus-mode .wrap > *:not(header):not(#focus-kpi-display) { display: none !important; }
+  body.focus-mode .header-buttons, body.focus-mode .header-meta .toggle, body.focus-mode .month-cards { visibility: hidden; }
+  body.focus-mode #focus-kpi-display { display: flex !important; align-items: center; justify-content: center;
     flex-direction: column; min-height: calc(100vh - 200px); }
   body.focus-mode #focus-kpi-display .focus-num { font-size: 200px; font-weight: 900;
     color: var(--ebm-navy); line-height: 1; font-variant-numeric: tabular-nums;
@@ -997,12 +998,12 @@
   .bullet .fill.warn { background: linear-gradient(90deg, var(--ebm-warn), #C28C2D) !important; }
   .bullet .fill.bad { background: linear-gradient(90deg, var(--ebm-red), #D53850) !important; }
 
-  /* 19. Header sweep animation no carregamento */
-  .sticky-header { position: relative; overflow: hidden; }
+  /* 19. Header sweep animation no carregamento (sem quebrar sticky/dropdowns) */
   .sticky-header::before { content: ''; position: absolute; inset: 0;
     background: linear-gradient(90deg, transparent 0%, rgba(176,122,31,0.12) 50%, transparent 100%);
     transform: translateX(-100%); animation: headerSweep 1.6s ease-out forwards;
-    pointer-events: none; }
+    pointer-events: none; clip-path: inset(0); z-index: 0; }
+  .sticky-header > * { position: relative; z-index: 1; }
   @keyframes headerSweep { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
 
   /* 9. Breadcrumb */
@@ -1016,7 +1017,7 @@
 
   /* 10. Toast notifications */
   .toast-wrap { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%);
-    z-index: 200; display: flex; flex-direction: column; gap: 8px; align-items: center;
+    z-index: 350; display: flex; flex-direction: column; gap: 8px; align-items: center;
     pointer-events: none; }
   .toast { background: var(--ebm-navy); color: white; padding: 10px 18px; border-radius: 10px;
     font-size: 13px; font-weight: 600; box-shadow: var(--ebm-shadow-lg);
@@ -1044,6 +1045,20 @@
     body.focus-mode #focus-kpi-display .focus-lbl { font-size: 16px; }
     .scroll-indicator { display: none; }
     .toast-wrap { bottom: 80px; }
+  }
+  /* Dark fix: card "is-current" gradient mais visível */
+  body.dark .mo-card.is-current {
+    background: linear-gradient(135deg, var(--ebm-card) 0%, rgba(176,122,31,0.10) 100%); }
+  /* Mês card pct=null tratamento + Maio current não vermelho */
+  .mo-card.is-current .mo-pct.bad { color: var(--ebm-gold) !important; }
+  .mo-card .mo-pct.na { color: var(--ebm-muted); }
+  /* Maio card showing pace ao invés de só % */
+  .mo-card.is-current .mo-pace-hint { font-size: 9px; color: var(--ebm-muted); margin-top: 2px;
+    font-style: italic; }
+  /* FAB seguro acima de bottom-nav em iPhones com home-indicator */
+  .fab { z-index: 91 !important; }
+  @media (max-width: 700px) {
+    .fab { bottom: calc(70px + env(safe-area-inset-bottom)) !important; }
   }
 </style>
 </head>
@@ -2981,34 +2996,57 @@
     wrap.innerHTML = months.map((m, i) => {
       const d = data[m];
       const tot = d.diretores.find(x=>x.isTotal);
-      const pct = tot.pct;
-      const fin = d.kpi.finalizadas;
-      let pctCls = 'bad';
-      if (pct >= 90) pctCls = 'ok';
-      else if (pct >= 60) pctCls = 'warn';
+      const pct = tot ? tot.pct : null;
+      const fin = d.kpi.finalizadas || 0;
+      let pctCls = 'bad', pctTxt = '—';
+      if (pct == null) { pctCls = 'na'; pctTxt = 'Aguardando'; }
+      else { pctTxt = pct + '% meta';
+        if (pct >= 90) pctCls = 'ok';
+        else if (pct >= 60) pctCls = 'warn';
+      }
       const isCurrent = (m === 'mai');
       const isActive = (m === activePeriod);
+      // Pace para mês vigente
+      let paceHtml = '';
+      if (isCurrent && dayMaio) {
+        const pacePct = Math.round((dayMaio/31)*100);
+        paceHtml = `<div class="mo-pace-hint">Dia ${dayMaio}/31 · esperado ${pacePct}%</div>`;
+      }
       // Trend vs mês anterior
       let trendHtml = '';
       if (i > 0) {
         const prevFin = data[months[i-1]].kpi.finalizadas;
-        if (prevFin > 0) {
+        if (prevFin > 0 && fin > 0) {
           const delta = ((fin - prevFin) / prevFin) * 100;
           const arrow = delta > 0 ? '↑' : (delta < 0 ? '↓' : '→');
           const cls = delta > 0 ? 'up' : (delta < 0 ? 'down' : '');
           trendHtml = `<div class="mo-trend ${cls}">${arrow} ${Math.abs(delta).toFixed(1)}%</div>`;
         }
       }
-      return `<button class="mo-card ${isActive?'active':''} ${isCurrent?'is-current':''}" data-period="${m}" type="button">
+      return `<button class="mo-card ${isActive?'active':''} ${isCurrent?'is-current':''}" data-period="${m}" type="button" ${isActive?'aria-current="page"':''}>
         ${isCurrent?'<span class="mo-current-tag">Vigente</span>':''}
         <div class="mo-name">${monthLbl[m]}</div>
-        <div class="mo-val">${fmtBRLshort(fin)}</div>
-        <div class="mo-pct ${pctCls}">${pct}% meta</div>
-        ${trendHtml}
+        <div class="mo-val">${fin > 0 ? fmtBRLshort(fin) : '—'}</div>
+        <div class="mo-pct ${pctCls}">${pctTxt}</div>
+        ${paceHtml || trendHtml}
       </button>`;
     }).join('');
     wrap.querySelectorAll('.mo-card').forEach(c => {
-      c.addEventListener('click', () => activate(c.dataset.period));
+      c.addEventListener('click', () => {
+        // Pausa TV mode se ativo
+        if (document.body.classList.contains('tv-mode')) {
+          if (window.__tvInterval) { clearInterval(window.__tvInterval); window.__tvInterval = null; }
+          document.body.classList.remove('tv-mode');
+          const btnTv = document.getElementById('btn-tv');
+          if (btnTv) btnTv.textContent = '📺 TV';
+        }
+        activate(c.dataset.period);
+        // Re-renderiza Foco se ativo
+        if (document.body.classList.contains('focus-mode')) {
+          document.body.classList.remove('focus-mode');
+          setTimeout(() => toggleFocus('finalizadas'), 50);
+        }
+      });
     });
   }
   // Re-render quando trocar de aba
