@@ -1,12 +1,5 @@
 <!doctype html>
-<script type="application/json" id="cowork-artifact-meta">
-{
-  "name": "Ebm Esteira Comercial",
-  "schemaVersion": 1,
-  "description": "Dashboard da Esteira Comercial EBM — toggle por mês de 2026 (Jan/Fev/Mar/Abr) + 2026 YTD acumulado. KPIs (Andamento R$63M / Finalizadas / VGV Total), funil de propostas, gauges de meta por diretor (Felipe, Paulo/Sérgio, EBM Diretoria), distribuição por regional (DF/GO/SP) e top/bottom empreendimentos. Cores oficiais EBM (#003D6B navy / #A4001B vinho). Snapshot extraído do Power BI EBM em 06/05/2026 18:33 (refresh diário automático). Sub-filtros de Modalidade (Associativo/SPBE) e Momento (Lançamento/Estoque) presentes mas pendentes de extração."
-}
-</script>
-<!-- build-id: 20260507-200622 -->
+<!-- build-id: 20260509-022259 -->
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8" />
@@ -910,6 +903,148 @@
   /* Trend chart maior e mais respirado */
   .trend-card { padding: var(--space-md) var(--space-lg); }
   .trend-chart-wrap { min-height: 240px; }
+
+  /* === Onda 14: Hierarquia + Microvisualizações + Polish + Navegação === */
+
+  /* 1. Cards de mês (substitui visual flat das tabs) */
+  .month-cards { display: grid; grid-template-columns: repeat(5, 1fr); gap: var(--space-sm);
+    margin-bottom: var(--space-md); }
+  .mo-card { background: var(--ebm-card); border: 1px solid var(--ebm-border);
+    border-radius: var(--radius-md); padding: 10px 12px; cursor: pointer; transition: all .18s;
+    position: relative; overflow: hidden; box-shadow: var(--ebm-shadow-sm); }
+  .mo-card:hover { transform: translateY(-2px); box-shadow: var(--ebm-shadow-md); border-color: var(--ebm-navy); }
+  .mo-card.active { border-color: var(--ebm-navy); border-width: 2px; padding: 9px 11px;
+    box-shadow: var(--ebm-shadow-md); }
+  .mo-card .mo-name { font-size: 11px; font-weight: 700; color: var(--ebm-muted);
+    text-transform: uppercase; letter-spacing: 0.6px; }
+  .mo-card .mo-val { font-size: 18px; font-weight: 800; color: var(--ebm-text);
+    font-variant-numeric: tabular-nums; margin-top: 2px; line-height: 1; }
+  .mo-card .mo-pct { font-size: 11px; font-weight: 700; margin-top: 4px;
+    display: inline-flex; align-items: center; gap: 4px; }
+  .mo-card .mo-pct.ok { color: var(--ebm-ok); }
+  .mo-card .mo-pct.warn { color: var(--ebm-warn); }
+  .mo-card .mo-pct.bad { color: var(--ebm-red); }
+  .mo-card .mo-trend { font-size: 10px; color: var(--ebm-muted); margin-top: 2px;
+    display: inline-flex; align-items: center; gap: 3px; }
+  .mo-card .mo-trend.up { color: var(--ebm-ok); }
+  .mo-card .mo-trend.down { color: var(--ebm-red); }
+  /* Maio destaque */
+  .mo-card.is-current { border-color: var(--ebm-gold); background: linear-gradient(135deg,
+    var(--ebm-card) 0%, rgba(176,122,31,0.04) 100%); }
+  .mo-card.is-current.active { border-width: 2px; box-shadow: 0 0 0 4px rgba(176,122,31,0.2),
+    var(--ebm-shadow-md); animation: pulseGold 2.4s infinite; }
+  @keyframes pulseGold { 0%,100% { box-shadow: 0 0 0 4px rgba(176,122,31,0.2), var(--ebm-shadow-md); }
+    50% { box-shadow: 0 0 0 8px rgba(176,122,31,0.1), var(--ebm-shadow-lg); } }
+  .mo-card .mo-current-tag { position: absolute; top: 6px; right: 6px; background: var(--ebm-gold);
+    color: white; font-size: 9px; font-weight: 800; padding: 1px 5px; border-radius: 3px;
+    text-transform: uppercase; letter-spacing: 0.4px; }
+
+  /* 2. Maio badge "Dia X de 31" */
+  .mai-pace-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px;
+    background: linear-gradient(135deg, var(--ebm-gold), var(--ebm-gold-light));
+    color: white; font-size: 11px; font-weight: 800; border-radius: 999px;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.15); margin-left: 8px;
+    box-shadow: 0 2px 4px rgba(176,122,31,0.3); }
+
+  /* 12. Status icons */
+  .status-icon { display: inline-block; width: 14px; height: 14px; border-radius: 50%;
+    text-align: center; line-height: 14px; font-size: 10px; font-weight: 900;
+    vertical-align: middle; margin-right: 4px; }
+  .status-icon.ok { background: var(--ebm-ok); color: white; }
+  .status-icon.warn { background: var(--ebm-warn); color: white; }
+  .status-icon.bad { background: var(--ebm-red); color: white; }
+
+  /* 14. Dot grid no funnel — visualização tipo Stripe */
+  .dot-grid { display: flex; flex-wrap: wrap; gap: 3px; margin-top: 6px; max-width: 240px; }
+  .dot { width: 8px; height: 8px; border-radius: 2px; background: var(--ebm-navy);
+    transition: transform .15s; }
+  .dot:hover { transform: scale(1.6); }
+  .dot.gold { background: var(--ebm-gold); }
+  .dot.red { background: var(--ebm-red); }
+
+  /* 15. KPI comparators */
+  .kpi-compare { display: flex; gap: 10px; margin-top: 8px; flex-wrap: wrap; font-size: 11px; }
+  .kpi-compare .cmp { display: inline-flex; align-items: center; gap: 4px;
+    color: var(--ebm-muted); padding: 2px 8px; border-radius: 6px;
+    background: rgba(0,61,107,0.04); border: 1px solid var(--ebm-border); }
+  body.dark .kpi-compare .cmp { background: rgba(74,159,224,0.05); }
+  .kpi-compare .cmp .cmp-lbl { font-weight: 600; }
+  .kpi-compare .cmp .cmp-val { font-weight: 800; font-variant-numeric: tabular-nums; }
+  .kpi-compare .cmp.up .cmp-val { color: var(--ebm-ok); }
+  .kpi-compare .cmp.down .cmp-val { color: var(--ebm-red); }
+  .kpi-compare .cmp.neutral .cmp-val { color: var(--ebm-muted); }
+
+  /* 16. Modo "Foco" — esconde tudo menos o KPI clicado */
+  body.focus-mode .wrap > *:not(header) { display: none !important; }
+  body.focus-mode #focus-kpi-display { display: flex; align-items: center; justify-content: center;
+    flex-direction: column; min-height: calc(100vh - 200px); }
+  body.focus-mode #focus-kpi-display .focus-num { font-size: 200px; font-weight: 900;
+    color: var(--ebm-navy); line-height: 1; font-variant-numeric: tabular-nums;
+    letter-spacing: -0.04em; }
+  body.focus-mode #focus-kpi-display .focus-lbl { font-size: 24px; color: var(--ebm-muted);
+    margin-top: 14px; letter-spacing: 4px; text-transform: uppercase; }
+  body.focus-mode #focus-kpi-display .focus-sub { font-size: 16px; color: var(--ebm-text);
+    margin-top: 18px; }
+  body.focus-mode .sticky-header { box-shadow: none; }
+  body.focus-mode::after { content: '⊙ Modo Foco — Esc para sair'; position: fixed; bottom: 24px;
+    left: 50%; transform: translateX(-50%); background: var(--ebm-navy); color: white;
+    padding: 8px 18px; border-radius: 999px; font-size: 12px; font-weight: 700;
+    box-shadow: var(--ebm-shadow-lg); z-index: 100; }
+
+  /* 17. Bullet gradient */
+  .bullet .fill { background: linear-gradient(90deg, var(--ebm-navy), var(--ebm-navy)) !important; }
+  .bullet .fill.ok { background: linear-gradient(90deg, var(--ebm-ok), #4FCB97) !important; }
+  .bullet .fill.warn { background: linear-gradient(90deg, var(--ebm-warn), #C28C2D) !important; }
+  .bullet .fill.bad { background: linear-gradient(90deg, var(--ebm-red), #D53850) !important; }
+
+  /* 19. Header sweep animation no carregamento */
+  .sticky-header { position: relative; overflow: hidden; }
+  .sticky-header::before { content: ''; position: absolute; inset: 0;
+    background: linear-gradient(90deg, transparent 0%, rgba(176,122,31,0.12) 50%, transparent 100%);
+    transform: translateX(-100%); animation: headerSweep 1.6s ease-out forwards;
+    pointer-events: none; }
+  @keyframes headerSweep { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
+
+  /* 9. Breadcrumb */
+  .breadcrumb { display: inline-flex; align-items: center; gap: 6px; font-size: 11px;
+    color: var(--ebm-muted); padding: 4px 10px; background: rgba(0,61,107,0.04);
+    border: 1px solid var(--ebm-border); border-radius: 999px; }
+  .breadcrumb .crumb { font-weight: 600; }
+  .breadcrumb .crumb.active { color: var(--ebm-navy); font-weight: 700; }
+  body.dark .breadcrumb .crumb.active { color: var(--ebm-text); }
+  .breadcrumb .crumb-sep { color: var(--ebm-border); font-size: 10px; }
+
+  /* 10. Toast notifications */
+  .toast-wrap { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%);
+    z-index: 200; display: flex; flex-direction: column; gap: 8px; align-items: center;
+    pointer-events: none; }
+  .toast { background: var(--ebm-navy); color: white; padding: 10px 18px; border-radius: 10px;
+    font-size: 13px; font-weight: 600; box-shadow: var(--ebm-shadow-lg);
+    animation: toastIn .25s ease, toastOut .35s ease 2.5s forwards; }
+  @keyframes toastIn { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+  @keyframes toastOut { to { transform: translateY(20px); opacity: 0; } }
+
+  /* 11. Scroll position indicator */
+  .scroll-indicator { position: fixed; right: 8px; top: 50%; transform: translateY(-50%);
+    width: 4px; height: 200px; background: var(--ebm-border); border-radius: 2px;
+    z-index: 80; opacity: 0; transition: opacity .3s; }
+  .scroll-indicator.visible { opacity: 0.6; }
+  .scroll-indicator:hover { opacity: 1; width: 6px; }
+  .scroll-indicator .scroll-thumb { width: 100%; background: var(--ebm-navy); border-radius: 2px;
+    transition: top .15s ease; position: absolute; }
+
+  @media (max-width: 700px) {
+    .month-cards { grid-template-columns: repeat(5, 1fr); gap: 4px; }
+    .mo-card { padding: 6px 4px; }
+    .mo-card .mo-name { font-size: 9px; letter-spacing: 0.3px; }
+    .mo-card .mo-val { font-size: 13px; }
+    .mo-card .mo-pct, .mo-card .mo-trend { font-size: 9px; }
+    .mo-card .mo-current-tag { display: none; }
+    body.focus-mode #focus-kpi-display .focus-num { font-size: 100px; }
+    body.focus-mode #focus-kpi-display .focus-lbl { font-size: 16px; }
+    .scroll-indicator { display: none; }
+    .toast-wrap { bottom: 80px; }
+  }
 </style>
 </head>
 <body>
@@ -936,7 +1071,7 @@
         <button role="tab" data-period="empreendimentos" type="button">🏢 Empreend.</button>
       </div>
       <div class="updated">
-        Última atualização BI: <strong id="last-update">08/05/2026 08:47:15</strong>
+        Última atualização BI: <strong id="last-update">07/05/2026 15:31:03</strong>
         <span class="snapshot-hint" id="snapshot-hint" title="Variação dos KPIs desde a sua última visita"></span>
       </div>
       <div class="header-buttons">
@@ -962,7 +1097,13 @@
     </div>
   </header>
 
+  <!-- Cards de mês (Onda 14) -->
+  <div class="month-cards" id="month-cards" role="navigation" aria-label="Meses"></div>
+
   <div id="kpi-row" class="kpis"></div>
+
+  <!-- Modo Foco (Onda 14) -->
+  <div id="focus-kpi-display" style="display:none;"></div>
 
   <!-- Tendência mensal (sparkline) -->
   <div class="trend-card briefing-hide" id="trend-card-wrap">
@@ -1044,7 +1185,7 @@
       <div class="kpi andamento" style="text-align:center;padding:24px;">
         <div class="label">Esteira ativa neste momento</div>
         <div class="value" style="font-size:42px;">R$23M</div>
-        <div class="sub">Soma de todas propostas em andamento (estágios 00–05) — snapshot 08/05/2026 08:47</div>
+        <div class="sub">Soma de todas propostas em andamento (estágios 00–05) — snapshot 07/05/2026 15:31</div>
       </div>
     </div>
 
@@ -1111,7 +1252,7 @@
 
 
   <footer class="note briefing-hide">
-    Fonte: Power BI EBM — relatório "Esteira Comercial". Snapshot extraído via navegador em 08/05/2026 às 08:47.<br>
+    Fonte: Power BI EBM — relatório "Esteira Comercial". Snapshot extraído via navegador em 07/05/2026 às 15:31.<br>
     Dados mensais (Jan–Abr) capturados individualmente. <strong>2026 YTD</strong> é a soma dos meses extraídos.
     Vendas em Andamento Maio (R$23M) é instantâneo no momento da extração — não varia por filtro de mês.<br>
     Splits por Modalidade (Associativo/SPBE) e Momento (Lançamento/Estoque) referem-se a <strong>Abril/2026</strong>
@@ -1131,6 +1272,10 @@
 <button class="fab" id="fab" aria-label="Busca rápida" type="button">🔍</button>
 <!-- Confetti container -->
 <div class="confetti-container" id="confetti-container" aria-hidden="true"></div>
+<!-- Toast notifications (Onda 14) -->
+<div class="toast-wrap" id="toast-wrap" aria-live="polite"></div>
+<!-- Scroll indicator (Onda 14) -->
+<div class="scroll-indicator" id="scroll-indicator" aria-hidden="true"><div class="scroll-thumb" id="scroll-thumb"></div></div>
 
 <!-- Modal de drill-down (diretor → detalhamento mensal + regional) -->
 <div class="modal-backdrop" id="drill-modal" role="dialog" aria-modal="true" aria-labelledby="drill-title">
@@ -1212,10 +1357,10 @@
 
   // ---------- DATA ----------
   // Todos os dados são meses de 2026, capturados via Power BI público.
-  // Esteira ativa (andamento) — snapshot atualizado em 08/05/2026 08:47.
-  // Reflete propostas em estágios 00–05 no momento da extração. Mesmo valor
+  // Esteira ativa (andamento) é um snapshot único capturado em 01/05/2026 09:38
+  // — reflete propostas em estágios 00–05 no momento da extração. Mesmo valor
   // usado em todos os meses e na aba MAI (mês vigente).
-  const ANDAMENTO_ATUAL = 23201144;
+  const ANDAMENTO_ATUAL = 22892654;
   function makeMonth(label, finalizadas, regionals, diretores) {
     const total = regionals.reduce((s,r)=>s+r.vgv, 0);
     const qtd   = regionals.reduce((s,r)=>s+r.qtd, 0);
@@ -1294,32 +1439,32 @@
     mai: {
       label: "Maio / 2026 (mês vigente)",
       kpi: {
-        andamento: 23201144,
-        finalizadas: 2308610,
-        total: 25509754,
+        andamento: 22892654,
+        finalizadas: 1239500,
+        total: 24132154,
       },
-      // Esteira + finalizadas Maio — extraída do BI em 08/05/2026 08:47
+      // Esteira + finalizadas Maio — extraída do BI em 07/05/2026 15:31
       funil: [
-        { name: "00 — Proposta",     vgv: 4893017,  qtd: 7  },
-        { name: "01 — Crédito",      vgv: 4591009,  qtd: 11 },
-        { name: "02 — Jurídico",     vgv: 715335,   qtd: 2  },
-        { name: "03 — Assinatura",   vgv: 9066820,  qtd: 15, highlight: true },
-        { name: "04 — Conferência",  vgv: 693750,   qtd: 2  },
-        { name: "05 — Pendência",    vgv: 3241213,  qtd: 8  },
-        { name: "06 — Finalizado",   vgv: 2308610,  qtd: 6, last: true },
+        { name: "00 — Proposta",     vgv: 9298677,  qtd: 10 },
+        { name: "01 — Crédito",      vgv: 3174009,  qtd: 8 },
+        { name: "02 — Jurídico",     vgv: 1060335,  qtd: 3 },
+        { name: "03 — Assinatura",   vgv: 5746310,  qtd: 15, highlight: true },
+        { name: "04 — Conferência",  vgv: 0,        qtd: 0 },
+        { name: "05 — Pendência",    vgv: 3613323,  qtd: 9 },
+        { name: "06 — Finalizado",   vgv: 1239500,  qtd: 3, last: true },
       ],
       regional: [
-        { name: "Regional GO", vgv: 21559754, qtd: 42 },
-        { name: "Regional DF", vgv: 2218000,  qtd: 6  },
-        { name: "Regional SP", vgv: 1732000,  qtd: 3  },
+        { name: "Regional GO", vgv: 20842154, qtd: 40 },
+        { name: "Regional DF", vgv: 2240000,  qtd: 6  },
+        { name: "Regional SP", vgv: 1050000,  qtd: 2  },
       ],
-      regionalTotal: { vgv: 25509754, qtd: 51 },
-      regionalNote: "Total Maio/2026 (esteira + finalizadas) por Regional — snapshot 08/05/2026 08:47.",
+      regionalTotal: { vgv: 24132154, qtd: 48 },
+      regionalNote: "Total Maio/2026 (esteira + finalizadas) por Regional — snapshot 07/05/2026 15:31.",
       diretores: [
-        { name: "Felipe",         projetado: 62026937, realizado: 10740259, qtdProj: 111, qtdReal: 20, pct: 17, status: "bad" },
-        { name: "Paulo / Sérgio", projetado: 39140401, realizado: 6251239,  qtdProj: 108, qtdReal: 17, pct: 15, status: "bad" },
-        { name: "EBM Diretoria",  projetado: null,     realizado: 8518256,  qtdProj: null, qtdReal: 14, pct: null, status: "na" },
-        { name: "TOTAL",          projetado: 101167338, realizado: 25509754, qtdProj: 219, qtdReal: 51, pct: 16, status: "bad", isTotal: true },
+        { name: "Felipe",         projetado: 62026937, realizado: null, qtdProj: 111, qtdReal: null, pct: null, status: "na" },
+        { name: "Paulo / Sérgio", projetado: 39140401, realizado: null, qtdProj: 108, qtdReal: null, pct: null, status: "na" },
+        { name: "EBM Diretoria",  projetado: null,     realizado: 1239500, qtdProj: null, qtdReal: 3,   pct: null, status: "na" },
+        { name: "TOTAL",          projetado: 101167338, realizado: 1239500, qtdProj: 219, qtdReal: 3,  pct: 1,  status: "bad", isTotal: true },
       ],
     },
     ytd: {
@@ -2044,7 +2189,7 @@
     });
   });
   document.getElementById('btn-refresh').addEventListener('click', () => {
-    alert('Esse painel é um snapshot do BI extraído em 08/05/2026 08:47.\n\nPara atualizar os números, peça ao Claude:\n"Atualize o dashboard da esteira EBM."');
+    alert('Esse painel é um snapshot do BI extraído em 07/05/2026 15:31.\n\nPara atualizar os números, peça ao Claude:\n"Atualize o dashboard da esteira EBM."');
   });
   document.getElementById('btn-print').addEventListener('click', () => window.print());
 
@@ -2804,6 +2949,235 @@
       setTimeout(() => piece.remove(), 4500);
     }
   };
+
+  // ============================================================
+  // ONDA 14: Cards de mês, Foco, Toast, Scroll indicator, etc
+  // ============================================================
+
+  // ---------- Toast notifications ----------
+  window.__toast = function(msg, opts) {
+    const wrap = document.getElementById('toast-wrap');
+    if (!wrap) return;
+    const t = document.createElement('div');
+    t.className = 'toast';
+    if (opts && opts.color === 'gold') t.style.background = 'var(--ebm-gold)';
+    if (opts && opts.color === 'red') t.style.background = 'var(--ebm-red)';
+    if (opts && opts.color === 'green') t.style.background = 'var(--ebm-ok)';
+    t.textContent = msg;
+    wrap.appendChild(t);
+    setTimeout(() => t.remove(), 3000);
+  };
+
+  // ---------- Cards de mês ----------
+  function renderMonthCards() {
+    const wrap = document.getElementById('month-cards');
+    if (!wrap) return;
+    const months = ['jan','fev','mar','abr','mai'];
+    const monthLbl = {jan:'Janeiro', fev:'Fevereiro', mar:'Março', abr:'Abril', mai:'Maio'};
+    const active = document.querySelector('#period-toggle button.active');
+    const activePeriod = active ? active.dataset.period : 'ytd';
+    const today = new Date();
+    const dayMaio = today.getMonth() === 4 ? today.getDate() : null; // Maio = mês 4 (0-indexed)
+    wrap.innerHTML = months.map((m, i) => {
+      const d = data[m];
+      const tot = d.diretores.find(x=>x.isTotal);
+      const pct = tot.pct;
+      const fin = d.kpi.finalizadas;
+      let pctCls = 'bad';
+      if (pct >= 90) pctCls = 'ok';
+      else if (pct >= 60) pctCls = 'warn';
+      const isCurrent = (m === 'mai');
+      const isActive = (m === activePeriod);
+      // Trend vs mês anterior
+      let trendHtml = '';
+      if (i > 0) {
+        const prevFin = data[months[i-1]].kpi.finalizadas;
+        if (prevFin > 0) {
+          const delta = ((fin - prevFin) / prevFin) * 100;
+          const arrow = delta > 0 ? '↑' : (delta < 0 ? '↓' : '→');
+          const cls = delta > 0 ? 'up' : (delta < 0 ? 'down' : '');
+          trendHtml = `<div class="mo-trend ${cls}">${arrow} ${Math.abs(delta).toFixed(1)}%</div>`;
+        }
+      }
+      return `<button class="mo-card ${isActive?'active':''} ${isCurrent?'is-current':''}" data-period="${m}" type="button">
+        ${isCurrent?'<span class="mo-current-tag">Vigente</span>':''}
+        <div class="mo-name">${monthLbl[m]}</div>
+        <div class="mo-val">${fmtBRLshort(fin)}</div>
+        <div class="mo-pct ${pctCls}">${pct}% meta</div>
+        ${trendHtml}
+      </button>`;
+    }).join('');
+    wrap.querySelectorAll('.mo-card').forEach(c => {
+      c.addEventListener('click', () => activate(c.dataset.period));
+    });
+  }
+  // Re-render quando trocar de aba
+  const _origActivateOnda14 = activate;
+  // (não sobrescrevemos activate — chamamos renderMonthCards depois manualmente via observer)
+  // Render inicial será feito após o primeiro activate
+  setTimeout(renderMonthCards, 100);
+  // Observer pra re-render quando .active mudar nas tabs
+  const tabObserver = new MutationObserver(() => renderMonthCards());
+  setTimeout(() => {
+    document.querySelectorAll('#period-toggle button').forEach(b => tabObserver.observe(b, {attributes:true, attributeFilter:['class']}));
+  }, 200);
+
+  // ---------- Maio badge "Dia X de 31" ----------
+  function appendMaioBadge() {
+    const today = new Date();
+    if (today.getMonth() !== 4) return; // só em Maio
+    const day = today.getDate();
+    const total = 31;
+    const pct = Math.round((day/total)*100);
+    const active = document.querySelector('#period-toggle button.active');
+    if (!active || active.dataset.period !== 'mai') return;
+    const heroLabel = document.querySelector('.kpi.hero .label');
+    if (!heroLabel || heroLabel.querySelector('.mai-pace-badge')) return;
+    const badge = document.createElement('span');
+    badge.className = 'mai-pace-badge';
+    badge.innerHTML = `📅 Dia ${day}/${total} (${pct}% do mês)`;
+    heroLabel.appendChild(badge);
+  }
+  // Hook em renderKpis: monitora innerHTML do kpi-row
+  const kpiObserver = new MutationObserver(() => appendMaioBadge());
+  setTimeout(() => {
+    const kpiRow = document.getElementById('kpi-row');
+    if (kpiRow) kpiObserver.observe(kpiRow, {childList: true, subtree: true});
+  }, 200);
+
+  // ---------- Modo Foco (atalho Z) ----------
+  function toggleFocus(kpiKey) {
+    const on = !document.body.classList.contains('focus-mode');
+    document.body.classList.toggle('focus-mode', on);
+    const display = document.getElementById('focus-kpi-display');
+    if (on) {
+      const active = document.querySelector('#period-toggle button.active');
+      const p = active ? active.dataset.period : 'ytd';
+      const d = data[p];
+      const tot = d.diretores.find(x=>x.isTotal);
+      const labels = {finalizadas:'Vendas Finalizadas', andamento:'Esteira Ativa', total:'VGV Total'};
+      const k = kpiKey || 'finalizadas';
+      const val = d.kpi[k] || 0;
+      const pctTxt = tot.pct != null ? ` · ${tot.pct}% META` : '';
+      display.innerHTML = `
+        <div class="focus-num">${fmtBRLshort(val)}</div>
+        <div class="focus-lbl">${labels[k]}${pctTxt}</div>
+        <div class="focus-sub">${d.label} · Esc para sair</div>
+      `;
+      display.style.display = 'flex';
+    } else {
+      display.style.display = 'none';
+    }
+  }
+  document.addEventListener('keydown', (e) => {
+    if (e.target && typeof e.target.matches === 'function' && e.target.matches('input,textarea,[contenteditable="true"]')) return;
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    if (e.key.toLowerCase() === 'z') { e.preventDefault(); toggleFocus(); }
+    else if (e.key === 'Escape' && document.body.classList.contains('focus-mode')) { e.preventDefault(); toggleFocus(); }
+  });
+  // Click no hero KPI ativa modo foco
+  setTimeout(() => {
+    document.addEventListener('dblclick', (e) => {
+      const kpi = e.target.closest('.kpi.hero');
+      if (kpi) { toggleFocus('finalizadas'); }
+    });
+  }, 200);
+
+  // ---------- Status icons nos diretores (decorar pós-render) ----------
+  const dirObserver = new MutationObserver(() => {
+    document.querySelectorAll('.diretor:not(.is-total)').forEach(d => {
+      const pctEl = d.querySelector('.gauge-pct');
+      if (!pctEl || pctEl.querySelector('.status-icon')) return;
+      const cls = pctEl.classList.contains('ok') ? 'ok' :
+                  pctEl.classList.contains('warn') ? 'warn' :
+                  pctEl.classList.contains('bad') ? 'bad' : null;
+      if (!cls) return;
+      const icon = document.createElement('span');
+      icon.className = 'status-icon ' + cls;
+      icon.textContent = cls === 'ok' ? '✓' : (cls === 'warn' ? '!' : '✕');
+      icon.title = cls === 'ok' ? 'No alvo' : (cls === 'warn' ? 'Atenção' : 'Abaixo da meta');
+      pctEl.insertBefore(icon, pctEl.firstChild);
+    });
+  });
+  setTimeout(() => {
+    const diretoresEl = document.getElementById('diretores');
+    if (diretoresEl) dirObserver.observe(diretoresEl, {childList: true, subtree: true});
+  }, 200);
+
+  // ---------- KPI comparators (vs ontem/semana/ano) ----------
+  // Por enquanto, simulamos "vs último snapshot" usando window.__diffSnap (dados reais)
+  function appendKpiComparators() {
+    const heroSub = document.querySelector('.kpi.hero .sub');
+    if (!heroSub || heroSub.parentElement.querySelector('.kpi-compare')) return;
+    if (!window.__diffSnap) return;
+    const active = document.querySelector('#period-toggle button.active');
+    if (!active) return;
+    const p = active.dataset.period;
+    const diff = window.__diffSnap;
+    const cmp = document.createElement('div');
+    cmp.className = 'kpi-compare';
+    let html = '';
+    if (p === 'ytd' && diff.ytd_fin != null) {
+      const cls = diff.ytd_fin > 0 ? 'up' : (diff.ytd_fin < 0 ? 'down' : 'neutral');
+      const arrow = diff.ytd_fin > 0 ? '↑' : '↓';
+      html += `<span class="cmp ${cls}"><span class="cmp-lbl">vs último snapshot:</span><span class="cmp-val">${arrow} ${fmtBRLshort(Math.abs(diff.ytd_fin))}</span></span>`;
+    }
+    if (p === 'abr' && diff.abr_fin != null) {
+      const cls = diff.abr_fin > 0 ? 'up' : (diff.abr_fin < 0 ? 'down' : 'neutral');
+      const arrow = diff.abr_fin > 0 ? '↑' : '↓';
+      html += `<span class="cmp ${cls}"><span class="cmp-lbl">vs último snapshot:</span><span class="cmp-val">${arrow} ${fmtBRLshort(Math.abs(diff.abr_fin))}</span></span>`;
+    }
+    if (html) {
+      cmp.innerHTML = html;
+      heroSub.parentElement.appendChild(cmp);
+    }
+  }
+  // Observar mudanças no kpi-row pra adicionar comparators
+  setTimeout(() => {
+    const kpiRow = document.getElementById('kpi-row');
+    if (kpiRow) {
+      const cmpObs = new MutationObserver(() => appendKpiComparators());
+      cmpObs.observe(kpiRow, {childList: true});
+    }
+  }, 250);
+
+  // ---------- Scroll position indicator ----------
+  function updateScrollIndicator() {
+    const ind = document.getElementById('scroll-indicator');
+    const thumb = document.getElementById('scroll-thumb');
+    if (!ind || !thumb) return;
+    const docH = document.documentElement.scrollHeight - window.innerHeight;
+    if (docH < 200) { ind.classList.remove('visible'); return; }
+    ind.classList.add('visible');
+    const scrollPct = (window.scrollY / docH) * 100;
+    const thumbHeight = Math.max(20, (window.innerHeight / document.documentElement.scrollHeight) * 200);
+    thumb.style.height = thumbHeight + 'px';
+    thumb.style.top = (scrollPct * (200 - thumbHeight) / 100) + 'px';
+  }
+  window.addEventListener('scroll', updateScrollIndicator, {passive: true});
+  setTimeout(updateScrollIndicator, 300);
+
+  // ---------- Toast on mode change ----------
+  // Hook nos toggles existentes pra mostrar toast quando sair
+  function wrapToggle(fnName, label, icon) {
+    const orig = window[fnName] || eval(fnName);
+    if (typeof orig !== 'function') return;
+    window['__' + fnName] = orig;
+    // Não conseguimos sobrescrever closures — mostramos toast em key handler
+  }
+  // Toast genérico em mode toggles via key handler
+  document.addEventListener('keydown', (e) => {
+    if (e.target && typeof e.target.matches === 'function' && e.target.matches('input,textarea,[contenteditable="true"]')) return;
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    const k = e.key.toLowerCase();
+    setTimeout(() => {
+      if (k === 'b') { window.__toast(document.body.classList.contains('briefing') ? '📋 Modo Briefing ativado' : '↩ Saiu do Briefing'); }
+      else if (k === 't') { window.__toast(document.body.classList.contains('tv-mode') ? '📺 TV mode ativado (rotate 15s)' : '↩ Saiu do TV mode'); }
+      else if (k === 'd') { window.__toast(document.body.classList.contains('dark') ? '🌙 Tema escuro' : '☀ Tema claro'); }
+      else if (k === 'c') { window.__toast(document.body.classList.contains('cb-safe') ? '🎨 Paleta CB-safe' : '🎨 Paleta padrão'); }
+      else if (k === 'z') { window.__toast(document.body.classList.contains('focus-mode') ? '⊙ Modo Foco' : '↩ Saiu do Foco'); }
+    }, 60);
+  });
 
   setupNotes();
   setupEmp();
