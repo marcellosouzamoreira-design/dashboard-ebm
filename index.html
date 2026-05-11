@@ -1,5 +1,4 @@
-<!doctype html>
-<script type="application/json" id="cowork-artifact-meta">
+<!doctype html><script type="application/json" id="cowork-artifact-meta">
 {
   "name": "Ebm Esteira Comercial",
   "schemaVersion": 1,
@@ -1102,7 +1101,7 @@
         <button role="tab" data-period="empreendimentos" type="button">🏢 Empreend.</button>
       </div>
       <div class="updated">
-        Última atualização BI: <strong id="last-update">08/05/2026 08:47:15</strong>
+        Última atualização BI: <strong id="last-update">11/05/2026 08:39:19</strong>
         <span class="snapshot-hint" id="snapshot-hint" title="Variação dos KPIs desde a sua última visita"></span>
       </div>
       <div class="header-buttons">
@@ -1117,7 +1116,7 @@
           <button id="btn-modos" class="btn-more ripple" type="button" title="Modos de visualização">🎛 Modos ▾</button>
           <div class="modos-menu" id="modos-menu" role="menu"></div>
         </div>
-        <button id="btn-refresh" class="btn-refresh ripple" type="button" title="Snapshot — peça ao Claude pra atualizar">↻</button>
+        <button id="btn-refresh" class="btn-refresh ripple" type="button" title="Atualização automática" style="display:none;">↻</button>
         <!-- Botões legacy (escondidos, mantidos pra compatibilidade JS) -->
         <button id="btn-print" type="button" hidden>🖨 PDF</button>
         <button id="btn-cb" type="button" hidden>🎨</button>
@@ -1216,7 +1215,7 @@
       <div class="kpi andamento" style="text-align:center;padding:24px;">
         <div class="label">Esteira ativa neste momento</div>
         <div class="value" style="font-size:42px;">R$23M</div>
-        <div class="sub">Soma de todas propostas em andamento (estágios 00–05) — snapshot 08/05/2026 08:47</div>
+        <div class="sub">Soma de todas propostas em andamento (estágios 00–05) — snapshot 11/05/2026 08:39</div>
       </div>
     </div>
 
@@ -1283,7 +1282,7 @@
 
 
   <footer class="note briefing-hide">
-    Fonte: Power BI EBM — relatório "Esteira Comercial". Snapshot extraído via navegador em 08/05/2026 às 08:47.<br>
+    Fonte: Power BI EBM — relatório "Esteira Comercial". Snapshot extraído via navegador em 11/05/2026 às 08:39.<br>
     Dados mensais (Jan–Abr) capturados individualmente. <strong>2026 YTD</strong> é a soma dos meses extraídos.
     Vendas em Andamento Maio (R$23M) é instantâneo no momento da extração — não varia por filtro de mês.<br>
     Splits por Modalidade (Associativo/SPBE) e Momento (Lançamento/Estoque) referem-se a <strong>Abril/2026</strong>
@@ -1474,7 +1473,7 @@
         finalizadas: 2308610,
         total: 25509754,
       },
-      // Esteira + finalizadas Maio — extraída do BI em 08/05/2026 08:47
+      // Esteira + finalizadas Maio — extraída do BI em 11/05/2026 08:39 (sem mudança de dados vs 08/05)
       funil: [
         { name: "00 — Proposta",     vgv: 4893017,  qtd: 7  },
         { name: "01 — Crédito",      vgv: 4591009,  qtd: 11 },
@@ -1490,7 +1489,7 @@
         { name: "Regional SP", vgv: 1732000,  qtd: 3  },
       ],
       regionalTotal: { vgv: 25509754, qtd: 51 },
-      regionalNote: "Total Maio/2026 (esteira + finalizadas) por Regional — snapshot 08/05/2026 08:47.",
+      regionalNote: "Total Maio/2026 (esteira + finalizadas) por Regional — snapshot 11/05/2026 08:39.",
       diretores: [
         { name: "Felipe",         projetado: 62026937, realizado: 10740259, qtdProj: 111, qtdReal: 20, pct: 17, status: "bad" },
         { name: "Paulo / Sérgio", projetado: 39140401, realizado: 6251239,  qtdProj: 108, qtdReal: 17, pct: 15, status: "bad" },
@@ -2220,7 +2219,7 @@
     });
   });
   document.getElementById('btn-refresh').addEventListener('click', () => {
-    alert('Esse painel é um snapshot do BI extraído em 08/05/2026 08:47.\n\nPara atualizar os números, peça ao Claude:\n"Atualize o dashboard da esteira EBM."');
+    alert('Esse painel é um snapshot do BI extraído em 11/05/2026 08:39.\n\nPara atualizar os números, peça ao Claude:\n"Atualize o dashboard da esteira EBM."');
   });
   document.getElementById('btn-print').addEventListener('click', () => window.print());
 
