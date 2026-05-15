@@ -1101,7 +1101,7 @@
         <button role="tab" data-period="empreendimentos" type="button">🏢 Empreend.</button>
       </div>
       <div class="updated">
-        Última atualização BI: <strong id="last-update">14/05/2026 08:57:30</strong>
+        Última atualização BI: <strong id="last-update">15/05/2026 08:32:03</strong>
         <span class="snapshot-hint" id="snapshot-hint" title="Variação dos KPIs desde a sua última visita"></span>
       </div>
       <div class="header-buttons">
@@ -1215,7 +1215,7 @@
       <div class="kpi andamento" style="text-align:center;padding:24px;">
         <div class="label">Esteira ativa neste momento</div>
         <div class="value" style="font-size:42px;">R$22M</div>
-        <div class="sub">Soma de todas propostas em andamento (estágios 00–05) — snapshot 14/05/2026 08:57</div>
+        <div class="sub">Soma de todas propostas em andamento (estágios 00–05) — snapshot 15/05/2026 08:32</div>
       </div>
     </div>
 
@@ -1282,7 +1282,7 @@
 
 
   <footer class="note briefing-hide">
-    Fonte: Power BI EBM — relatório "Esteira Comercial". Snapshot extraído via navegador em 14/05/2026 às 08:57.<br>
+    Fonte: Power BI EBM — relatório "Esteira Comercial". Snapshot extraído via navegador em 15/05/2026 às 08:32.<br>
     Dados mensais (Jan–Abr) capturados individualmente. <strong>2026 YTD</strong> é a soma dos meses extraídos.
     Vendas em Andamento Maio (R$22M) é instantâneo no momento da extração — não varia por filtro de mês.<br>
     Splits por Modalidade (Associativo/SPBE) e Momento (Lançamento/Estoque) referem-se a <strong>Abril/2026</strong>
@@ -1387,10 +1387,10 @@
 
   // ---------- DATA ----------
   // Todos os dados são meses de 2026, capturados via Power BI público.
-  // Esteira ativa (andamento) é um snapshot único capturado em 14/05/2026 08:57
+  // Esteira ativa (andamento) é um snapshot único capturado em 15/05/2026 08:32
   // — reflete propostas em estágios 00–05 no momento da extração. Mesmo valor
   // usado em todos os meses e na aba MAI (mês vigente).
-  const ANDAMENTO_ATUAL = 21515074;
+  const ANDAMENTO_ATUAL = 24507941;
   function makeMonth(label, finalizadas, regionals, diretores) {
     const total = regionals.reduce((s,r)=>s+r.vgv, 0);
     const qtd   = regionals.reduce((s,r)=>s+r.qtd, 0);
@@ -1469,32 +1469,32 @@
     mai: {
       label: "Maio / 2026 (mês vigente)",
       kpi: {
-        andamento: 21515074,
-        finalizadas: 14500232,
-        total: 36015306,
+        andamento: 24507941,
+        finalizadas: 15657234,
+        total: 40165175,
       },
-      // Esteira + finalizadas Maio — extraída do BI em 14/05/2026 08:57
+      // Esteira + finalizadas Maio — extraída do BI em 15/05/2026 08:32
       funil: [
-        { name: "00 — Proposta",     vgv: 1650993,  qtd: 5  },
-        { name: "01 — Crédito",      vgv: 7213154,  qtd: 17 },
-        { name: "02 — Jurídico",     vgv: 1100335,  qtd: 3  },
-        { name: "03 — Assinatura",   vgv: 6662170,  qtd: 14, highlight: true },
-        { name: "04 — Conferência",  vgv: 701000,   qtd: 2  },
-        { name: "05 — Pendência",    vgv: 4187422,  qtd: 9  },
-        { name: "06 — Finalizado",   vgv: 14500232, qtd: 29, last: true },
+        { name: "00 — Proposta",     vgv: 2232086,  qtd: 5  },
+        { name: "01 — Crédito",      vgv: 6286620,  qtd: 16 },
+        { name: "02 — Jurídico",     vgv: 1093335,  qtd: 3  },
+        { name: "03 — Assinatura",   vgv: 9764914,  qtd: 21, highlight: true },
+        { name: "04 — Conferência",  vgv: 390000,   qtd: 1  },
+        { name: "05 — Pendência",    vgv: 4740986,  qtd: 11 },
+        { name: "06 — Finalizado",   vgv: 15657234, qtd: 32, last: true },
       ],
       regional: [
-        { name: "Regional GO", vgv: 28796807, qtd: 64 },
-        { name: "Regional DF", vgv: 4416500,  qtd: 10 },
-        { name: "Regional SP", vgv: 2802000,  qtd: 5  },
+        { name: "Regional GO", vgv: 32812936, qtd: 73 },
+        { name: "Regional DF", vgv: 5129502,  qtd: 12 },
+        { name: "Regional SP", vgv: 2222738,  qtd: 4  },
       ],
-      regionalTotal: { vgv: 36015307, qtd: 79 },
-      regionalNote: "Total Maio/2026 (esteira + finalizadas) por Regional — snapshot 14/05/2026 08:57.",
+      regionalTotal: { vgv: 40165176, qtd: 89 },
+      regionalNote: "Total Maio/2026 (esteira + finalizadas) por Regional — snapshot 15/05/2026 08:32.",
       diretores: [
-        { name: "Felipe",         projetado: 62026937, realizado: 20835273, qtdProj: 111, qtdReal: 39, pct: 32, status: "bad" },
-        { name: "Paulo / Sérgio", projetado: 39140401, realizado: 8168262,  qtdProj: 108, qtdReal: 22, pct: 18, status: "bad" },
-        { name: "EBM Diretoria",  projetado: null,     realizado: 7011772,  qtdProj: null, qtdReal: 18, pct: null, status: "na" },
-        { name: "TOTAL",          projetado: 101167337, realizado: 36015307, qtdProj: 219, qtdReal: 79, pct: 27, status: "bad", isTotal: true },
+        { name: "Felipe",         projetado: 62026937, realizado: 22185594, qtdProj: 111, qtdReal: 42, pct: 34, status: "bad" },
+        { name: "Paulo / Sérgio", projetado: 39140401, realizado: 9636978,  qtdProj: 108, qtdReal: 26, pct: 20, status: "bad" },
+        { name: "EBM Diretoria",  projetado: null,     realizado: 8342603,  qtdProj: null, qtdReal: 21, pct: null, status: "na" },
+        { name: "TOTAL",          projetado: 101167337, realizado: 40165175, qtdProj: 219, qtdReal: 89, pct: 29, status: "bad", isTotal: true },
       ],
     },
     ytd: {
@@ -2219,7 +2219,7 @@
     });
   });
   document.getElementById('btn-refresh').addEventListener('click', () => {
-    alert('Esse painel é um snapshot do BI extraído em 14/05/2026 08:57.\n\nPara atualizar os números, peça ao Claude:\n"Atualize o dashboard da esteira EBM."');
+    alert('Esse painel é um snapshot do BI extraído em 15/05/2026 08:32.\n\nPara atualizar os números, peça ao Claude:\n"Atualize o dashboard da esteira EBM."');
   });
   document.getElementById('btn-print').addEventListener('click', () => window.print());
 
