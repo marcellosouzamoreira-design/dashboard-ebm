@@ -1,11 +1,5 @@
-<!doctype html><script type="application/json" id="cowork-artifact-meta">
-{
-  "name": "Ebm Esteira Comercial",
-  "schemaVersion": 1,
-  "description": "Dashboard da Esteira Comercial EBM — toggle por mês de 2026 (Jan/Fev/Mar/Abr) + 2026 YTD acumulado. KPIs (Andamento R$63M / Finalizadas / VGV Total), funil de propostas, gauges de meta por diretor (Felipe, Paulo/Sérgio, EBM Diretoria), distribuição por regional (DF/GO/SP) e top/bottom empreendimentos. Cores oficiais EBM (#003D6B navy / #A4001B vinho). Snapshot extraído do Power BI EBM em 06/05/2026 18:33 (refresh diário automático). Sub-filtros de Modalidade (Associativo/SPBE) e Momento (Lançamento/Estoque) presentes mas pendentes de extração."
-}
-</script>
-<!-- build-id: 20260513-084301 -->
+<!doctype html>
+<!-- build-id: 20260519-173640 -->
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8" />
@@ -1075,6 +1069,144 @@
   @media (max-width: 700px) {
     .fab { bottom: calc(70px + env(safe-area-inset-bottom)) !important; }
   }
+
+  /* === Onda 15: Time Travel, Anomaly, Polish === */
+
+  /* Dark mode automático segue sistema (só se não setou manualmente) */
+  @media (prefers-color-scheme: dark) {
+    body:not(.dark-forced):not(.light-forced) {
+      /* aplicado via JS */
+    }
+  }
+
+  /* Logo animado — letras EBM com pulse sutil */
+  .logo {
+    background: linear-gradient(135deg, var(--ebm-navy) 0%, #0066B3 100%);
+    position: relative; overflow: hidden;
+  }
+  .logo::after {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(135deg, transparent 30%, rgba(255,255,255,0.18) 50%, transparent 70%);
+    transform: translateX(-100%);
+    animation: logoSheen 6s ease-in-out infinite;
+  }
+  @keyframes logoSheen {
+    0%, 70% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+
+  /* Hero pulse quando recebe novo dado (snapshot mudou) */
+  @keyframes heroUpdatePulse {
+    0% { box-shadow: 0 0 0 0 rgba(176,122,31,0.5); }
+    50% { box-shadow: 0 0 0 12px rgba(176,122,31,0.0); }
+    100% { box-shadow: 0 0 0 0 rgba(176,122,31,0); }
+  }
+  .kpi.hero.received-update { animation: heroUpdatePulse 1.6s ease-out 2; }
+
+  /* Skeleton screens */
+  .skeleton-pulse {
+    background: linear-gradient(90deg,
+      var(--ebm-border) 0%,
+      rgba(255,255,255,0.5) 50%,
+      var(--ebm-border) 100%);
+    background-size: 200% 100%;
+    animation: skeleton 1.4s ease-in-out infinite;
+    color: transparent !important;
+    border-radius: 4px;
+  }
+  body.dark .skeleton-pulse {
+    background: linear-gradient(90deg,
+      var(--ebm-soft) 0%,
+      rgba(255,255,255,0.1) 50%,
+      var(--ebm-soft) 100%);
+    background-size: 200% 100%;
+  }
+  @keyframes skeleton {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+
+  /* Anomaly detection — badge nas células anormais */
+  .anomaly-badge {
+    display: inline-flex; align-items: center; gap: 3px;
+    padding: 1px 6px; border-radius: 999px;
+    background: rgba(176,122,31,0.15);
+    color: var(--ebm-gold); border: 1px solid var(--ebm-gold);
+    font-size: 9px; font-weight: 800; margin-left: 6px;
+    cursor: help;
+    text-transform: uppercase; letter-spacing: 0.3px;
+  }
+  body.dark .anomaly-badge {
+    background: rgba(230,201,122,0.1);
+    color: var(--ebm-gold-light);
+    border-color: var(--ebm-gold-light);
+  }
+
+  /* Time Travel slider */
+  .time-travel-panel {
+    position: fixed; left: 0; right: 0; bottom: 0;
+    background: var(--ebm-card); border-top: 2px solid var(--ebm-gold);
+    box-shadow: 0 -8px 24px rgba(0,0,0,0.15);
+    padding: 14px 20px; z-index: 95;
+    display: none; align-items: center; gap: 14px;
+    transform: translateY(100%); transition: transform .3s ease;
+  }
+  .time-travel-panel.show { display: flex; transform: translateY(0); }
+  .tt-title { font-size: 13px; font-weight: 800; color: var(--ebm-gold);
+    display: flex; align-items: center; gap: 6px; white-space: nowrap; }
+  .tt-slider { flex: 1; -webkit-appearance: none; appearance: none;
+    height: 6px; background: var(--ebm-border); border-radius: 3px; outline: none;
+    cursor: pointer; }
+  .tt-slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none;
+    width: 20px; height: 20px; background: var(--ebm-gold); border-radius: 50%;
+    cursor: grab; box-shadow: 0 2px 6px rgba(176,122,31,0.4); }
+  .tt-slider::-moz-range-thumb { width: 20px; height: 20px; background: var(--ebm-gold);
+    border-radius: 50%; cursor: grab; border: 0; }
+  .tt-info { font-size: 12px; color: var(--ebm-text); min-width: 200px;
+    font-variant-numeric: tabular-nums; }
+  .tt-info strong { color: var(--ebm-navy); font-weight: 800; }
+  body.dark .tt-info strong { color: var(--ebm-text); }
+  .tt-close { background: transparent; border: 1px solid var(--ebm-border);
+    border-radius: 8px; padding: 6px 12px; cursor: pointer;
+    font-size: 12px; color: var(--ebm-muted); font-family: inherit; }
+  .tt-close:hover { color: var(--ebm-red); border-color: var(--ebm-red); }
+
+  /* Overlay com dados do snapshot selecionado */
+  body.time-travel-mode .kpi { position: relative; }
+  body.time-travel-mode .kpi.hero::after {
+    content: 'Time Travel ativo'; position: absolute; top: 8px; right: 8px;
+    background: var(--ebm-gold); color: white; font-size: 9px; font-weight: 800;
+    padding: 2px 6px; border-radius: 3px; text-transform: uppercase;
+    letter-spacing: 0.4px; z-index: 5;
+  }
+  body.time-travel-mode { padding-bottom: 70px; }
+
+  /* Sound notification toggle indicator */
+  .sound-toggle-state { font-size: 10px; color: var(--ebm-muted);
+    padding: 2px 6px; border: 1px solid var(--ebm-border); border-radius: 4px;
+    margin-left: 4px; }
+
+  /* Tooltips ricos (custom hover) */
+  [data-tooltip] { position: relative; }
+  [data-tooltip]:hover::before {
+    content: attr(data-tooltip);
+    position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%);
+    background: var(--ebm-charcoal); color: white;
+    padding: 6px 10px; border-radius: 6px; font-size: 11px;
+    white-space: pre-line; max-width: 240px; z-index: 200;
+    pointer-events: none;
+    box-shadow: var(--ebm-shadow-md);
+    animation: tooltipFade .15s ease;
+  }
+  body.dark [data-tooltip]:hover::before { background: var(--ebm-card); color: var(--ebm-text);
+    border: 1px solid var(--ebm-border); }
+  @keyframes tooltipFade { from { opacity: 0; transform: translateX(-50%) translateY(4px); }
+    to { opacity: 1; transform: translateX(-50%) translateY(0); } }
+
+  @media (max-width: 700px) {
+    .time-travel-panel { padding: 10px 14px; gap: 10px; flex-wrap: wrap; }
+    .tt-info { min-width: 100%; order: 2; font-size: 11px; }
+  }
 </style>
 </head>
 <body>
@@ -1101,7 +1233,7 @@
         <button role="tab" data-period="empreendimentos" type="button">🏢 Empreend.</button>
       </div>
       <div class="updated">
-        Última atualização BI: <strong id="last-update">19/05/2026 08:59:44</strong>
+        Última atualização BI: <strong id="last-update">07/05/2026 15:31:03</strong>
         <span class="snapshot-hint" id="snapshot-hint" title="Variação dos KPIs desde a sua última visita"></span>
       </div>
       <div class="header-buttons">
@@ -1116,7 +1248,7 @@
           <button id="btn-modos" class="btn-more ripple" type="button" title="Modos de visualização">🎛 Modos ▾</button>
           <div class="modos-menu" id="modos-menu" role="menu"></div>
         </div>
-        <button id="btn-refresh" class="btn-refresh ripple" type="button" title="Atualização automática" style="display:none;">↻</button>
+        <button id="btn-refresh" class="btn-refresh ripple" type="button" title="Snapshot — peça ao Claude pra atualizar">↻</button>
         <!-- Botões legacy (escondidos, mantidos pra compatibilidade JS) -->
         <button id="btn-print" type="button" hidden>🖨 PDF</button>
         <button id="btn-cb" type="button" hidden>🎨</button>
@@ -1214,8 +1346,8 @@
     <div class="kpis" style="margin-bottom:18px;grid-template-columns:1fr;">
       <div class="kpi andamento" style="text-align:center;padding:24px;">
         <div class="label">Esteira ativa neste momento</div>
-        <div class="value" style="font-size:42px;">R$25M</div>
-        <div class="sub">Soma de todas propostas em andamento (estágios 00–05) — snapshot 19/05/2026 08:59:44</div>
+        <div class="value" style="font-size:42px;">R$23M</div>
+        <div class="sub">Soma de todas propostas em andamento (estágios 00–05) — snapshot 07/05/2026 15:31</div>
       </div>
     </div>
 
@@ -1282,9 +1414,9 @@
 
 
   <footer class="note briefing-hide">
-    Fonte: Power BI EBM — relatório "Esteira Comercial". Snapshot extraído via navegador em 19/05/2026 às 08:59.<br>
+    Fonte: Power BI EBM — relatório "Esteira Comercial". Snapshot extraído via navegador em 07/05/2026 às 15:31.<br>
     Dados mensais (Jan–Abr) capturados individualmente. <strong>2026 YTD</strong> é a soma dos meses extraídos.
-    Vendas em Andamento Maio (R$25M) é instantâneo no momento da extração — não varia por filtro de mês.<br>
+    Vendas em Andamento Maio (R$23M) é instantâneo no momento da extração — não varia por filtro de mês.<br>
     Splits por Modalidade (Associativo/SPBE) e Momento (Lançamento/Estoque) referem-se a <strong>Abril/2026</strong>
     — Estoque é calculado por subtração (Total − Lançamento) para evitar uma extração extra.
   </footer>
@@ -1302,6 +1434,13 @@
 <button class="fab" id="fab" aria-label="Busca rápida" type="button">🔍</button>
 <!-- Confetti container -->
 <div class="confetti-container" id="confetti-container" aria-hidden="true"></div>
+<!-- Time Travel panel (Onda 15) -->
+<div class="time-travel-panel" id="time-travel-panel" role="region" aria-label="Time Travel">
+  <div class="tt-title">🕰 Time Travel</div>
+  <input type="range" class="tt-slider" id="tt-slider" min="0" max="0" step="1" value="0" aria-label="Slider de snapshots">
+  <div class="tt-info" id="tt-info">—</div>
+  <button class="tt-close" id="tt-close" type="button">✕ Sair</button>
+</div>
 <!-- Toast notifications (Onda 14) -->
 <div class="toast-wrap" id="toast-wrap" aria-live="polite"></div>
 <!-- Scroll indicator (Onda 14) -->
@@ -1387,10 +1526,10 @@
 
   // ---------- DATA ----------
   // Todos os dados são meses de 2026, capturados via Power BI público.
-  // Esteira ativa (andamento) é um snapshot único capturado em 19/05/2026 08:59:44
+  // Esteira ativa (andamento) é um snapshot único capturado em 01/05/2026 09:38
   // — reflete propostas em estágios 00–05 no momento da extração. Mesmo valor
   // usado em todos os meses e na aba MAI (mês vigente).
-  const ANDAMENTO_ATUAL = 25105563;
+  const ANDAMENTO_ATUAL = 22892654;
   function makeMonth(label, finalizadas, regionals, diretores) {
     const total = regionals.reduce((s,r)=>s+r.vgv, 0);
     const qtd   = regionals.reduce((s,r)=>s+r.qtd, 0);
@@ -1469,32 +1608,32 @@
     mai: {
       label: "Maio / 2026 (mês vigente)",
       kpi: {
-        andamento: 25105563,
-        finalizadas: 19854884,
-        total: 44960447,
+        andamento: 22892654,
+        finalizadas: 1239500,
+        total: 24132154,
       },
-      // Esteira + finalizadas Maio — extraída do BI em 19/05/2026 08:59:44
+      // Esteira + finalizadas Maio — extraída do BI em 07/05/2026 15:31
       funil: [
-        { name: "00 — Proposta",     vgv: 1558566,  qtd: 5  },
-        { name: "01 — Crédito",      vgv: 4428636,  qtd: 11 },
-        { name: "02 — Jurídico",     vgv: 715335,   qtd: 2  },
-        { name: "03 — Assinatura",   vgv: 7556657,  qtd: 19, highlight: true },
-        { name: "04 — Conferência",  vgv: 6541266,  qtd: 15 },
-        { name: "05 — Pendência",    vgv: 4305103,  qtd: 10 },
-        { name: "06 — Finalizado",   vgv: 19854884, qtd: 40, last: true },
+        { name: "00 — Proposta",     vgv: 9298677,  qtd: 10 },
+        { name: "01 — Crédito",      vgv: 3174009,  qtd: 8 },
+        { name: "02 — Jurídico",     vgv: 1060335,  qtd: 3 },
+        { name: "03 — Assinatura",   vgv: 5746310,  qtd: 15, highlight: true },
+        { name: "04 — Conferência",  vgv: 0,        qtd: 0 },
+        { name: "05 — Pendência",    vgv: 3613323,  qtd: 9 },
+        { name: "06 — Finalizado",   vgv: 1239500,  qtd: 3, last: true },
       ],
       regional: [
-        { name: "Regional GO", vgv: 37608208, qtd: 86 },
-        { name: "Regional DF", vgv: 5129502,  qtd: 12 },
-        { name: "Regional SP", vgv: 2222738,  qtd: 4  },
+        { name: "Regional GO", vgv: 20842154, qtd: 40 },
+        { name: "Regional DF", vgv: 2240000,  qtd: 6  },
+        { name: "Regional SP", vgv: 1050000,  qtd: 2  },
       ],
-      regionalTotal: { vgv: 44960448, qtd: 102 },
-      regionalNote: "Total Maio/2026 (esteira + finalizadas) por Regional — snapshot 19/05/2026 08:59:44.",
+      regionalTotal: { vgv: 24132154, qtd: 48 },
+      regionalNote: "Total Maio/2026 (esteira + finalizadas) por Regional — snapshot 07/05/2026 15:31.",
       diretores: [
-        { name: "Felipe",         projetado: 62026937, realizado: 24862231, qtdProj: 111, qtdReal: 49, pct: 38, status: "bad" },
-        { name: "Paulo / Sérgio", projetado: 39140401, realizado: 11777013, qtdProj: 108, qtdReal: 32, pct: 24, status: "bad" },
-        { name: "EBM Diretoria",  projetado: null,     realizado: 8321203,  qtdProj: null, qtdReal: 21, pct: null, status: "na" },
-        { name: "TOTAL",          projetado: 101167337, realizado: 44960447, qtdProj: 219, qtdReal: 102, pct: 33, status: "bad", isTotal: true },
+        { name: "Felipe",         projetado: 62026937, realizado: null, qtdProj: 111, qtdReal: null, pct: null, status: "na" },
+        { name: "Paulo / Sérgio", projetado: 39140401, realizado: null, qtdProj: 108, qtdReal: null, pct: null, status: "na" },
+        { name: "EBM Diretoria",  projetado: null,     realizado: 1239500, qtdProj: null, qtdReal: 3,   pct: null, status: "na" },
+        { name: "TOTAL",          projetado: 101167338, realizado: 1239500, qtdProj: 219, qtdReal: 3,  pct: 1,  status: "bad", isTotal: true },
       ],
     },
     ytd: {
@@ -2035,7 +2174,7 @@
     const el = document.getElementById('funil');
     const hint = document.getElementById('funil-hint');
     if (period === 'mai') {
-      hint.textContent = '— Esteira ativa em Maio/2026: 62 propostas em aberto + 40 finalizadas — total R$45M';
+      hint.textContent = '— Esteira ativa em Maio/2026: 45 propostas em aberto + 3 finalizadas — total R$24M';
     } else if (period === 'ytd') {
       hint.textContent = '— Total finalizado Jan–Abr (vendas concluídas no ano)';
     } else {
@@ -2219,7 +2358,7 @@
     });
   });
   document.getElementById('btn-refresh').addEventListener('click', () => {
-    alert('Esse painel é um snapshot do BI extraído em 19/05/2026 08:59:44.\n\nPara atualizar os números, peça ao Claude:\n"Atualize o dashboard da esteira EBM."');
+    alert('Esse painel é um snapshot do BI extraído em 07/05/2026 15:31.\n\nPara atualizar os números, peça ao Claude:\n"Atualize o dashboard da esteira EBM."');
   });
   document.getElementById('btn-print').addEventListener('click', () => window.print());
 
@@ -2864,11 +3003,16 @@
     const isCB = document.body.classList.contains('cb-safe');
     const isP = document.body.classList.contains('presentation');
     const density = safeGet('ebm-density') || 'comfortable';
+    const isTT = document.body.classList.contains('time-travel-mode');
+    const isSound = safeGet('ebm-sound') === '1';
     const items = [
       {icon:'📋', label:'Briefing', meta:'B', active:isB, fn: toggleBriefing},
       {icon:'📺', label:'TV (auto-rotate)', meta:'T', active:isTV, fn: toggleTV},
       {icon:'⛶', label:'Apresentação', meta:'F', active:isP, fn: togglePresent},
       {icon:'🎨', label:'Daltonismo', meta:'C', active:isCB, fn: toggleCB},
+      {sep:true},
+      {icon:'🕰', label:'Time Travel', meta:'', active:isTT, fn: toggleTimeTravel},
+      {icon: isSound?'🔔':'🔕', label:'Som ' + (isSound?'ligado':'desligado'), meta:'', active:isSound, fn: toggleSound},
       {sep:true},
       {icon:'🖨', label:'Imprimir / PDF', meta:'P', active:false, fn: () => window.print()},
       {sep:true},
@@ -3234,6 +3378,181 @@
       else if (k === 'z') { window.__toast(document.body.classList.contains('focus-mode') ? '⊙ Modo Foco' : '↩ Saiu do Foco'); }
     }, 60);
   });
+
+  // ============================================================
+  // ONDA 15: Time Travel + Anomaly Detection + Polish
+  // ============================================================
+
+  // ---------- Dark mode automático (segue sistema se não tiver preferência) ----------
+  (function darkAuto() {
+    if (safeGet('ebm-dark') == null) {
+      // Sem preferência salva — segue sistema
+      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (prefersDark) {
+        document.body.classList.add('dark');
+        const btn = document.getElementById('btn-dark');
+        if (btn) { btn.textContent = '☀'; btn.title = 'Voltar para tema claro (atalho: D)'; }
+      }
+      // Observer pra mudanças do sistema
+      if (window.matchMedia) {
+        try {
+          window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+            if (safeGet('ebm-dark') == null) {
+              applyDark(e.matches, true);
+              if (window.__toast) window.__toast(e.matches ? '🌙 Tema escuro (sistema)' : '☀ Tema claro (sistema)');
+            }
+          });
+        } catch(e) {}
+      }
+    }
+  })();
+
+  // ---------- Sound Notifications (opt-in via toggleSound) ----------
+  let _audioCtx = null;
+  function getAudioCtx() {
+    if (_audioCtx) return _audioCtx;
+    try {
+      _audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      return _audioCtx;
+    } catch(e) { return null; }
+  }
+  function playBeep(freq, duration, type) {
+    if (safeGet('ebm-sound') !== '1') return;
+    const ctx = getAudioCtx(); if (!ctx) return;
+    try {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain); gain.connect(ctx.destination);
+      osc.frequency.value = freq || 800;
+      osc.type = type || 'sine';
+      gain.gain.setValueAtTime(0.15, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + (duration||0.15));
+      osc.start(); osc.stop(ctx.currentTime + (duration||0.15));
+    } catch(e) {}
+  }
+  function toggleSound() {
+    const cur = safeGet('ebm-sound') === '1';
+    safeSet('ebm-sound', cur ? '0' : '1');
+    if (window.__toast) window.__toast(cur ? '🔕 Som desligado' : '🔔 Som ligado — tocando teste');
+    if (!cur) { playBeep(800, 0.1); setTimeout(() => playBeep(1000, 0.15), 120); }
+  }
+  window.__playBeep = playBeep;
+
+  // ---------- Hero pulse on new snapshot ----------
+  // window.__diff vem do Onda 11. Se != null, snapshot mudou desde última visita.
+  setTimeout(() => {
+    if (window.__diffSnap) {
+      const hero = document.querySelector('.kpi.hero');
+      if (hero) {
+        hero.classList.add('received-update');
+        setTimeout(() => hero.classList.remove('received-update'), 3500);
+      }
+      // Som suave de "novidade" se sound habilitado
+      playBeep(660, 0.12, 'sine');
+      setTimeout(() => playBeep(880, 0.15, 'sine'), 140);
+    }
+  }, 800);
+
+  // ---------- Anomaly Detection ----------
+  // Calcula média e σ do histórico de snapshots, marca valores fora de 2σ
+  function getAnomalies() {
+    const h = getHistory();
+    if (h.length < 4) return {}; // precisa de pelo menos 4 pra ser significativo
+    const anomalies = {};
+    const fields = ['ytd_fin','abr_fin','mai_act','felipe_ytd','paulo_ytd'];
+    fields.forEach(f => {
+      const vals = h.map(s => s[f]).filter(v => typeof v === 'number');
+      if (vals.length < 4) return;
+      const mean = vals.reduce((a,b)=>a+b,0) / vals.length;
+      const variance = vals.reduce((s,v) => s + Math.pow(v-mean,2), 0) / vals.length;
+      const sigma = Math.sqrt(variance);
+      const cur = h[h.length-1][f];
+      const z = sigma > 0 ? (cur - mean) / sigma : 0;
+      if (Math.abs(z) > 2) {
+        anomalies[f] = {
+          z: z.toFixed(1),
+          mean: mean,
+          cur: cur,
+          delta: cur - mean,
+          direction: z > 0 ? 'acima' : 'abaixo'
+        };
+      }
+    });
+    return anomalies;
+  }
+  function appendAnomalyBadges() {
+    const anom = getAnomalies();
+    if (Object.keys(anom).length === 0) return;
+    // Hero KPI — corresponde ao período ativo
+    const active = document.querySelector('#period-toggle button.active');
+    if (!active) return;
+    const p = active.dataset.period;
+    let key = null;
+    if (p === 'ytd') key = 'ytd_fin';
+    else if (p === 'abr') key = 'abr_fin';
+    else if (p === 'mai') key = 'mai_act';
+    if (!key || !anom[key]) return;
+    const heroLabel = document.querySelector('.kpi.hero .label');
+    if (!heroLabel || heroLabel.querySelector('.anomaly-badge')) return;
+    const badge = document.createElement('span');
+    badge.className = 'anomaly-badge';
+    const a = anom[key];
+    badge.innerHTML = `🔍 ${Math.abs(a.z)}σ ${a.direction}`;
+    badge.title = `Anomalia estatística: ${a.direction} da média histórica (${fmtBRLshort(a.mean)}) por ${Math.abs(a.delta) > 1000 ? fmtBRLshort(Math.abs(a.delta)) : a.delta.toFixed(0)}`;
+    heroLabel.appendChild(badge);
+  }
+  // Re-inject após KPI render
+  const anomObs = new MutationObserver(() => appendAnomalyBadges());
+  setTimeout(() => {
+    const kpiRow = document.getElementById('kpi-row');
+    if (kpiRow) anomObs.observe(kpiRow, {childList: true});
+  }, 300);
+
+  // ---------- Time Travel Mode ----------
+  function toggleTimeTravel() {
+    const panel = document.getElementById('time-travel-panel');
+    const on = !document.body.classList.contains('time-travel-mode');
+    document.body.classList.toggle('time-travel-mode', on);
+    panel.classList.toggle('show', on);
+    if (on) {
+      const h = getHistory();
+      const slider = document.getElementById('tt-slider');
+      slider.max = Math.max(0, h.length - 1);
+      slider.value = slider.max;
+      updateTimeTravelInfo();
+      if (window.__toast) window.__toast(`🕰 Time Travel ativo (${h.length} snapshots)`);
+      playBeep(440, 0.18, 'triangle');
+    } else {
+      if (window.__toast) window.__toast('↩ Saiu do Time Travel');
+    }
+  }
+  function updateTimeTravelInfo() {
+    const h = getHistory();
+    const slider = document.getElementById('tt-slider');
+    const info = document.getElementById('tt-info');
+    if (!h.length) { info.textContent = 'Sem snapshots no histórico'; return; }
+    const idx = +slider.value;
+    const s = h[idx];
+    if (!s) { info.textContent = 'Snapshot inválido'; return; }
+    info.innerHTML = `<strong>${s.ts}</strong> · YTD ${fmtBRLshort(s.ytd_fin)} · Abr ${fmtBRLshort(s.abr_fin)} · Mai esteira ${fmtBRLshort(s.mai_act||0)}`;
+  }
+  document.getElementById('tt-slider').addEventListener('input', updateTimeTravelInfo);
+  document.getElementById('tt-close').addEventListener('click', toggleTimeTravel);
+
+  // ---------- Skeleton screens no init ----------
+  // (Aplicado nas primeiras 200ms até renderKpis preencher)
+  (function showSkeleton() {
+    const el = document.getElementById('kpi-row');
+    if (!el || el.children.length > 0) return;
+    el.innerHTML = `
+      <div class="kpi hero" style="min-height:200px;">
+        <div class="label skeleton-pulse" style="width:200px;height:14px;">.</div>
+        <div class="value skeleton-pulse" style="width:280px;height:64px;margin-top:14px;">R$ 000,0M</div>
+        <div class="sub skeleton-pulse" style="width:160px;height:12px;margin-top:8px;">.</div>
+      </div>
+      <div class="kpi"><div class="label skeleton-pulse" style="width:100px;height:12px;">.</div><div class="value skeleton-pulse" style="width:140px;height:32px;margin-top:8px;">R$00M</div></div>
+      <div class="kpi"><div class="label skeleton-pulse" style="width:100px;height:12px;">.</div><div class="value skeleton-pulse" style="width:140px;height:32px;margin-top:8px;">R$00M</div></div>`;
+  })();
 
   setupNotes();
   setupEmp();
