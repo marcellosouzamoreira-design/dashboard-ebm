@@ -1,5 +1,4 @@
-<!doctype html>
-<script type="application/json" id="cowork-artifact-meta">
+<!doctype html><script type="application/json" id="cowork-artifact-meta">
 {
   "name": "Ebm Esteira Comercial",
   "schemaVersion": 1,
@@ -1240,7 +1239,7 @@
         <button role="tab" data-period="empreendimentos" type="button">🏢 Empreend.</button>
       </div>
       <div class="updated">
-        Última atualização BI: <strong id="last-update">20/05/2026 08:52:40</strong>
+        Última atualização BI: <strong id="last-update">21/05/2026 09:47:37</strong>
         <span class="snapshot-hint" id="snapshot-hint" title="Variação dos KPIs desde a sua última visita"></span>
       </div>
       <div class="header-buttons">
@@ -1354,7 +1353,7 @@
       <div class="kpi andamento" style="text-align:center;padding:24px;">
         <div class="label">Esteira ativa neste momento</div>
         <div class="value" style="font-size:42px;">R$23M</div>
-        <div class="sub">Soma de todas propostas em andamento (estágios 00–05) — snapshot 20/05/2026 08:52</div>
+        <div class="sub">Soma de todas propostas em andamento (estágios 00–05) — snapshot 21/05/2026 09:47</div>
       </div>
     </div>
 
@@ -1421,7 +1420,7 @@
 
 
   <footer class="note briefing-hide">
-    Fonte: Power BI EBM — relatório "Esteira Comercial". Snapshot extraído via navegador em 20/05/2026 às 08:52.<br>
+    Fonte: Power BI EBM — relatório "Esteira Comercial". Snapshot extraído via navegador em 21/05/2026 às 09:47.<br>
     Dados mensais (Jan–Abr) capturados individualmente. <strong>2026 YTD</strong> é a soma dos meses extraídos.
     Vendas em Andamento Maio (R$23M) é instantâneo no momento da extração — não varia por filtro de mês.<br>
     Splits por Modalidade (Associativo/SPBE) e Momento (Lançamento/Estoque) referem-se a <strong>Abril/2026</strong>
@@ -1533,10 +1532,10 @@
 
   // ---------- DATA ----------
   // Todos os dados são meses de 2026, capturados via Power BI público.
-  // Esteira ativa (andamento) é um snapshot único capturado em 20/05/2026 08:52
+  // Esteira ativa (andamento) é um snapshot único capturado em 21/05/2026 09:47
   // — reflete propostas em estágios 00–05 no momento da extração. Mesmo valor
   // usado em todos os meses e na aba MAI (mês vigente).
-  const ANDAMENTO_ATUAL = 24147583;
+  const ANDAMENTO_ATUAL = 24131896;
   function makeMonth(label, finalizadas, regionals, diretores) {
     const total = regionals.reduce((s,r)=>s+r.vgv, 0);
     const qtd   = regionals.reduce((s,r)=>s+r.qtd, 0);
@@ -1615,32 +1614,32 @@
     mai: {
       label: "Maio / 2026 (mês vigente)",
       kpi: {
-        andamento: 24147583,
-        finalizadas: 26547183,
-        total: 50694766,
+        andamento: 24131896,
+        finalizadas: 28399763,
+        total: 52531659,
       },
-      // Esteira + finalizadas Maio — extraída do BI em 20/05/2026 08:52:40
+      // Esteira + finalizadas Maio — extraída do BI em 21/05/2026 09:47:37
       funil: [
-        { name: "00 — Proposta",     vgv: 3765719,  qtd: 10 },
-        { name: "01 — Crédito",      vgv: 4400110,  qtd: 11 },
+        { name: "00 — Proposta",     vgv: 3398548,  qtd: 8  },
+        { name: "01 — Crédito",      vgv: 5437938,  qtd: 13 },
         { name: "02 — Jurídico",     vgv: 715335,   qtd: 2  },
-        { name: "03 — Assinatura",   vgv: 9555928,  qtd: 24, highlight: true },
-        { name: "04 — Conferência",  vgv: 320001,   qtd: 1  },
-        { name: "05 — Pendência",    vgv: 5390490,  qtd: 12 },
-        { name: "06 — Finalizado",   vgv: 26547183, qtd: 56, last: true },
+        { name: "03 — Assinatura",   vgv: 7389943,  qtd: 19, highlight: true },
+        { name: "04 — Conferência",  vgv: 372522,   qtd: 1  },
+        { name: "05 — Pendência",    vgv: 6817610,  qtd: 16 },
+        { name: "06 — Finalizado",   vgv: 28399763, qtd: 60, last: true },
       ],
       regional: [
-        { name: "Regional GO", vgv: 40847525, qtd: 94 },
-        { name: "Regional DF", vgv: 6481502,  qtd: 16 },
-        { name: "Regional SP", vgv: 3365738,  qtd: 6  },
+        { name: "Regional GO", vgv: 42506419, qtd: 97 },
+        { name: "Regional DF", vgv: 6099502,  qtd: 15 },
+        { name: "Regional SP", vgv: 3925738,  qtd: 7  },
       ],
-      regionalTotal: { vgv: 50694765, qtd: 116 },
-      regionalNote: "Total Maio/2026 (esteira + finalizadas) por Regional — snapshot 20/05/2026 08:52:40.",
+      regionalTotal: { vgv: 52531659, qtd: 119 },
+      regionalNote: "Total Maio/2026 (esteira + finalizadas) por Regional — snapshot 21/05/2026 09:47:37.",
       diretores: [
-        { name: "Felipe",         projetado: 28324731, realizado: 26841519, qtdProj: null, qtdReal: 57, pct: 95, status: "ok" },
-        { name: "Paulo / Sérgio", projetado: 14259331, realizado: 12226023, qtdProj: null, qtdReal: 39, pct: 86, status: "bad" },
-        { name: "EBM Diretoria",  projetado: null,     realizado: 11627223, qtdProj: null, qtdReal: 20, pct: null, status: "na" },
-        { name: "TOTAL",          projetado: 100501752, realizado: 50694765, qtdProj: 218, qtdReal: 116, pct: 50, status: "bad", isTotal: true },
+        { name: "Felipe",         projetado: 62026937, realizado: 27926197, qtdProj: 111, qtdReal: 56, pct: 43, status: "bad" },
+        { name: "Paulo / Sérgio", projetado: 24441495, realizado: 15710468, qtdProj: 67,  qtdReal: 43, pct: 53, status: "bad" },
+        { name: "EBM Diretoria",  projetado: 14033320, realizado: 8894992,  qtdProj: 40,  qtdReal: 20, pct: null, status: "na" },
+        { name: "TOTAL",          projetado: 100501752, realizado: 52531658, qtdProj: 218, qtdReal: 119, pct: 46, status: "bad", isTotal: true },
       ],
     },
     ytd: {
@@ -2365,7 +2364,7 @@
     });
   });
   document.getElementById('btn-refresh').addEventListener('click', () => {
-    alert('Esse painel é um snapshot do BI extraído em 20/05/2026 08:52.\n\nPara atualizar os números, peça ao Claude:\n"Atualize o dashboard da esteira EBM."');
+    alert('Esse painel é um snapshot do BI extraído em 21/05/2026 09:47.\n\nPara atualizar os números, peça ao Claude:\n"Atualize o dashboard da esteira EBM."');
   });
   document.getElementById('btn-print').addEventListener('click', () => window.print());
 
