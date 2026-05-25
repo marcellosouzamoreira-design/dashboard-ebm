@@ -507,6 +507,60 @@
   .modal-stat .val { font-size: 22px; color: var(--ebm-navy); font-weight: 800; margin-top: 4px; font-variant-numeric: tabular-nums; }
   body.dark .modal-stat { background: #1a2538; }
   body.dark .modal-stat .val { color: #d8e3f2; }
+
+  /* KPI Drill — stages collapsible */
+  #kpi-row .kpi[data-kpi-drill] { cursor: pointer; transition: transform .15s ease, box-shadow .15s ease; position: relative; }
+  #kpi-row .kpi[data-kpi-drill]:hover { transform: translateY(-2px); box-shadow: var(--ebm-shadow-lg); }
+  #kpi-row .kpi[data-kpi-drill]::after { content: '🔍'; position: absolute; top: 10px; right: 12px;
+    opacity: 0; font-size: 14px; transition: opacity .2s ease; pointer-events: none; }
+  #kpi-row .kpi[data-kpi-drill]:hover::after { opacity: .55; }
+  .kpi-drill-summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 10px; margin-bottom: 18px; padding-bottom: 14px; border-bottom: 1px solid var(--ebm-border); }
+  .kpi-drill-summary .item { background: linear-gradient(135deg, rgba(0,61,107,0.04), transparent);
+    border: 1px solid var(--ebm-border); border-radius: 10px; padding: 10px 12px; }
+  .kpi-drill-summary .item .lbl { font-size: 10px; color: var(--ebm-muted); text-transform: uppercase;
+    letter-spacing: 0.5px; font-weight: 700; }
+  .kpi-drill-summary .item .v { font-size: 18px; color: var(--ebm-navy); font-weight: 800; margin-top: 3px;
+    font-variant-numeric: tabular-nums; }
+  body.dark .kpi-drill-summary .item .v { color: #cfd8e4; }
+  .kpi-stage-group { margin-bottom: 10px; border: 1px solid var(--ebm-border); border-radius: 10px;
+    background: var(--ebm-card); overflow: hidden; }
+  .kpi-stage-header { display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 14px; cursor: pointer; user-select: none; background: var(--ebm-soft);
+    transition: background .15s ease; }
+  .kpi-stage-header:hover { background: rgba(0,61,107,0.06); }
+  body.dark .kpi-stage-header { background: #1a2538; }
+  body.dark .kpi-stage-header:hover { background: rgba(74,159,224,0.08); }
+  .kpi-stage-header .stage-name { font-weight: 700; color: var(--ebm-navy); font-size: 14px;
+    display: flex; align-items: center; gap: 8px; }
+  .kpi-stage-header .stage-name .caret { display: inline-block; transition: transform .2s ease;
+    color: var(--ebm-muted); font-size: 12px; }
+  .kpi-stage-group.open .caret { transform: rotate(90deg); }
+  .kpi-stage-header .stage-meta { font-size: 13px; color: var(--ebm-text); font-weight: 700;
+    font-variant-numeric: tabular-nums; }
+  .kpi-stage-list { max-height: 0; overflow: hidden; transition: max-height .25s ease; }
+  .kpi-stage-group.open .kpi-stage-list { max-height: 2000px; }
+  .kpi-emp-row { display: grid; grid-template-columns: 50px 1fr auto;
+    padding: 9px 14px; align-items: center; border-top: 1px solid var(--ebm-border);
+    font-size: 13px; gap: 10px; }
+  .kpi-emp-row.aggregated { font-style: italic; color: var(--ebm-muted); }
+  .kpi-reg-badge { display: inline-block; padding: 2px 7px; border-radius: 12px;
+    font-size: 10px; font-weight: 800; letter-spacing: 0.5px; text-align: center;
+    color: #fff; background: var(--ebm-navy); }
+  .kpi-reg-badge.df { background: #2563EB; }
+  .kpi-reg-badge.go { background: #003D6B; }
+  .kpi-reg-badge.sp { background: #A4001B; }
+  .kpi-emp-row .emp-name { color: var(--ebm-text); font-weight: 600; }
+  .kpi-emp-row .emp-vgv { color: var(--ebm-navy); font-weight: 700; font-variant-numeric: tabular-nums; }
+  body.dark .kpi-emp-row .emp-vgv { color: #cfd8e4; }
+  .kpi-stage-empty { padding: 14px; color: var(--ebm-muted); font-style: italic; font-size: 13px; text-align: center; }
+  .kpi-drill-note { margin-top: 14px; padding: 10px 12px; background: #FFF8EC;
+    border: 1px solid var(--ebm-border); border-radius: 8px; font-size: 12px; color: var(--ebm-muted); }
+  body.dark .kpi-drill-note { background: #2a2010; }
+  @media (max-width: 600px) {
+    .kpi-emp-row { grid-template-columns: 40px 1fr auto; font-size: 12px; padding: 8px 10px; }
+    .kpi-reg-badge { font-size: 9px; padding: 2px 5px; }
+  }
   .modal-table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 13px; }
   .modal-table th, .modal-table td { padding: 8px 10px; text-align: left; border-bottom: 1px solid var(--ebm-border); }
   .modal-table th { background: #f0f3f7; color: var(--ebm-muted); font-size: 11px; text-transform: uppercase; letter-spacing: .4px; }
@@ -1497,6 +1551,17 @@
   </div>
 </div>
 
+<!-- ===== Modal: Drill-down por KPI (Esteira / Finalizadas / Total) ===== -->
+<div class="modal-backdrop" id="kpi-drill-modal" role="dialog" aria-modal="true" aria-labelledby="kpi-drill-title">
+  <div class="modal kpi-drill" style="max-width:880px;">
+    <div class="modal-head">
+      <h3 id="kpi-drill-title">📊 Drill</h3>
+      <button class="modal-close" id="kpi-drill-close" aria-label="Fechar">✕</button>
+    </div>
+    <div class="modal-body" id="kpi-drill-body"></div>
+  </div>
+</div>
+
 <script>/*!
  * Chart.js v4.5.0
  * https://www.chartjs.org
@@ -1636,6 +1701,40 @@
         { name: "EBM Diretoria",  projetado: null,      realizado: 560389,   qtdProj: null, qtdReal: 1,  pct: null, status: "na" },
         { name: "TOTAL",          projetado: 100501752, realizado: 36630512, qtdProj: 218, qtdReal: 78, pct: 36, status: "bad", isTotal: true },
       ],
+      // Empreendimentos × estágio Maio (BI Fabric 22/05/2026 18:49)
+      // GO = breakdown completo (26 empreendimentos). DF/SP = totais por estágio.
+      empreendimentos: [
+        { reg:"GO", nome:"CONDOMÍNIO TRANCOSO",                  s00:373000, s01:1100842, s02:0,      s03:365690,  s05:1098822, s06:756000,  total:3694354 },
+        { reg:"GO", nome:"LOC SERRINHA",                         s00:0,      s01:0,       s02:0,      s03:520000,  s05:0,       s06:2162882, total:2682882 },
+        { reg:"GO", nome:"Metropolitan Bueno",                   s00:403050, s01:0,       s02:0,      s03:0,       s05:0,       s06:900480,  total:1303530 },
+        { reg:"GO", nome:"Metropolitan Genebra",                 s00:0,      s01:0,       s02:0,      s03:0,       s05:0,       s06:3193310, total:3193310 },
+        { reg:"GO", nome:"Now 111",                              s00:0,      s01:350500,  s02:0,      s03:387506,  s05:671180,  s06:1713762, total:3122948 },
+        { reg:"GO", nome:"Now Alameda das Águas - 1ª Fase",      s00:0,      s01:0,       s02:0,      s03:0,       s05:0,       s06:840677,  total:840677 },
+        { reg:"GO", nome:"Now Alameda das Águas - 2ª Fase",      s00:0,      s01:0,       s02:0,      s03:350000,  s05:1881750, s06:1220401, total:3452151 },
+        { reg:"GO", nome:"Now Laguna - 1ª Fase",                 s00:358810, s01:0,       s02:370000, s03:1388218, s05:0,       s06:3455882, total:5572910 },
+        { reg:"GO", nome:"Now Laguna - 2ª Fase",                 s00:0,      s01:335000,  s02:0,      s03:1149244, s05:335001,  s06:2784714, total:4603958 },
+        { reg:"GO", nome:"Now Milão - 1ª Fase",                  s00:0,      s01:1090000, s02:0,      s03:798250,  s05:0,       s06:1529490, total:3417740 },
+        { reg:"GO", nome:"Now Milão - 2ª Fase",                  s00:0,      s01:0,       s02:0,      s03:780000,  s05:0,       s06:1515709, total:2295709 },
+        { reg:"GO", nome:"Now PQ Amazônia - 3ª Fase",            s00:0,      s01:371033,  s02:0,      s03:0,       s05:0,       s06:0,       total:371033 },
+        { reg:"GO", nome:"Now Praça C8",                         s00:0,      s01:0,       s02:0,      s03:323200,  s05:0,       s06:450000,  total:773200 },
+        { reg:"GO", nome:"NOW Reserva das Águas - 3ª Fase",      s00:0,      s01:0,       s02:0,      s03:385050,  s05:0,       s06:0,       total:385050 },
+        { reg:"GO", nome:"Parque América Cancun - 3ª Fase",      s00:0,      s01:0,       s02:0,      s03:0,       s05:0,       s06:360000,  total:360000 },
+        { reg:"GO", nome:"Reserva Urbana Pitangueira 1ª Fase",   s00:0,      s01:335000,  s02:345335, s03:871450,  s05:0,       s06:2513300, total:4065085 },
+        { reg:"GO", nome:"Reserva Urbana Pitangueira 2ª Fase",   s00:434468, s01:0,       s02:0,      s03:349741,  s05:360000,  s06:0,       total:1144209 },
+        { reg:"GO", nome:"Smart 36",                             s00:0,      s01:0,       s02:0,      s03:0,       s05:0,       s06:431000,  total:431000 },
+        { reg:"GO", nome:"Smart Parque Areião",                  s00:0,      s01:0,       s02:0,      s03:0,       s05:1031774, s06:620000,  total:1651774 },
+        { reg:"GO", nome:"UND Terceiros - Wide Maristta",        s00:0,      s01:0,       s02:0,      s03:0,       s05:2400000, s06:0,       total:2400000 },
+        { reg:"GO", nome:"VOLT C 220",                           s00:0,      s01:559271,  s02:0,      s03:0,       s05:0,       s06:0,       total:559271 },
+        { reg:"GO", nome:"Wish 211",                             s00:0,      s01:0,       s02:0,      s03:0,       s05:649688,  s06:1258650, total:1908338 },
+        { reg:"GO", nome:"WISH GRAN 29",                         s00:0,      s01:0,       s02:535204, s03:1320000, s05:0,       s06:535000,  total:2390204 },
+        { reg:"GO", nome:"Wish Gran Six",                        s00:0,      s01:0,       s02:0,      s03:0,       s05:694389,  s06:0,       total:694389 },
+        { reg:"GO", nome:"Wish Trinta e Sete",                   s00:0,      s01:0,       s02:0,      s03:662500,  s05:0,       s06:0,       total:662500 },
+        { reg:"GO", nome:"Wish Vaca Brava",                      s00:0,      s01:0,       s02:0,      s03:0,       s05:0,       s06:3151016, total:3151016 },
+        // Regional DF — totais agregados por estágio (detalhe por empreendimento será capturado em refresh futuro)
+        { reg:"DF", nome:"(Regional DF — agregado)",             s00:0,      s01:636000,  s02:0,      s03:780000,  s05:350000,  s06:4333502, total:6099502, aggregated:true },
+        // Regional SP — totais agregados por estágio
+        { reg:"SP", nome:"(Regional SP — agregado)",             s00:461000, s01:0,       s02:0,      s03:0,       s05:560000,  s06:2904738, total:3925738, aggregated:true }
+      ],
     },
     ytd: {
       label: "2026 YTD (Jan–Abr acumulado)",
@@ -1717,8 +1816,12 @@
     }
     // Hero: Vendas Finalizadas | Secundário 1: Andamento | Secundário 2: VGV Total
     const isWinner = pct != null && pct >= 100;
+    // KPIs clicáveis apenas no mês vigente (mai) — onde há detalhe por empreendimento × estágio
+    const drillFin = (period === 'mai') ? 'data-kpi-drill="finalizadas" title="Clique para ver empreendimentos finalizados em Maio"' : '';
+    const drillAct = (period === 'mai') ? 'data-kpi-drill="andamento" title="Clique para ver esteira detalhada por empreendimento"' : '';
+    const drillTot = (period === 'mai') ? 'data-kpi-drill="total" title="Clique para ver todos os empreendimentos de Maio"' : '';
     el.innerHTML = `
-      <div class="kpi hero finalizadas ${statusCls}${isWinner?' gold-glow':''}">
+      <div class="kpi hero finalizadas ${statusCls}${isWinner?' gold-glow':''}" ${drillFin}>
         ${gaugeHtml}
         <div class="label">📊 Vendas Finalizadas ${isWinner?'<span class="badge-gold">🏆 META BATIDA</span>':pctBadge}${diffFinHtml}</div>
         <div class="value updating">${fmtBRLshort(p.kpi.finalizadas)}</div>
@@ -1726,12 +1829,12 @@
         ${deltaFin}
         <div class="spark"><canvas id="spark-fin"></canvas></div>
       </div>
-      <div class="kpi andamento">
+      <div class="kpi andamento" ${drillAct}>
         <div class="label">⚙ Esteira Ativa ${diffActHtml}</div>
         <div class="value updating">${p.kpi.andamento==null ? '—' : fmtBRLshort(p.kpi.andamento)}</div>
         <div class="sub">${p.kpi.andamento==null ? 'Não populado' : 'Estágios 00–05'}</div>
       </div>
-      <div class="kpi total">
+      <div class="kpi total" ${drillTot}>
         <div class="label">💰 VGV Total</div>
         <div class="value updating">${fmtBRLshort(p.kpi.total)}</div>
         <div class="sub">Andamento + Finalizadas</div>
@@ -2620,6 +2723,120 @@
     if (!dir || dir.classList.contains('is-total')) return;
     const nameEl = dir.querySelector('.name');
     if (nameEl) openDrill(nameEl.textContent.trim());
+  });
+
+  // ---------- KPI Drill (mês vigente — empreendimentos × estágio) ----------
+  const STAGE_DEFS = [
+    { key: 's00', label: '00 — Proposta',           inEsteira: true,  inFinal: false },
+    { key: 's01', label: '01 — Crédito',            inEsteira: true,  inFinal: false },
+    { key: 's02', label: '02 — Jurídico',           inEsteira: true,  inFinal: false },
+    { key: 's03', label: '03 — Assinatura',         inEsteira: true,  inFinal: false },
+    { key: 's05', label: '05 — Pendência',          inEsteira: true,  inFinal: false },
+    { key: 's06', label: '06 — Processo Finalizado', inEsteira: false, inFinal: true  }
+  ];
+  const kpiDrillModal = document.getElementById('kpi-drill-modal');
+  const kpiDrillBody  = document.getElementById('kpi-drill-body');
+  const kpiDrillTitle = document.getElementById('kpi-drill-title');
+
+  function openKpiDrill(kpiType) {
+    const mai = data.mai;
+    const emps = mai.empreendimentos || [];
+    if (!emps.length) {
+      kpiDrillBody.innerHTML = '<p style="text-align:center;color:var(--ebm-muted);padding:30px;">Sem dados de empreendimentos disponíveis. Aguarde próximo refresh do BI.</p>';
+      kpiDrillTitle.textContent = '📊 Drill — Maio/2026';
+      kpiDrillModal.classList.add('show');
+      document.body.style.overflow = 'hidden';
+      return;
+    }
+    // Filtrar estágios conforme tipo de KPI
+    let stagesToShow, titleEmoji, titleText, totalVgv;
+    if (kpiType === 'andamento') {
+      stagesToShow = STAGE_DEFS.filter(s => s.inEsteira);
+      titleEmoji = '⚙'; titleText = 'Esteira Ativa — Maio/2026';
+      totalVgv = mai.kpi.andamento;
+    } else if (kpiType === 'finalizadas') {
+      stagesToShow = STAGE_DEFS.filter(s => s.inFinal);
+      titleEmoji = '📊'; titleText = 'Vendas Finalizadas — Maio/2026';
+      totalVgv = mai.kpi.finalizadas;
+    } else { // total
+      stagesToShow = STAGE_DEFS;
+      titleEmoji = '💰'; titleText = 'VGV Total — Maio/2026';
+      totalVgv = mai.kpi.total;
+    }
+    kpiDrillTitle.textContent = titleEmoji + ' ' + titleText;
+    // Sumário superior
+    const empsInScope = emps.filter(e => stagesToShow.some(s => e[s.key] > 0));
+    const detalhados = empsInScope.filter(e => !e.aggregated).length;
+    const agregados  = empsInScope.filter(e => e.aggregated).length;
+    let html = '';
+    html += '<div class="kpi-drill-summary">';
+    html += '<div class="item"><div class="lbl">VGV Total</div><div class="v">' + fmtBRLshort(totalVgv) + '</div></div>';
+    html += '<div class="item"><div class="lbl">Empreendimentos</div><div class="v">' + detalhados + (agregados ? ' <span style="font-size:11px;color:var(--ebm-muted);font-weight:600;">+ ' + agregados + ' agreg.</span>' : '') + '</div></div>';
+    html += '<div class="item"><div class="lbl">Estágios</div><div class="v">' + stagesToShow.length + '</div></div>';
+    html += '<div class="item"><div class="lbl">Snapshot BI</div><div class="v" style="font-size:14px;">22/05 18:49</div></div>';
+    html += '</div>';
+    // Grupos por estágio
+    let hasAnyEmp = false;
+    stagesToShow.forEach(function(stage, idx){
+      const rows = emps
+        .filter(function(e){ return e[stage.key] > 0; })
+        .sort(function(a,b){ return b[stage.key] - a[stage.key]; });
+      const stageTotal = rows.reduce(function(s,e){ return s + e[stage.key]; }, 0);
+      const stageQtd = rows.length; // n de empreendimentos com vendas naquele estágio
+      if (rows.length > 0) hasAnyEmp = true;
+      // Estágio único? Já aberto. Múltiplos? Aberto só o primeiro.
+      const isOpen = (stagesToShow.length === 1) || (idx === 0);
+      html += '<div class="kpi-stage-group' + (isOpen ? ' open' : '') + '" data-stage="' + stage.key + '">';
+      html += '<div class="kpi-stage-header">';
+      html +=   '<span class="stage-name"><span class="caret">▶</span>' + stage.label + '</span>';
+      html +=   '<span class="stage-meta">' + fmtBRLshort(stageTotal) + ' <span style="color:var(--ebm-muted);font-weight:600;">· ' + rows.length + ' empr.</span></span>';
+      html += '</div>';
+      html += '<div class="kpi-stage-list">';
+      if (rows.length === 0) {
+        html += '<div class="kpi-stage-empty">Nenhum empreendimento neste estágio em Maio.</div>';
+      } else {
+        rows.forEach(function(e){
+          const regClass = (e.reg||'go').toLowerCase();
+          html += '<div class="kpi-emp-row' + (e.aggregated ? ' aggregated' : '') + '">';
+          html +=   '<span class="kpi-reg-badge ' + regClass + '">' + (e.reg || '?') + '</span>';
+          html +=   '<span class="emp-name">' + e.nome + '</span>';
+          html +=   '<span class="emp-vgv">' + fmtBRL(e[stage.key]) + '</span>';
+          html += '</div>';
+        });
+      }
+      html += '</div></div>';
+    });
+    if (!hasAnyEmp) {
+      html += '<p style="text-align:center;color:var(--ebm-muted);padding:30px;">Sem empreendimentos com vendas neste recorte.</p>';
+    }
+    // Nota
+    if (agregados > 0) {
+      html += '<div class="kpi-drill-note">📌 <strong>Nota:</strong> Regional DF e SP aparecem em modo agregado por estágio. Detalhe por empreendimento individual será incluído em refresh futuro do BI.</div>';
+    }
+    kpiDrillBody.innerHTML = html;
+    kpiDrillModal.classList.add('show');
+    document.body.style.overflow = 'hidden';
+    // Click handler nos headers de estágio (toggle)
+    kpiDrillBody.querySelectorAll('.kpi-stage-header').forEach(function(h){
+      h.addEventListener('click', function(){ h.closest('.kpi-stage-group').classList.toggle('open'); });
+    });
+  }
+  function closeKpiDrill() {
+    kpiDrillModal.classList.remove('show');
+    document.body.style.overflow = '';
+  }
+  document.getElementById('kpi-drill-close').addEventListener('click', closeKpiDrill);
+  kpiDrillModal.addEventListener('click', function(e){ if (e.target === kpiDrillModal) closeKpiDrill(); });
+  // Delegação de click nos KPIs (apenas mai — onde há data-kpi-drill)
+  document.addEventListener('click', function(e){
+    const kpi = e.target.closest('[data-kpi-drill]');
+    if (!kpi) return;
+    const kpiType = kpi.getAttribute('data-kpi-drill');
+    openKpiDrill(kpiType);
+  });
+  // ESC fecha
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape' && kpiDrillModal.classList.contains('show')) closeKpiDrill();
   });
 
   // ---------- Modo Briefing ----------
