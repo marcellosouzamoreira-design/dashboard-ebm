@@ -2175,7 +2175,12 @@
     const el = document.getElementById('funil');
     const hint = document.getElementById('funil-hint');
     if (period === 'mai') {
-      hint.textContent = '— Esteira ativa em Maio/2026: 45 propostas em aberto + 3 finalizadas — total R$24M';
+      // Dinâmico — soma estágios 00–05 (aberto) vs 06 (finalizado)
+      var maiF = p.funil || [];
+      var aberto = maiF.filter(function(s){return !s.last;}).reduce(function(a,s){return a + (s.qtd||0);},0);
+      var fin = (maiF.find(function(s){return s.last;}) || {qtd:0}).qtd;
+      var totVgv = p.kpi && p.kpi.total ? Math.round(p.kpi.total/1e6) : 0;
+      hint.textContent = '— Esteira ativa em Maio/2026: ' + aberto + ' propostas em aberto + ' + fin + ' finalizadas — total R$' + totVgv + 'M';
     } else if (period === 'ytd') {
       hint.textContent = '— Total finalizado Jan–Abr (vendas concluídas no ano)';
     } else {
