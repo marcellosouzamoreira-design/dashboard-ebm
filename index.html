@@ -2551,32 +2551,57 @@
       </div>`;
 
     // Tabela mensal
-    let tableHtml = `
-      <h4 style="margin:12px 0 8px;color:var(--ebm-navy);font-size:14px;">Performance mensal</h4>
-      <table class="modal-table">
-        <thead><tr><th>Mês</th><th class="num">Realizado</th><th class="num">Meta</th><th class="num">%</th><th class="num">Unid.</th></tr></thead>
-        <tbody>
-          ${rows.map(r => `<tr>
-            <td>${r.mes}</td>
-            <td class="num">${fmtBRLshort(r.real)}</td>
-            <td class="num">${r.proj?fmtBRLshort(r.proj):'—'}</td>
-            <td class="num"><strong style="color:${r.pct>=90?'#0F6E4D':(r.pct>=60?'#8A5E13':'#A4001B')}">${r.pct!=null?r.pct+'%':'—'}</strong></td>
-            <td class="num">${fmtNum(r.qreal)}</td>
-          </tr>`).join('')}
-        </tbody>
-      </table>`;
+    let tableHtml = '';
+    if (rows.length === 0) {
+      tableHtml = `<h4 style="margin:12px 0 8px;color:var(--ebm-navy);font-size:14px;">Performance mensal</h4>
+        <p style="margin:0;padding:14px;background:#FFF8EC;border:1px solid var(--ebm-border);border-radius:8px;font-size:13px;color:var(--ebm-muted);">📌 Sem dados em Jan–Abr para esse diretor.</p>`;
+    } else {
+      tableHtml = `
+        <h4 style="margin:12px 0 8px;color:var(--ebm-navy);font-size:14px;">Performance mensal</h4>
+        <table class="modal-table">
+          <thead><tr><th>Mês</th><th class="num">Realizado</th><th class="num">Meta</th><th class="num">%</th><th class="num">Unid.</th></tr></thead>
+          <tbody>
+            ${rows.map(r => `<tr>
+              <td>${r.mes}</td>
+              <td class="num">${fmtBRLshort(r.real)}</td>
+              <td class="num">${r.proj?fmtBRLshort(r.proj):'—'}</td>
+              <td class="num"><strong style="color:${r.pct>=90?'#0F6E4D':(r.pct>=60?'#8A5E13':'#A4001B')}">${r.pct!=null?r.pct+'%':'—'}</strong></td>
+              <td class="num">${fmtNum(r.qreal)}</td>
+            </tr>`).join('')}
+          </tbody>
+        </table>`;
+    }
 
-    // Insights
-    const best = rows.slice().sort((a,b)=>(b.pct||0)-(a.pct||0))[0];
-    const worst = rows.slice().sort((a,b)=>(a.pct||0)-(b.pct||0))[0];
-    const insightsHtml = `
-      <h4 style="margin:18px 0 8px;color:var(--ebm-navy);font-size:14px;">💡 Insights</h4>
-      <ul style="margin:0;padding-left:20px;font-size:13px;line-height:1.7;color:var(--ebm-text);">
-        <li>Melhor mês: <strong>${best.mes}</strong> (${best.pct}% da meta — ${fmtBRLshort(best.real)})</li>
-        <li>Pior mês: <strong>${worst.mes}</strong> (${worst.pct}% da meta — ${fmtBRLshort(worst.real)})</li>
-        <li>Ticket médio YTD: <strong>${totQty?fmtBRLshort(totReal/totQty):'—'}</strong> por unidade</li>
-        ${avgPct!=null && avgPct<60 ? `<li style="color:var(--ebm-red);"><strong>⚠ Abaixo da meta YTD</strong> — gap de ${fmtBRLshort(totProj-totReal)}</li>` : ''}
-      </ul>`;
+    // Insights (defensivo — Renato e diretores novos não têm histórico jan-abr)
+    let insightsHtml = '';
+    if (rows.length === 0) {
+      // Diretor sem histórico jan-abr — mostrar dados do mês vigente se houver
+      const maiDir = data.mai.diretores.find(x => x.name === dirName);
+      if (maiDir && maiDir.realizado != null) {
+        insightsHtml = `
+          <h4 style="margin:18px 0 8px;color:var(--ebm-navy);font-size:14px;">💡 Insights — Maio/2026 (mês vigente)</h4>
+          <div class="modal-grid" style="margin-top:8px;">
+            <div class="modal-stat"><div class="lbl">VGV Maio</div><div class="val">${fmtBRLshort(maiDir.realizado)}</div></div>
+            <div class="modal-stat"><div class="lbl">Meta Maio</div><div class="val">${maiDir.projetado?fmtBRLshort(maiDir.projetado):'—'}</div></div>
+            <div class="modal-stat"><div class="lbl">% Atingimento</div><div class="val">${maiDir.pct!=null?maiDir.pct+'%':'—'}</div></div>
+            <div class="modal-stat"><div class="lbl">Unidades</div><div class="val">${fmtNum(maiDir.qtdReal)}</div></div>
+          </div>
+          <p style="margin:12px 0 0;font-size:12px;color:var(--ebm-muted);">📌 Diretor sem histórico em Jan–Abr (entrou na operação em Maio). Comparativo mensal vai ser construído ao longo do ano.</p>`;
+      } else {
+        insightsHtml = `<p style="margin:18px 0 0;font-size:13px;color:var(--ebm-muted);">Sem dados históricos disponíveis para esse diretor.</p>`;
+      }
+    } else {
+      const best = rows.slice().sort((a,b)=>(b.pct||0)-(a.pct||0))[0];
+      const worst = rows.slice().sort((a,b)=>(a.pct||0)-(b.pct||0))[0];
+      insightsHtml = `
+        <h4 style="margin:18px 0 8px;color:var(--ebm-navy);font-size:14px;">💡 Insights</h4>
+        <ul style="margin:0;padding-left:20px;font-size:13px;line-height:1.7;color:var(--ebm-text);">
+          <li>Melhor mês: <strong>${best.mes}</strong> (${best.pct}% da meta — ${fmtBRLshort(best.real)})</li>
+          <li>Pior mês: <strong>${worst.mes}</strong> (${worst.pct}% da meta — ${fmtBRLshort(worst.real)})</li>
+          <li>Ticket médio YTD: <strong>${totQty?fmtBRLshort(totReal/totQty):'—'}</strong> por unidade</li>
+          ${avgPct!=null && avgPct<60 ? `<li style="color:var(--ebm-red);"><strong>⚠ Abaixo da meta YTD</strong> — gap de ${fmtBRLshort(totProj-totReal)}</li>` : ''}
+        </ul>`;
+    }
 
     drillBody.innerHTML = statsHtml + tableHtml + insightsHtml;
     drillModal.classList.add('show');
