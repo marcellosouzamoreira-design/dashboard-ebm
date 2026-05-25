@@ -1,5 +1,4 @@
-<!doctype html>
-<script type="application/json" id="cowork-artifact-meta">
+<!doctype html><script type="application/json" id="cowork-artifact-meta">
 {
   "name": "Ebm Esteira Comercial",
   "schemaVersion": 1,
@@ -1294,7 +1293,7 @@
         <button role="tab" data-period="empreendimentos" type="button">🏢 Empreend.</button>
       </div>
       <div class="updated">
-        Última atualização BI: <strong id="last-update">25/05/2026 09:17:46</strong>
+        Última atualização BI: <strong id="last-update">25/05/2026 11:48:22</strong>
         <span class="snapshot-hint" id="snapshot-hint" title="Variação dos KPIs desde a sua última visita"></span>
       </div>
       <div class="header-buttons">
@@ -1408,7 +1407,7 @@
       <div class="kpi andamento" style="text-align:center;padding:24px;">
         <div class="label">Esteira ativa neste momento</div>
         <div class="value" style="font-size:42px;">R$29M</div>
-        <div class="sub">Soma de todas propostas em andamento (estágios 00–05) — snapshot 25/05/2026 09:17</div>
+        <div class="sub">Soma de todas propostas em andamento (estágios 00–05) — snapshot 25/05/2026 11:48</div>
       </div>
     </div>
 
@@ -1598,10 +1597,10 @@
 
   // ---------- DATA ----------
   // Todos os dados são meses de 2026, capturados via Power BI público.
-  // Esteira ativa (andamento) é um snapshot único capturado em 01/05/2026 09:38
+  // Esteira ativa (andamento) é um snapshot único capturado em 25/05/2026 11:48
   // — reflete propostas em estágios 00–05 no momento da extração. Mesmo valor
   // usado em todos os meses e na aba MAI (mês vigente).
-  const ANDAMENTO_ATUAL = 28521965;
+  const ANDAMENTO_ATUAL = 27518104;
   function makeMonth(label, finalizadas, regionals, diretores) {
     const total = regionals.reduce((s,r)=>s+r.vgv, 0);
     const qtd   = regionals.reduce((s,r)=>s+r.qtd, 0);
@@ -1663,91 +1662,94 @@
     ),
     abr: makeMonth(
       "Abril / 2026",
-      86497450,  // REVISADO em 07/05/2026 15:31 — vendas reclassificadas (era R$60,2M)
+      86497450,  // REVISADO em 07/05/2026 — vendas reclassificadas (era R$60,2M). Total inalterado em 25/05.
       [
         { name: "Regional GO", vgv: 73264836, qtd: 159 },
         { name: "Regional DF", vgv: 6003750,  qtd: 17  },
         { name: "Regional SP", vgv: 7228864,  qtd: 14  },
       ],
       [
-        // Abril REVISADO — valores oficiais extraídos do BI em 07/05/2026 15:31
+        // Abril RE-REVISADO em 25/05/2026 — Paulo/Sérgio projetado caiu de R$41,4M→R$26,7M (e qtdProj 114→73).
+        // EBM Diretoria realizado caiu de R$10,35M (18 deals) → R$4,35M (1 deal). Renato passou a aparecer
+        // separadamente em Abril (R$6,00M / 17 deals). Total finalizado mantido em R$86,497,450.
         { name: "Felipe",         projetado: 65396703,  realizado: 48512026, qtdProj: 113, qtdReal: 94,  pct: 69, status: "bad" },
-        { name: "Paulo / Sérgio", projetado: 41404192,  realizado: 27631674, qtdProj: 114, qtdReal: 78,  pct: 48, status: "bad" },
-        { name: "EBM Diretoria",  projetado: null,      realizado: 10353750, qtdProj: null, qtdReal: 18, pct: null, status: "na" },
-        { name: "TOTAL",          projetado: 106800895, realizado: 86497450, qtdProj: 227, qtdReal: 190, pct: 61, status: "bad", isTotal: true },
+        { name: "Paulo / Sérgio", projetado: 26705286,  realizado: 27631674, qtdProj: 73,  qtdReal: 78,  pct: 75, status: "bad" },
+        { name: "Renato",         projetado: 14033320,  realizado: 6003750,  qtdProj: 40,  qtdReal: 17,  pct: null, status: "ok" },
+        { name: "EBM Diretoria",  projetado: null,      realizado: 4350000,  qtdProj: null, qtdReal: 1,  pct: null, status: "na" },
+        { name: "TOTAL",          projetado: 106135308, realizado: 86497450, qtdProj: 226, qtdReal: 190, pct: 71, status: "bad", isTotal: true },
       ]
     ),
     mai: {
       label: "Maio / 2026 (mês vigente)",
       kpi: {
-        andamento: 28521965,
-        finalizadas: 36630512,
-        total: 65152477,
+        andamento: 27518104,
+        finalizadas: 43009089,
+        total: 70527193,
       },
-      // Esteira + finalizadas Maio — extraída do BI em 25/05/2026 (BI ts 25/05/2026 09:17:46)
+      // Esteira + finalizadas Maio — extraída do BI em 25/05/2026 (BI ts 25/05/2026 11:48:22)
       funil: [
-        { name: "00 — Proposta",     vgv: 2030328,  qtd: 6 },
-        { name: "01 — Crédito",      vgv: 4777646,  qtd: 13 },
-        { name: "02 — Jurídico",     vgv: 1250539,  qtd: 3 },
-        { name: "03 — Assinatura",   vgv: 10430849, qtd: 26, highlight: true },
+        { name: "00 — Proposta",     vgv: 1187518,  qtd: 4 },
+        { name: "01 — Crédito",      vgv: 6826974,  qtd: 16 },
+        { name: "02 — Jurídico",     vgv: 715335,   qtd: 2 },
+        { name: "03 — Assinatura",   vgv: 9993705,  qtd: 24, highlight: true },
         { name: "04 — Conferência",  vgv: 0,        qtd: 0 },
-        { name: "05 — Pendência",    vgv: 10032603, qtd: 19 },
-        { name: "06 — Finalizado",   vgv: 36630512, qtd: 78, last: true },
+        { name: "05 — Pendência",    vgv: 8794572,  qtd: 23 },
+        { name: "06 — Finalizado",   vgv: 43009089, qtd: 87, last: true },
       ],
       regional: [
-        { name: "Regional GO", vgv: 55127238, qtd: 123 },
-        { name: "Regional DF", vgv: 6099502,  qtd: 15  },
-        { name: "Regional SP", vgv: 3925738,  qtd: 7   },
+        { name: "Regional GO", vgv: 60615254, qtd: 134 },
+        { name: "Regional DF", vgv: 6447202,  qtd: 16  },
+        { name: "Regional SP", vgv: 3464738,  qtd: 6   },
       ],
-      regionalTotal: { vgv: 65152478, qtd: 145 },
-      regionalNote: "Total Maio/2026 (esteira + finalizadas) por Regional — snapshot BI 25/05/2026 09:17.",
+      regionalTotal: { vgv: 70527193, qtd: 156 },
+      regionalNote: "Total Maio/2026 (esteira + finalizadas) por Regional — snapshot BI 25/05/2026 11:48.",
       diretores: [
-        { name: "Felipe",         projetado: 62026937,  realizado: 24370236, qtdProj: 111, qtdReal: 45, pct: 38, status: "bad" },
-        { name: "Paulo / Sérgio", projetado: 24441495,  realizado: 8792387,  qtdProj: 67,  qtdReal: 24, pct: 32, status: "bad" },
-        { name: "Renato",         projetado: 14033320,  realizado: 2907500,  qtdProj: 40,  qtdReal: 8,  pct: 21, status: "bad" },
-        { name: "EBM Diretoria",  projetado: null,      realizado: 560389,   qtdProj: null, qtdReal: 1,  pct: null, status: "na" },
-        { name: "TOTAL",          projetado: 100501752, realizado: 36630512, qtdProj: 218, qtdReal: 78, pct: 36, status: "bad", isTotal: true },
+        { name: "Felipe",         projetado: 62026937,  realizado: 27653813, qtdProj: 111, qtdReal: 51, pct: 43, status: "bad" },
+        { name: "Paulo / Sérgio", projetado: 24441495,  realizado: 9487387,  qtdProj: 67,  qtdReal: 26, pct: 35, status: "bad" },
+        { name: "Renato",         projetado: 14033320,  realizado: 2907500,  qtdProj: 40,  qtdReal: 8,  pct: null, status: "ok" },
+        { name: "EBM Diretoria",  projetado: null,      realizado: 2960389,  qtdProj: null, qtdReal: 2,  pct: null, status: "na" },
+        { name: "TOTAL",          projetado: 100501752, realizado: 43009089, qtdProj: 218, qtdReal: 87, pct: 41, status: "bad", isTotal: true },
       ],
-      // Empreendimentos × estágio Maio (BI Fabric 25/05/2026 09:17)
+      // Empreendimentos × estágio Maio (BI Fabric 25/05/2026 11:48)
       // GO = breakdown completo (26 empreendimentos). DF/SP = totais por estágio.
       empreendimentos: [
-        { reg:"GO", nome:"CONDOMÍNIO TRANCOSO",                  s00:373000, s01:1100842, s02:0,      s03:365690,  s05:1098822, s06:756000,  total:3694354 },
+        { reg:"GO", nome:"CONDOMÍNIO TRANCOSO",                  s00:0,      s01:1099286, s02:0,      s03:375556,  s05:1089600, s06:1128522, total:3692964 },
         { reg:"GO", nome:"LOC SERRINHA",                         s00:0,      s01:0,       s02:0,      s03:520000,  s05:0,       s06:2162882, total:2682882 },
-        { reg:"GO", nome:"Metropolitan Bueno",                   s00:403050, s01:0,       s02:0,      s03:0,       s05:0,       s06:900480,  total:1303530 },
+        { reg:"GO", nome:"Metropolitan Bueno",                   s00:403050, s01:2590440, s02:0,      s03:0,       s05:0,       s06:900480,  total:3893970 },
         { reg:"GO", nome:"Metropolitan Genebra",                 s00:0,      s01:0,       s02:0,      s03:0,       s05:0,       s06:3193310, total:3193310 },
-        { reg:"GO", nome:"Now 111",                              s00:0,      s01:350500,  s02:0,      s03:387506,  s05:671180,  s06:1713762, total:3122948 },
+        { reg:"GO", nome:"Now 111",                              s00:0,      s01:350500,  s02:0,      s03:0,       s05:1058686, s06:1713762, total:3122948 },
         { reg:"GO", nome:"Now Alameda das Águas - 1ª Fase",      s00:0,      s01:0,       s02:0,      s03:0,       s05:0,       s06:840677,  total:840677 },
         { reg:"GO", nome:"Now Alameda das Águas - 2ª Fase",      s00:0,      s01:0,       s02:0,      s03:350000,  s05:1881750, s06:1220401, total:3452151 },
-        { reg:"GO", nome:"Now Laguna - 1ª Fase",                 s00:358810, s01:0,       s02:370000, s03:1388218, s05:0,       s06:3455882, total:5572910 },
-        { reg:"GO", nome:"Now Laguna - 2ª Fase",                 s00:0,      s01:335000,  s02:0,      s03:1149244, s05:335001,  s06:2784714, total:4603958 },
-        { reg:"GO", nome:"Now Milão - 1ª Fase",                  s00:0,      s01:1090000, s02:0,      s03:798250,  s05:0,       s06:1529490, total:3417740 },
-        { reg:"GO", nome:"Now Milão - 2ª Fase",                  s00:0,      s01:0,       s02:0,      s03:780000,  s05:0,       s06:1515709, total:2295709 },
+        { reg:"GO", nome:"Now Laguna - 1ª Fase",                 s00:0,      s01:0,       s02:370000, s03:693843,  s05:1078685, s06:3455882, total:5598410 },
+        { reg:"GO", nome:"Now Laguna - 2ª Fase",                 s00:0,      s01:0,       s02:0,      s03:1512964, s05:335001,  s06:3119714, total:4967679 },
+        { reg:"GO", nome:"Now Milão - 1ª Fase",                  s00:350000, s01:350000,  s02:0,      s03:445250,  s05:353000,  s06:1529490, total:3027740 },
+        { reg:"GO", nome:"Now Milão - 2ª Fase",                  s00:0,      s01:0,       s02:0,      s03:0,       s05:780000,  s06:1515709, total:2295709 },
         { reg:"GO", nome:"Now PQ Amazônia - 3ª Fase",            s00:0,      s01:371033,  s02:0,      s03:0,       s05:0,       s06:0,       total:371033 },
         { reg:"GO", nome:"Now Praça C8",                         s00:0,      s01:0,       s02:0,      s03:323200,  s05:0,       s06:450000,  total:773200 },
         { reg:"GO", nome:"NOW Reserva das Águas - 3ª Fase",      s00:0,      s01:0,       s02:0,      s03:385050,  s05:0,       s06:0,       total:385050 },
         { reg:"GO", nome:"Parque América Cancun - 3ª Fase",      s00:0,      s01:0,       s02:0,      s03:0,       s05:0,       s06:360000,  total:360000 },
-        { reg:"GO", nome:"Reserva Urbana Pitangueira 1ª Fase",   s00:0,      s01:335000,  s02:345335, s03:871450,  s05:0,       s06:2513300, total:4065085 },
-        { reg:"GO", nome:"Reserva Urbana Pitangueira 2ª Fase",   s00:434468, s01:0,       s02:0,      s03:349741,  s05:360000,  s06:0,       total:1144209 },
+        { reg:"GO", nome:"Reserva Urbana Pitangueira 1ª Fase",   s00:0,      s01:870444,  s02:345335, s03:335000,  s05:1307850, s06:2513300, total:5371929 },
+        { reg:"GO", nome:"Reserva Urbana Pitangueira 2ª Fase",   s00:434468, s01:0,       s02:0,      s03:715088,  s05:0,       s06:360000,  total:1509556 },
         { reg:"GO", nome:"Smart 36",                             s00:0,      s01:0,       s02:0,      s03:0,       s05:0,       s06:431000,  total:431000 },
-        { reg:"GO", nome:"Smart Parque Areião",                  s00:0,      s01:0,       s02:0,      s03:0,       s05:1031774, s06:620000,  total:1651774 },
-        { reg:"GO", nome:"UND Terceiros - Wide Maristta",        s00:0,      s01:0,       s02:0,      s03:0,       s05:2400000, s06:0,       total:2400000 },
+        { reg:"GO", nome:"Smart Parque Areião",                  s00:0,      s01:0,       s02:0,      s03:0,       s05:0,       s06:1651774, total:1651774 },
+        { reg:"GO", nome:"UND Terceiros - Wide Maristta",        s00:0,      s01:0,       s02:0,      s03:0,       s05:0,       s06:2400000, total:2400000 },
         { reg:"GO", nome:"VOLT C 220",                           s00:0,      s01:559271,  s02:0,      s03:0,       s05:0,       s06:0,       total:559271 },
-        { reg:"GO", nome:"Wish 211",                             s00:0,      s01:0,       s02:0,      s03:0,       s05:649688,  s06:1258650, total:1908338 },
-        { reg:"GO", nome:"WISH GRAN 29",                         s00:0,      s01:0,       s02:535204, s03:1320000, s05:0,       s06:535000,  total:2390204 },
-        { reg:"GO", nome:"Wish Gran Six",                        s00:0,      s01:0,       s02:0,      s03:0,       s05:694389,  s06:0,       total:694389 },
+        { reg:"GO", nome:"Wish 211",                             s00:0,      s01:0,       s02:0,      s03:0,       s05:0,       s06:1908338, total:1908338 },
+        { reg:"GO", nome:"WISH GRAN 29",                         s00:0,      s01:0,       s02:0,      s03:1320000, s05:0,       s06:1070204, total:2390204 },
+        { reg:"GO", nome:"Wish Gran Six",                        s00:0,      s01:0,       s02:0,      s03:0,       s05:0,       s06:694389,  total:694389 },
         { reg:"GO", nome:"Wish Trinta e Sete",                   s00:0,      s01:0,       s02:0,      s03:662500,  s05:0,       s06:0,       total:662500 },
-        { reg:"GO", nome:"Wish Vaca Brava",                      s00:0,      s01:0,       s02:0,      s03:0,       s05:0,       s06:3151016, total:3151016 },
+        { reg:"GO", nome:"Wish Vaca Brava",                      s00:0,      s01:0,       s02:0,      s03:1227554, s05:0,       s06:3151016, total:4378570 },
         // Regional DF — totais agregados por estágio (detalhe por empreendimento será capturado em refresh futuro)
-        { reg:"DF", nome:"(Regional DF — agregado)",             s00:0,      s01:636000,  s02:0,      s03:780000,  s05:350000,  s06:4333502, total:6099502, aggregated:true },
+        { reg:"DF", nome:"(Regional DF — agregado)",             s00:0,      s01:636000,  s02:0,      s03:1127700, s05:350000,  s06:4333502, total:6447202, aggregated:true },
         // Regional SP — totais agregados por estágio
-        { reg:"SP", nome:"(Regional SP — agregado)",             s00:461000, s01:0,       s02:0,      s03:0,       s05:560000,  s06:2904738, total:3925738, aggregated:true }
+        { reg:"SP", nome:"(Regional SP — agregado)",             s00:0,      s01:0,       s02:0,      s03:0,       s05:560000,  s06:2904738, total:3464738, aggregated:true }
       ],
     },
     ytd: {
       label: "2026 YTD (Jan–Abr acumulado)",
       kpi: {
         andamento: ANDAMENTO_ATUAL,
-        finalizadas: 81708983 + 74952478 + 95422416 + 86497450,   // 338,581,327 (Abril REVISADO 07/05)
+        finalizadas: 81708983 + 74952478 + 95422416 + 86497450,   // 338,581,327 (Abril REVISADO 07/05; total inalterado em 25/05)
         total:       81708983 + 74952478 + 95422416 + 86497450 + ANDAMENTO_ATUAL,
       },
       funil: [
@@ -1759,12 +1761,15 @@
         { name: "Regional SP", vgv: 4069886+3184763+6490902+7228864,     qtd: 6+5+15+14 },       // 20,974,415 / 40
       ],
       regionalTotal: { vgv: 338581327, qtd: 755 },
-      regionalNote: "Soma de Jan–Abr 2026 (Abril REVISADO em 07/05 — incluindo reclassificações).",
+      regionalNote: "Soma de Jan–Abr 2026 (Abril RE-REVISADO em 25/05 — diretoria re-alocada, Renato separado).",
       diretores: [
-        { name: "Felipe",         projetado: 55275088+68625050+68475570+65396703,  realizado: 45592156+50163105+55922437+48512026, qtdProj: 96+108+107+113, qtdReal: 78+102+118+94,  pct: 76, status: "bad" },
-        { name: "Paulo / Sérgio", projetado: 35833188+35692124+30472083+41404192,  realizado: 34909827+22329373+38415979+27631674, qtdProj: 98+98+84+114,   qtdReal: 98+59+104+78,   pct: 86, status: "bad" },
-        { name: "EBM Diretoria",  projetado: null,                                  realizado: 1207000+2460000+1084000+10353750,    qtdProj: null,           qtdReal: 2+2+2+18,        pct: null, status: "na" },
-        { name: "TOTAL",          projetado: 91108276+104317175+98947653+106800895, realizado: 338581327,                           qtdProj: 194+206+191+227, qtdReal: 178+163+224+190, pct: 84, status: "bad", isTotal: true },
+        // YTD RE-CALCULADO em 25/05 — Paulo/Sérgio Abril projetado caiu 41,4M→26,7M; EBM Diretoria Abril realizado caiu 10,35M→4,35M;
+        // Renato passou a aparecer separadamente em Abril (R$6,00M / 17 deals).
+        { name: "Felipe",         projetado: 55275088+68625050+68475570+65396703,  realizado: 45592156+50163105+55922437+48512026, qtdProj: 96+108+107+113, qtdReal: 78+102+118+94,  pct: 78, status: "bad" },
+        { name: "Paulo / Sérgio", projetado: 35833188+35692124+30472083+26705286,  realizado: 34909827+22329373+38415979+27631674, qtdProj: 98+98+84+73,    qtdReal: 98+59+104+78,   pct: 96, status: "bad" },
+        { name: "Renato",         projetado: 14033320,                              realizado: 6003750,                             qtdProj: 40,             qtdReal: 17,             pct: null, status: "ok" },
+        { name: "EBM Diretoria",  projetado: null,                                  realizado: 1207000+2460000+1084000+4350000,     qtdProj: null,           qtdReal: 2+2+2+1,        pct: null, status: "na" },
+        { name: "TOTAL",          projetado: 91108276+104317175+98947653+106135308, realizado: 338581327,                           qtdProj: 194+206+191+226, qtdReal: 178+163+224+190, pct: 85, status: "bad", isTotal: true },
       ],
     },
   };
@@ -2474,7 +2479,7 @@
     });
   });
   document.getElementById('btn-refresh').addEventListener('click', () => {
-    alert('Esse painel é um snapshot do BI extraído em 25/05/2026 09:17.\n\nPara atualizar os números, peça ao Claude:\n"Atualize o dashboard da esteira EBM."');
+    alert('Esse painel é um snapshot do BI extraído em 25/05/2026 11:48.\n\nPara atualizar os números, peça ao Claude:\n"Atualize o dashboard da esteira EBM."');
   });
   document.getElementById('btn-print').addEventListener('click', () => window.print());
 
