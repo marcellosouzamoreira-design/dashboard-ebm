@@ -1293,7 +1293,7 @@
         <button role="tab" data-period="empreendimentos" type="button">🏢 Empreend.</button>
       </div>
       <div class="updated">
-        Última atualização BI: <strong id="last-update">26/05/2026 08:50:04</strong>
+        Última atualização BI: <strong id="last-update">27/05/2026 10:06:28</strong>
         <span class="snapshot-hint" id="snapshot-hint" title="Variação dos KPIs desde a sua última visita"></span>
       </div>
       <div class="header-buttons">
@@ -1407,7 +1407,7 @@
       <div class="kpi andamento" style="text-align:center;padding:24px;">
         <div class="label">Esteira ativa neste momento</div>
         <div class="value" style="font-size:42px;">R$33M</div>
-        <div class="sub">Soma de todas propostas em andamento (estágios 00–05) — snapshot 26/05/2026 08:50</div>
+        <div class="sub">Soma de todas propostas em andamento (estágios 00–05) — snapshot 27/05/2026 10:06</div>
       </div>
     </div>
 
@@ -1474,7 +1474,7 @@
 
 
   <footer class="note briefing-hide">
-    Fonte: Microsoft Fabric (BI EBM) — relatório "Esteira Comercial". Snapshot extraído via navegador em 26/05/2026 às 08:50.<br>
+    Fonte: Microsoft Fabric (BI EBM) — relatório "Esteira Comercial". Snapshot extraído via navegador em 27/05/2026 às 10:06.<br>
     Dados mensais (Jan–Abr) capturados individualmente. <strong>2026 YTD</strong> é a soma dos meses extraídos.
     Vendas em Andamento Maio (R$33M) é instantâneo no momento da extração — não varia por filtro de mês.<br>
     Splits por Modalidade (Associativo/SPBE) e Momento (Lançamento/Estoque) referem-se a <strong>Abril/2026</strong>
@@ -1597,10 +1597,10 @@
 
   // ---------- DATA ----------
   // Todos os dados são meses de 2026, capturados via Power BI público.
-  // Esteira ativa (andamento) é um snapshot único capturado em 26/05/2026 08:50
+  // Esteira ativa (andamento) é um snapshot único capturado em 27/05/2026 10:06
   // — reflete propostas em estágios 00–05 no momento da extração. Mesmo valor
   // usado em todos os meses e na aba MAI (mês vigente).
-  const ANDAMENTO_ATUAL = 33312439;
+  const ANDAMENTO_ATUAL = 32574539;
   function makeMonth(label, finalizadas, regionals, diretores) {
     const total = regionals.reduce((s,r)=>s+r.vgv, 0);
     const qtd   = regionals.reduce((s,r)=>s+r.qtd, 0);
@@ -1682,35 +1682,35 @@
     mai: {
       label: "Maio / 2026 (mês vigente)",
       kpi: {
-        andamento: 33312439,
-        finalizadas: 44483395,
-        total: 77795834,
+        andamento: 32574539,
+        finalizadas: 52441370,
+        total: 85015909,
       },
-      // Esteira + finalizadas Maio — extraída do BI em 26/05/2026 (BI ts 26/05/2026 08:50:04)
+      // Esteira + finalizadas Maio — extraída do BI em 27/05/2026 (BI ts 27/05/2026 10:06:28)
       funil: [
-        { name: "00 — Proposta",     vgv: 2704291,  qtd: 8 },
-        { name: "01 — Crédito",      vgv: 4379744,  qtd: 9 },
-        { name: "02 — Jurídico",     vgv: 715335,   qtd: 2 },
-        { name: "03 — Assinatura",   vgv: 15540726, qtd: 37, highlight: true },
-        { name: "04 — Conferência",  vgv: 3102077,  qtd: 8 },
-        { name: "05 — Pendência",    vgv: 6870266,  qtd: 18 },
-        { name: "06 — Finalizado",   vgv: 44483395, qtd: 91, last: true },
+        { name: "00 — Proposta",     vgv: 8349619,  qtd: 10 },
+        { name: "01 — Crédito",      vgv: 1566304,  qtd: 4 },
+        { name: "02 — Jurídico",     vgv: 1065335,  qtd: 3 },
+        { name: "03 — Assinatura",   vgv: 13342540, qtd: 32, highlight: true },
+        { name: "04 — Conferência",  vgv: 1806815,  qtd: 5 },
+        { name: "05 — Pendência",    vgv: 6443926,  qtd: 17 },
+        { name: "06 — Finalizado",   vgv: 52441370, qtd: 110, last: true },
       ],
       regional: [
-        { name: "Regional GO", vgv: 65931621, qtd: 147 },
-        { name: "Regional DF", vgv: 7199475,  qtd: 18  },
-        { name: "Regional SP", vgv: 4664738,  qtd: 8   },
+        { name: "Regional GO", vgv: 72204396, qtd: 153 },
+        { name: "Regional DF", vgv: 7536775,  qtd: 19  },
+        { name: "Regional SP", vgv: 5274738,  qtd: 9   },
       ],
-      regionalTotal: { vgv: 77795834, qtd: 173 },
-      regionalNote: "Total Maio/2026 (esteira + finalizadas) por Regional — snapshot BI 26/05/2026 08:50.",
+      regionalTotal: { vgv: 85015909, qtd: 181 },
+      regionalNote: "Total Maio/2026 (esteira + finalizadas) por Regional — snapshot BI 27/05/2026 10:06.",
       diretores: [
-        { name: "Felipe",         projetado: 62026937,  realizado: 42400166, qtdProj: 111, qtdReal: 84, pct: 66, status: "warn" },
-        { name: "Paulo / Sérgio", projetado: 24441495,  realizado: 19945449, qtdProj: 67,  qtdReal: 54, pct: 67, status: "warn" },
-        { name: "Renato",         projetado: 14033320,  realizado: 4341200,  qtdProj: 40,  qtdReal: 12, pct: null, status: "ok" },
-        { name: "EBM Diretoria",  projetado: null,      realizado: 11109019, qtdProj: null, qtdReal: 23, pct: null, status: "na" },
-        { name: "TOTAL",          projetado: 100501752, realizado: 77795834, qtdProj: 218, qtdReal: 173, pct: 66, status: "warn", isTotal: true },
+        { name: "Felipe",         projetado: 62026937,  realizado: 32482604, qtdProj: 111, qtdReal: 62, pct: 51, status: "bad" },
+        { name: "Paulo / Sérgio", projetado: 24441495,  realizado: 14090877, qtdProj: 67,  qtdReal: 38, pct: 49, status: "bad" },
+        { name: "Renato",         projetado: 14033320,  realizado: 2907500,  qtdProj: 40,  qtdReal: 8,  pct: null, status: "ok" },
+        { name: "EBM Diretoria",  projetado: null,      realizado: 2960389,  qtdProj: null, qtdReal: 2, pct: null, status: "na" },
+        { name: "TOTAL",          projetado: 100501752, realizado: 52441370, qtdProj: 218, qtdReal: 110, pct: 50, status: "bad", isTotal: true },
       ],
-      // Empreendimentos × estágio Maio (BI Fabric 25/05/2026 11:48 — STALE: drill-down não re-extraído em 26/05 por limite read-tier; KPIs/funil/regional/diretores acima são frescos de 26/05/2026 08:50)
+      // Empreendimentos × estágio Maio (BI Fabric 25/05/2026 11:48 — STALE: drill-down não re-extraído em 27/05 por limite read-tier; KPIs/funil/regional/diretores acima são frescos de 27/05/2026 10:06)
       // GO = breakdown completo (26 empreendimentos). DF/SP = totais por estágio.
       empreendimentos: [
         { reg:"GO", nome:"CONDOMÍNIO TRANCOSO",                  s00:0,      s01:1099286, s02:0,      s03:375556,  s05:1089600, s06:1128522, total:3692964 },
@@ -2479,7 +2479,7 @@
     });
   });
   document.getElementById('btn-refresh').addEventListener('click', () => {
-    alert('Esse painel é um snapshot do BI extraído em 26/05/2026 08:50.\n\nPara atualizar os números, peça ao Claude:\n"Atualize o dashboard da esteira EBM."');
+    alert('Esse painel é um snapshot do BI extraído em 27/05/2026 10:06.\n\nPara atualizar os números, peça ao Claude:\n"Atualize o dashboard da esteira EBM."');
   });
   document.getElementById('btn-print').addEventListener('click', () => window.print());
 
