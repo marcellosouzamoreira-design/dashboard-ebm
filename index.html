@@ -1293,7 +1293,7 @@
         <button role="tab" data-period="empreendimentos" type="button">🏢 Empreend.</button>
       </div>
       <div class="updated">
-        Última atualização BI: <strong id="last-update">28/05/2026 15:24:25</strong>
+        Última atualização BI: <strong id="last-update">29/05/2026 08:49:21</strong>
         <span class="snapshot-hint" id="snapshot-hint" title="Variação dos KPIs desde a sua última visita"></span>
       </div>
       <div class="header-buttons">
@@ -1597,10 +1597,10 @@
 
   // ---------- DATA ----------
   // Todos os dados são meses de 2026, capturados via Power BI público.
-  // Esteira ativa (andamento) é um snapshot único capturado em 28/05/2026 15:24
+  // Esteira ativa (andamento) é um snapshot único capturado em 29/05/2026 08:49
   // — reflete propostas em estágios 00–05 no momento da extração. Mesmo valor
   // usado em todos os meses e na aba MAI (mês vigente).
-  const ANDAMENTO_ATUAL = 38677444;
+  const ANDAMENTO_ATUAL = 36085862;
   function makeMonth(label, finalizadas, regionals, diretores) {
     const total = regionals.reduce((s,r)=>s+r.vgv, 0);
     const qtd   = regionals.reduce((s,r)=>s+r.qtd, 0);
@@ -1682,67 +1682,66 @@
     mai: {
       label: "Maio / 2026 (mês vigente)",
       kpi: {
-        andamento: 38677444,
-        finalizadas: 53131728,
-        total: 91809172,
+        andamento: 36085862,
+        finalizadas: 56701007,
+        total: 92786869,
       },
-      // Esteira + finalizadas Maio — extraída do BI em 28/05/2026 (BI ts 28/05/2026 15:24:25)
+      // Esteira + finalizadas Maio — extraída do BI em 29/05/2026 (BI ts 29/05/2026 08:49:21)
       funil: [
-        { name: "00 — Proposta",     vgv: 3727268,  qtd: 11 },
-        { name: "01 — Crédito",      vgv: 1931304,  qtd: 5 },
-        { name: "02 — Jurídico",     vgv: 1804335,  qtd: 3 },
-        { name: "03 — Assinatura",   vgv: 20315800, qtd: 37, highlight: true },
-        { name: "04 — Conferência",  vgv: 1950604,  qtd: 5 },
-        { name: "05 — Pendência",    vgv: 8948133,  qtd: 24 },
-        { name: "06 — Finalizado",   vgv: 53131728, qtd: 112, last: true },
+        { name: "00 — Proposta",     vgv: 1935418,  qtd: 6 },
+        { name: "01 — Crédito",      vgv: 1566304,  qtd: 4 },
+        { name: "02 — Jurídico",     vgv: 715335,   qtd: 2 },
+        { name: "03 — Assinatura",   vgv: 19938556, qtd: 36, highlight: true },
+        { name: "04 — Conferência",  vgv: 3156788,  qtd: 8 },
+        { name: "05 — Pendência",    vgv: 8773461,  qtd: 23 },
+        { name: "06 — Finalizado",   vgv: 56701007, qtd: 122, last: true },
       ],
       regional: [
-        { name: "Regional GO", vgv: 78631659, qtd: 168 },
-        { name: "Regional DF", vgv: 7902775,  qtd: 20  },
+        { name: "Regional GO", vgv: 79115219, qtd: 171 },
+        { name: "Regional DF", vgv: 8396912,  qtd: 21  },
         { name: "Regional SP", vgv: 5274738,  qtd: 9   },
       ],
-      regionalTotal: { vgv: 91809172, qtd: 197 },
-      regionalNote: "Total Maio/2026 (esteira + finalizadas) por Regional — snapshot BI 28/05/2026 15:24.",
+      regionalTotal: { vgv: 92786869, qtd: 201 },
+      regionalNote: "Total Maio/2026 (esteira + finalizadas) por Regional — snapshot BI 29/05/2026 08:49.",
       diretores: [
-        { name: "Felipe",         projetado: 62026937,  realizado: 45064387, qtdProj: 111, qtdReal: 86, pct: 71, status: "warn" },
-        { name: "Paulo / Sérgio", projetado: 24441495,  realizado: 25085922, qtdProj: 67,  qtdReal: 68, pct: 85, status: "warn" },
-        { name: "Renato",         projetado: 14033320,  realizado: 5060773,  qtdProj: 40,  qtdReal: 14, pct: null, status: "ok" },
-        { name: "EBM Diretoria",  projetado: null,      realizado: 16598090, qtdProj: null, qtdReal: 29, pct: null, status: "na" },
-        { name: "TOTAL",          projetado: 100501752, realizado: 91809172, qtdProj: 218, qtdReal: 197, pct: 75, status: "warn", isTotal: true },
+        { name: "Felipe",         projetado: 62026937,  realizado: 46840207, qtdProj: 111, qtdReal: 90, pct: 74, status: "warn" },
+        { name: "Paulo / Sérgio", projetado: 24441495,  realizado: 27134922, qtdProj: 67,  qtdReal: 74, pct: 92, status: "warn" },
+        { name: "Renato",         projetado: 14033320,  realizado: 5044500,  qtdProj: 40,  qtdReal: 14, pct: null, status: "ok" },
+        { name: "EBM Diretoria",  projetado: null,      realizado: 13767240, qtdProj: null, qtdReal: 23, pct: null, status: "na" },
+        { name: "TOTAL",          projetado: 100501752, realizado: 92786869, qtdProj: 218, qtdReal: 201, pct: 79, status: "warn", isTotal: true },
       ],
-      // Empreendimentos × estágio Maio (BI Fabric 25/05/2026 11:48 — STALE: drill-down não re-extraído em 28/05 15:24 por limite read-tier; KPIs/funil/regional/diretores acima são frescos de 28/05/2026 15:24)
-      // GO = breakdown completo (26 empreendimentos). DF/SP = totais por estágio.
+      // Empreendimentos × estágio Maio (BI Fabric 29/05/2026 08:49 — re-extraído via accessibility tree).
+      // GO = breakdown completo (25 empreendimentos). DF/SP = totais por estágio.
       empreendimentos: [
-        { reg:"GO", nome:"CONDOMÍNIO TRANCOSO",                  s00:0,      s01:1099286, s02:0,      s03:375556,  s05:1089600, s06:1128522, total:3692964 },
-        { reg:"GO", nome:"LOC SERRINHA",                         s00:0,      s01:0,       s02:0,      s03:520000,  s05:0,       s06:2162882, total:2682882 },
-        { reg:"GO", nome:"Metropolitan Bueno",                   s00:403050, s01:2590440, s02:0,      s03:0,       s05:0,       s06:900480,  total:3893970 },
-        { reg:"GO", nome:"Metropolitan Genebra",                 s00:0,      s01:0,       s02:0,      s03:0,       s05:0,       s06:3193310, total:3193310 },
-        { reg:"GO", nome:"Now 111",                              s00:0,      s01:350500,  s02:0,      s03:0,       s05:1058686, s06:1713762, total:3122948 },
+        { reg:"GO", nome:"CONDOMÍNIO TRANCOSO",                  s00:365000, s01:0,       s02:0,      s03:760156,  s05:1467928, s06:2573480, total:5166564 },
+        { reg:"GO", nome:"LOC SERRINHA",                         s00:0,      s01:0,       s02:0,      s03:532699,  s05:0,       s06:2682882, total:3215581 },
+        { reg:"GO", nome:"Metropolitan Bueno",                   s00:403050, s01:0,       s02:0,      s03:2173440, s05:417000,  s06:900480,  total:3893970 },
+        { reg:"GO", nome:"Metropolitan Genebra",                 s00:0,      s01:0,       s02:0,      s03:5438691, s05:0,       s06:3193310, total:8632001 },
+        { reg:"GO", nome:"Now 111",                              s00:0,      s01:0,       s02:0,      s03:350500,  s05:775220,  s06:2821011, total:3946731 },
         { reg:"GO", nome:"Now Alameda das Águas - 1ª Fase",      s00:0,      s01:0,       s02:0,      s03:0,       s05:0,       s06:840677,  total:840677 },
-        { reg:"GO", nome:"Now Alameda das Águas - 2ª Fase",      s00:0,      s01:0,       s02:0,      s03:350000,  s05:1881750, s06:1220401, total:3452151 },
-        { reg:"GO", nome:"Now Laguna - 1ª Fase",                 s00:0,      s01:0,       s02:370000, s03:693843,  s05:1078685, s06:3455882, total:5598410 },
-        { reg:"GO", nome:"Now Laguna - 2ª Fase",                 s00:0,      s01:0,       s02:0,      s03:1512964, s05:335001,  s06:3119714, total:4967679 },
-        { reg:"GO", nome:"Now Milão - 1ª Fase",                  s00:350000, s01:350000,  s02:0,      s03:445250,  s05:353000,  s06:1529490, total:3027740 },
-        { reg:"GO", nome:"Now Milão - 2ª Fase",                  s00:0,      s01:0,       s02:0,      s03:0,       s05:780000,  s06:1515709, total:2295709 },
+        { reg:"GO", nome:"Now Alameda das Águas - 2ª Fase",      s00:0,      s01:0,       s02:0,      s03:475537,  s05:1431290, s06:3134617, total:5041444 },
+        { reg:"GO", nome:"Now Laguna - 1ª Fase",                 s00:335000, s01:0,       s02:370000, s03:670033,  s05:335000,  s06:5228377, total:6938410 },
+        { reg:"GO", nome:"Now Laguna - 2ª Fase",                 s00:0,      s01:0,       s02:0,      s03:1728128, s05:2925260, s06:4180675, total:8834063 },
+        { reg:"GO", nome:"Now Milão - 1ª Fase",                  s00:0,      s01:0,       s02:0,      s03:1486860, s05:1118450, s06:2327740, total:4933050 },
+        { reg:"GO", nome:"Now Milão - 2ª Fase",                  s00:0,      s01:0,       s02:0,      s03:0,       s05:0,       s06:2295709, total:2295709 },
         { reg:"GO", nome:"Now PQ Amazônia - 3ª Fase",            s00:0,      s01:371033,  s02:0,      s03:0,       s05:0,       s06:0,       total:371033 },
-        { reg:"GO", nome:"Now Praça C8",                         s00:0,      s01:0,       s02:0,      s03:323200,  s05:0,       s06:450000,  total:773200 },
-        { reg:"GO", nome:"NOW Reserva das Águas - 3ª Fase",      s00:0,      s01:0,       s02:0,      s03:385050,  s05:0,       s06:0,       total:385050 },
+        { reg:"GO", nome:"Now Praça C8",                         s00:0,      s01:0,       s02:0,      s03:323200,  s05:450000,  s06:450000,  total:1223200 },
+        { reg:"GO", nome:"NOW Reserva das Águas - 3ª Fase",      s00:0,      s01:0,       s02:0,      s03:0,       s05:385050,  s06:0,       total:385050 },
         { reg:"GO", nome:"Parque América Cancun - 3ª Fase",      s00:0,      s01:0,       s02:0,      s03:0,       s05:0,       s06:360000,  total:360000 },
-        { reg:"GO", nome:"Reserva Urbana Pitangueira 1ª Fase",   s00:0,      s01:870444,  s02:345335, s03:335000,  s05:1307850, s06:2513300, total:5371929 },
-        { reg:"GO", nome:"Reserva Urbana Pitangueira 2ª Fase",   s00:434468, s01:0,       s02:0,      s03:715088,  s05:0,       s06:360000,  total:1509556 },
+        { reg:"GO", nome:"Reserva Urbana Pitangueira 1ª Fase",   s00:397900, s01:0,       s02:345335, s03:335000,  s05:1105050, s06:5305090, total:7488375 },
+        { reg:"GO", nome:"Reserva Urbana Pitangueira 2ª Fase",   s00:434468, s01:0,       s02:0,      s03:349741,  s05:0,       s06:360000,  total:1144209 },
         { reg:"GO", nome:"Smart 36",                             s00:0,      s01:0,       s02:0,      s03:0,       s05:0,       s06:431000,  total:431000 },
-        { reg:"GO", nome:"Smart Parque Areião",                  s00:0,      s01:0,       s02:0,      s03:0,       s05:0,       s06:1651774, total:1651774 },
+        { reg:"GO", nome:"Smart Parque Areião",                  s00:0,      s01:0,       s02:0,      s03:0,       s05:0,       s06:2452774, total:2452774 },
         { reg:"GO", nome:"UND Terceiros - Wide Maristta",        s00:0,      s01:0,       s02:0,      s03:0,       s05:0,       s06:2400000, total:2400000 },
-        { reg:"GO", nome:"VOLT C 220",                           s00:0,      s01:559271,  s02:0,      s03:0,       s05:0,       s06:0,       total:559271 },
+        { reg:"GO", nome:"VOLT C 220",                           s00:0,      s01:559271,  s02:0,      s03:574161,  s05:0,       s06:0,       total:1133432 },
         { reg:"GO", nome:"Wish 211",                             s00:0,      s01:0,       s02:0,      s03:0,       s05:0,       s06:1908338, total:1908338 },
-        { reg:"GO", nome:"WISH GRAN 29",                         s00:0,      s01:0,       s02:0,      s03:1320000, s05:0,       s06:1070204, total:2390204 },
+        { reg:"GO", nome:"WISH GRAN 29",                         s00:0,      s01:0,       s02:0,      s03:1164000, s05:0,       s06:1070204, total:2234204 },
         { reg:"GO", nome:"Wish Gran Six",                        s00:0,      s01:0,       s02:0,      s03:0,       s05:0,       s06:694389,  total:694389 },
-        { reg:"GO", nome:"Wish Trinta e Sete",                   s00:0,      s01:0,       s02:0,      s03:662500,  s05:0,       s06:0,       total:662500 },
-        { reg:"GO", nome:"Wish Vaca Brava",                      s00:0,      s01:0,       s02:0,      s03:1227554, s05:0,       s06:3151016, total:4378570 },
-        // Regional DF — totais agregados por estágio (detalhe por empreendimento será capturado em refresh futuro)
-        { reg:"DF", nome:"(Regional DF — agregado)",             s00:0,      s01:636000,  s02:0,      s03:1127700, s05:350000,  s06:4333502, total:6447202, aggregated:true },
+        { reg:"GO", nome:"Wish Vaca Brava",                      s00:0,      s01:0,       s02:0,      s03:0,       s05:0,       s06:3151016, total:3151016 },
+        // Regional DF — totais agregados por estágio
+        { reg:"DF", nome:"(Regional DF — agregado)",             s00:0,      s01:636000,  s02:0,      s03:2376410, s05:350000,  s06:5034502, total:8396912, aggregated:true },
         // Regional SP — totais agregados por estágio
-        { reg:"SP", nome:"(Regional SP — agregado)",             s00:0,      s01:0,       s02:0,      s03:0,       s05:560000,  s06:2904738, total:3464738, aggregated:true }
+        { reg:"SP", nome:"(Regional SP — agregado)",             s00:0,      s01:0,       s02:0,      s03:1200000, s05:1170000, s06:2904738, total:5274738, aggregated:true }
       ],
     },
     ytd: {
