@@ -1293,7 +1293,7 @@
         <button role="tab" data-period="empreendimentos" type="button">🏢 Empreend.</button>
       </div>
       <div class="updated">
-        Última atualização BI: <strong id="last-update">29/05/2026 08:49:21</strong>
+        Última atualização BI: <strong id="last-update">29/05/2026 23:57:46</strong>
         <span class="snapshot-hint" id="snapshot-hint" title="Variação dos KPIs desde a sua última visita"></span>
       </div>
       <div class="header-buttons">
@@ -1597,10 +1597,10 @@
 
   // ---------- DATA ----------
   // Todos os dados são meses de 2026, capturados via Power BI público.
-  // Esteira ativa (andamento) é um snapshot único capturado em 29/05/2026 08:49
+  // Esteira ativa (andamento) é um snapshot único capturado em 29/05/2026 23:57 (BI ts)
   // — reflete propostas em estágios 00–05 no momento da extração. Mesmo valor
   // usado em todos os meses e na aba MAI (mês vigente).
-  const ANDAMENTO_ATUAL = 36085862;
+  const ANDAMENTO_ATUAL = 39692167;
   function makeMonth(label, finalizadas, regionals, diretores) {
     const total = regionals.reduce((s,r)=>s+r.vgv, 0);
     const qtd   = regionals.reduce((s,r)=>s+r.qtd, 0);
@@ -1682,36 +1682,38 @@
     mai: {
       label: "Maio / 2026 (mês vigente)",
       kpi: {
-        andamento: 36085862,
-        finalizadas: 56701007,
-        total: 92786869,
+        andamento: 39692167,
+        finalizadas: 65649466,
+        total: 105341633,
       },
-      // Esteira + finalizadas Maio — extraída do BI em 29/05/2026 (BI ts 29/05/2026 08:49:21)
+      // Esteira + finalizadas Maio — extraída do BI em 30/05/2026 (BI ts 29/05/2026 23:57:46)
       funil: [
-        { name: "00 — Proposta",     vgv: 1935418,  qtd: 6 },
-        { name: "01 — Crédito",      vgv: 1566304,  qtd: 4 },
+        { name: "00 — Proposta",     vgv: 4645718,  qtd: 10 },
+        { name: "01 — Crédito",      vgv: 1656304,  qtd: 4 },
         { name: "02 — Jurídico",     vgv: 715335,   qtd: 2 },
-        { name: "03 — Assinatura",   vgv: 19938556, qtd: 36, highlight: true },
-        { name: "04 — Conferência",  vgv: 3156788,  qtd: 8 },
-        { name: "05 — Pendência",    vgv: 8773461,  qtd: 23 },
-        { name: "06 — Finalizado",   vgv: 56701007, qtd: 122, last: true },
+        { name: "03 — Assinatura",   vgv: 23282932, qtd: 45, highlight: true },
+        { name: "04 — Conferência",  vgv: 4402870,  qtd: 10 },
+        { name: "05 — Pendência",    vgv: 4989009,  qtd: 13 },
+        { name: "06 — Finalizado",   vgv: 65649466, qtd: 145, last: true },
       ],
       regional: [
-        { name: "Regional GO", vgv: 79115219, qtd: 171 },
-        { name: "Regional DF", vgv: 8396912,  qtd: 21  },
-        { name: "Regional SP", vgv: 5274738,  qtd: 9   },
+        { name: "Regional GO", vgv: 89259114, qtd: 195 },
+        { name: "Regional DF", vgv: 9123782,  qtd: 22  },
+        { name: "Regional SP", vgv: 6958738,  qtd: 12  },
       ],
-      regionalTotal: { vgv: 92786869, qtd: 201 },
-      regionalNote: "Total Maio/2026 (esteira + finalizadas) por Regional — snapshot BI 29/05/2026 08:49.",
+      regionalTotal: { vgv: 105341633, qtd: 229 },
+      regionalNote: "Total Maio/2026 (esteira + finalizadas) por Regional — snapshot BI 29/05/2026 23:57.",
       diretores: [
-        { name: "Felipe",         projetado: 62026937,  realizado: 46840207, qtdProj: 111, qtdReal: 90, pct: 74, status: "warn" },
-        { name: "Paulo / Sérgio", projetado: 24441495,  realizado: 27134922, qtdProj: 67,  qtdReal: 74, pct: 92, status: "warn" },
-        { name: "Renato",         projetado: 14033320,  realizado: 5044500,  qtdProj: 40,  qtdReal: 14, pct: null, status: "ok" },
-        { name: "EBM Diretoria",  projetado: null,      realizado: 13767240, qtdProj: null, qtdReal: 23, pct: null, status: "na" },
-        { name: "TOTAL",          projetado: 100501752, realizado: 92786869, qtdProj: 218, qtdReal: 201, pct: 79, status: "warn", isTotal: true },
+        { name: "Felipe",         projetado: 62026937,  realizado: 48946629, qtdProj: 111, qtdReal: 95, pct: 77, status: "warn" },
+        { name: "Paulo / Sérgio", projetado: 24441495,  realizado: 31687034, qtdProj: 67,  qtdReal: 87, pct: 111, status: "ok" },
+        { name: "Renato",         projetado: 14033320,  realizado: 5406500,  qtdProj: 40,  qtdReal: 15, pct: null, status: "ok" },
+        { name: "EBM Diretoria",  projetado: null,      realizado: 19301471, qtdProj: null, qtdReal: 32, pct: null, status: "na" },
+        { name: "TOTAL",          projetado: 100501752, realizado: 105341633, qtdProj: 218, qtdReal: 229, pct: 87, status: "warn", isTotal: true },
       ],
-      // Empreendimentos × estágio Maio (BI Fabric 29/05/2026 08:49 — re-extraído via accessibility tree).
-      // GO = breakdown completo (25 empreendimentos). DF/SP = totais por estágio.
+      // Empreendimentos × estágio Maio — drill-down NÃO re-extraído neste refresh (BI ts 29/05/2026 23:57:46).
+      // Soma dos totals (~R$92,8M) é ~R$12,5M MENOR que regionalTotal.vgv (R$105,3M) — os deals do dia 29
+      // estão refletidos nos KPIs/funil/regional/diretores, mas a distribuição por empreendimento GO permanece
+      // no snapshot 29/05 08:49. DF/SP agregados foram atualizados com os novos totais por estágio.
       empreendimentos: [
         { reg:"GO", nome:"CONDOMÍNIO TRANCOSO",                  s00:365000, s01:0,       s02:0,      s03:760156,  s05:1467928, s06:2573480, total:5166564 },
         { reg:"GO", nome:"LOC SERRINHA",                         s00:0,      s01:0,       s02:0,      s03:532699,  s05:0,       s06:2682882, total:3215581 },
@@ -1738,10 +1740,10 @@
         { reg:"GO", nome:"WISH GRAN 29",                         s00:0,      s01:0,       s02:0,      s03:1164000, s05:0,       s06:1070204, total:2234204 },
         { reg:"GO", nome:"Wish Gran Six",                        s00:0,      s01:0,       s02:0,      s03:0,       s05:0,       s06:694389,  total:694389 },
         { reg:"GO", nome:"Wish Vaca Brava",                      s00:0,      s01:0,       s02:0,      s03:0,       s05:0,       s06:3151016, total:3151016 },
-        // Regional DF — totais agregados por estágio
-        { reg:"DF", nome:"(Regional DF — agregado)",             s00:0,      s01:636000,  s02:0,      s03:2376410, s05:350000,  s06:5034502, total:8396912, aggregated:true },
-        // Regional SP — totais agregados por estágio
-        { reg:"SP", nome:"(Regional SP — agregado)",             s00:0,      s01:0,       s02:0,      s03:1200000, s05:1170000, s06:2904738, total:5274738, aggregated:true }
+        // Regional DF — totais agregados por estágio (atualizado BI ts 29/05/2026 23:57; s04 R$714.870 lumpado em s05)
+        { reg:"DF", nome:"(Regional DF — agregado)",             s00:270000, s01:366000,  s02:0,      s03:1672410, s05:1064870, s06:5750502, total:9123782, aggregated:true },
+        // Regional SP — totais agregados por estágio (atualizado BI ts 29/05/2026 23:57; s04 R$1.129.000 lumpado em s05)
+        { reg:"SP", nome:"(Regional SP — agregado)",             s00:0,      s01:0,       s02:0,      s03:2315000, s05:1739000, s06:2904738, total:6958738, aggregated:true }
       ],
     },
     ytd: {
@@ -2784,7 +2786,7 @@
     html += '<div class="item"><div class="lbl">VGV Total</div><div class="v">' + fmtBRLshort(totalVgv) + '</div></div>';
     html += '<div class="item"><div class="lbl">Empreendimentos</div><div class="v">' + detalhados + (agregados ? ' <span style="font-size:11px;color:var(--ebm-muted);font-weight:600;">+ ' + agregados + ' agreg.</span>' : '') + '</div></div>';
     html += '<div class="item"><div class="lbl">Estágios</div><div class="v">' + stagesToShow.length + '</div></div>';
-    html += '<div class="item"><div class="lbl">Snapshot BI</div><div class="v" style="font-size:14px;">25/05 09:17</div></div>';
+    html += '<div class="item"><div class="lbl">Snapshot BI</div><div class="v" style="font-size:14px;">29/05 23:57</div></div>';
     html += '</div>';
     // Grupos por estágio
     let hasAnyEmp = false;
