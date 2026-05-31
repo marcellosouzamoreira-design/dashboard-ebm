@@ -1293,7 +1293,7 @@
         <button role="tab" data-period="empreendimentos" type="button">🏢 Empreend.</button>
       </div>
       <div class="updated">
-        Última atualização BI: <strong id="last-update">30/05/2026 16:46:25</strong>
+        Última atualização BI: <strong id="last-update">31/05/2026 12:23:29</strong>
         <span class="snapshot-hint" id="snapshot-hint" title="Variação dos KPIs desde a sua última visita"></span>
       </div>
       <div class="header-buttons">
@@ -1597,10 +1597,10 @@
 
   // ---------- DATA ----------
   // Todos os dados são meses de 2026, capturados via Power BI público.
-  // Esteira ativa (andamento) é um snapshot único capturado em 30/05/2026 16:46 (BI ts)
+  // Esteira ativa (andamento) é um snapshot único capturado em 31/05/2026 12:23 (BI ts)
   // — reflete propostas em estágios 00–05 no momento da extração. Mesmo valor
   // usado em todos os meses e na aba MAI (mês vigente).
-  const ANDAMENTO_ATUAL = 45674687;
+  const ANDAMENTO_ATUAL = 46937969;
   function makeMonth(label, finalizadas, regionals, diretores) {
     const total = regionals.reduce((s,r)=>s+r.vgv, 0);
     const qtd   = regionals.reduce((s,r)=>s+r.qtd, 0);
@@ -1682,35 +1682,35 @@
     mai: {
       label: "Maio / 2026 (mês vigente)",
       kpi: {
-        andamento: 45674688,
-        finalizadas: 69501119,
-        total: 115175807,
+        andamento: 46937969,
+        finalizadas: 69501120,
+        total: 116439088,
       },
-      // Esteira + finalizadas Maio — extraída do BI em 30/05/2026 (BI ts 30/05/2026 16:46:25)
+      // Esteira + finalizadas Maio — extraída do BI em 31/05/2026 (BI ts 31/05/2026 12:23:29)
       funil: [
-        { name: "00 — Proposta",     vgv: 837518,   qtd: 3 },
-        { name: "01 — Crédito",      vgv: 2009664,  qtd: 5 },
+        { name: "00 — Proposta",     vgv: 2175785,  qtd: 6 },
+        { name: "01 — Crédito",      vgv: 1646304,  qtd: 4 },
         { name: "02 — Jurídico",     vgv: 715335,   qtd: 2 },
-        { name: "03 — Assinatura",   vgv: 31790565, qtd: 61, highlight: true },
-        { name: "04 — Conferência",  vgv: 4070580,  qtd: 10 },
+        { name: "03 — Assinatura",   vgv: 26293850, qtd: 49, highlight: true },
+        { name: "04 — Conferência",  vgv: 9855670,  qtd: 24 },
         { name: "05 — Pendência",    vgv: 6251025,  qtd: 17 },
-        { name: "06 — Finalizado",   vgv: 69501119, qtd: 154, last: true },
+        { name: "06 — Finalizado",   vgv: 69501120, qtd: 154, last: true },
       ],
       regional: [
-        { name: "Regional GO", vgv: 95781288, qtd: 211 },
-        { name: "Regional DF", vgv: 10905782, qtd: 27  },
-        { name: "Regional SP", vgv: 8488738,  qtd: 14  },
+        { name: "Regional GO", vgv: 96637068, qtd: 214 },
+        { name: "Regional DF", vgv: 11271782, qtd: 28  },
+        { name: "Regional SP", vgv: 8530238,  qtd: 14  },
       ],
-      regionalTotal: { vgv: 115175807, qtd: 252 },
-      regionalNote: "Total Maio/2026 (esteira + finalizadas) por Regional — snapshot BI 30/05/2026 16:46.",
+      regionalTotal: { vgv: 116439088, qtd: 256 },
+      regionalNote: "Total Maio/2026 (esteira + finalizadas) por Regional — snapshot BI 31/05/2026 12:23.",
       diretores: [
-        { name: "Felipe",         projetado: 62026937,  realizado: 57562408, qtdProj: 111, qtdReal: 114, pct: 90,  status: "bad" },
-        { name: "Paulo / Sérgio", projetado: 24441495,  realizado: 33738410, qtdProj: 67,  qtdReal: 93,  pct: 119, status: "ok" },
-        { name: "Renato",         projetado: 14033320,  realizado: 6822500,  qtdProj: 40,  qtdReal: 19,  pct: null, status: "ok" },
-        { name: "EBM Diretoria",  projetado: null,      realizado: 17052490, qtdProj: null, qtdReal: 26, pct: null, status: "na" },
-        { name: "TOTAL",          projetado: 100501752, realizado: 115175807, qtdProj: 218, qtdReal: 252, pct: 98,  status: "bad", isTotal: true },
+        { name: "Felipe",         projetado: 62026937,  realizado: 57206966, qtdProj: 111, qtdReal: 113, pct: 89,  status: "bad" },
+        { name: "Paulo / Sérgio", projetado: 24441495,  realizado: 35573682, qtdProj: 67,  qtdReal: 98,  pct: 125, status: "ok" },
+        { name: "Renato",         projetado: 14033320,  realizado: 7188500,  qtdProj: 40,  qtdReal: 20,  pct: null, status: "ok" },
+        { name: "EBM Diretoria",  projetado: null,      realizado: 16469940, qtdProj: null, qtdReal: 25, pct: null, status: "na" },
+        { name: "TOTAL",          projetado: 100501752, realizado: 116439088, qtdProj: 218, qtdReal: 256, pct: 99,  status: "bad", isTotal: true },
       ],
-      // Empreendimentos × estágio Maio — drill-down NÃO re-extraído neste refresh (BI ts 30/05/2026 16:46:25).
+      // Empreendimentos × estágio Maio — drill-down NÃO re-extraído neste refresh (BI ts 31/05/2026 12:23:29).
       // Soma dos totals (~R$92,8M GO + DF/SP) é ~R$22M MENOR que regionalTotal.vgv (R$115,2M) — os deals novos
       // estão refletidos nos KPIs/funil/regional/diretores, mas a distribuição por empreendimento GO permanece
       // no snapshot 29/05 08:49. DF/SP agregados foram atualizados com os novos totais por estágio (30/05 16:46).
@@ -1740,10 +1740,10 @@
         { reg:"GO", nome:"WISH GRAN 29",                         s00:0,      s01:0,       s02:0,      s03:1164000, s05:0,       s06:1070204, total:2234204 },
         { reg:"GO", nome:"Wish Gran Six",                        s00:0,      s01:0,       s02:0,      s03:0,       s05:0,       s06:694389,  total:694389 },
         { reg:"GO", nome:"Wish Vaca Brava",                      s00:0,      s01:0,       s02:0,      s03:0,       s05:0,       s06:3151016, total:3151016 },
-        // Regional DF — totais agregados por estágio (atualizado BI ts 30/05/2026 16:46; s04 R$1.446.870 lumpado em s05)
-        { reg:"DF", nome:"(Regional DF — agregado)",             s00:0,      s01:716000,  s02:0,      s03:2642410, s05:1796870, s06:5750502, total:10905782, aggregated:true },
-        // Regional SP — totais agregados por estágio (atualizado BI ts 30/05/2026 16:46; s04 R$0 lumpado em s05)
-        { reg:"SP", nome:"(Regional SP — agregado)",             s00:0,      s01:0,       s02:0,      s03:3845000, s05:610000,  s06:4033738, total:8488738, aggregated:true }
+        // Regional DF — totais agregados por estágio (atualizado BI ts 31/05/2026 12:23; s04 R$1.812.870 lumpado em s05)
+        { reg:"DF", nome:"(Regional DF — agregado)",             s00:0,      s01:716000,  s02:0,      s03:2642410, s05:2162870, s06:5750502, total:11271782, aggregated:true },
+        // Regional SP — totais agregados por estágio (atualizado BI ts 31/05/2026 12:23; s04 R$0 lumpado em s05)
+        { reg:"SP", nome:"(Regional SP — agregado)",             s00:610000, s01:0,       s02:0,      s03:3276500, s05:610000,  s06:4033738, total:8530238, aggregated:true }
       ],
     },
     ytd: {
