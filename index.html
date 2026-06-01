@@ -853,14 +853,14 @@
     box-shadow: var(--ebm-shadow-sm); font-weight: 700; }
   body.dark #period-toggle button.active { background: var(--ebm-soft); color: var(--ebm-text); }
   /* Mês vigente destaque */
-  #period-toggle button[data-period="mai"] {
+  #period-toggle button[data-period="jun"] {
     color: var(--ebm-gold); position: relative; padding-right: 22px; font-weight: 700; }
-  #period-toggle button[data-period="mai"]::after { content: ''; position: absolute; right: 8px; top: 50%;
+  #period-toggle button[data-period="jun"]::after { content: ''; position: absolute; right: 8px; top: 50%;
     transform: translateY(-50%); width: 7px; height: 7px; border-radius: 50%;
     background: var(--ebm-gold); box-shadow: 0 0 0 0 var(--ebm-gold);
     animation: pulseDot 1.8s infinite; }
   @keyframes pulseDot { 0% { box-shadow: 0 0 0 0 rgba(176,122,31,0.7); } 70% { box-shadow: 0 0 0 8px rgba(176,122,31,0); } 100% { box-shadow: 0 0 0 0 rgba(176,122,31,0); } }
-  #period-toggle button[data-period="mai"].active { color: var(--ebm-gold); }
+  #period-toggle button[data-period="jun"].active { color: var(--ebm-gold); }
   /* Separadores entre grupos de tabs */
   #period-toggle .sep { display: inline-block; width: 1px; height: 18px; background: var(--ebm-border); margin: 0 4px; }
 
@@ -898,7 +898,7 @@
   .bottom-nav button .bn-icon { font-size: 18px; }
   .bottom-nav button.active { color: var(--ebm-navy); }
   body.dark .bottom-nav button.active { color: var(--ebm-text); }
-  .bottom-nav button[data-period="mai"].active { color: var(--ebm-gold); }
+  .bottom-nav button[data-period="jun"].active { color: var(--ebm-gold); }
   .fab { display: none; position: fixed; bottom: 80px; right: 20px; z-index: 89;
     width: 56px; height: 56px; border-radius: 50%; background: var(--ebm-navy); color: white;
     border: 0; box-shadow: var(--ebm-shadow-lg); cursor: pointer; font-size: 22px;
@@ -1286,6 +1286,7 @@
         <button role="tab" data-period="mar" type="button">Mar</button>
         <button role="tab" data-period="abr" type="button">Abr</button>
         <button role="tab" data-period="mai" type="button">Mai</button>
+        <button role="tab" data-period="jun" type="button">Jun</button>
         <span class="sep" aria-hidden="true"></span>
         <button role="tab" data-period="ytd" class="active" type="button">2026 YTD</button>
         <span class="sep" aria-hidden="true"></span>
@@ -1293,7 +1294,7 @@
         <button role="tab" data-period="empreendimentos" type="button">🏢 Empreend.</button>
       </div>
       <div class="updated">
-        Última atualização BI: <strong id="last-update">31/05/2026 12:23:29</strong>
+        Última atualização BI: <strong id="last-update">01/06/2026 16:59:04</strong>
         <span class="snapshot-hint" id="snapshot-hint" title="Variação dos KPIs desde a sua última visita"></span>
       </div>
       <div class="header-buttons">
@@ -1476,8 +1477,8 @@
   <footer class="note briefing-hide">
     Fonte: Microsoft Fabric (BI EBM) — relatório "Esteira Comercial". Snapshot extraído via navegador em 28/05/2026 às 15:24.<br>
     Dados mensais (Jan–Abr) capturados individualmente. <strong>2026 YTD</strong> é a soma dos meses extraídos.
-    Vendas em Andamento Maio (R$33M) é instantâneo no momento da extração — não varia por filtro de mês.<br>
-    Splits por Modalidade (Associativo/SPBE) e Momento (Lançamento/Estoque) referem-se a <strong>Abril/2026</strong>
+    Vendas em Andamento Junho (R$37M) é instantâneo no momento da extração — não varia por filtro de mês.<br>
+    Splits por Modalidade (Associativo/SPBE) e Momento (Lançamento/Estoque) referem-se a <strong>Abril/2026</strong> (snapshot manual — não auto-refresh)
     — Estoque é calculado por subtração (Total − Lançamento) para evitar uma extração extra.
   </footer>
 </div>
@@ -1486,7 +1487,7 @@
 <nav class="bottom-nav" id="bottom-nav" aria-label="Navegação mobile">
   <button data-period="ytd" type="button"><span class="bn-icon">📊</span><span>YTD</span></button>
   <button data-period="abr" type="button"><span class="bn-icon">📅</span><span>Abr</span></button>
-  <button data-period="mai" type="button"><span class="bn-icon">⚡</span><span>Mai</span></button>
+  <button data-period="jun" type="button"><span class="bn-icon">⚡</span><span>Jun</span></button>
   <button data-period="esteira" type="button"><span class="bn-icon">⚙</span><span>Esteira</span></button>
   <button data-period="empreendimentos" type="button"><span class="bn-icon">🏢</span><span>Empr.</span></button>
 </nav>
@@ -1600,7 +1601,7 @@
   // Esteira ativa (andamento) é um snapshot único capturado em 31/05/2026 12:23 (BI ts)
   // — reflete propostas em estágios 00–05 no momento da extração. Mesmo valor
   // usado em todos os meses e na aba MAI (mês vigente).
-  const ANDAMENTO_ATUAL = 46937969;
+  const ANDAMENTO_ATUAL = 37122807;
   function makeMonth(label, finalizadas, regionals, diretores) {
     const total = regionals.reduce((s,r)=>s+r.vgv, 0);
     const qtd   = regionals.reduce((s,r)=>s+r.qtd, 0);
@@ -1679,104 +1680,95 @@
         { name: "TOTAL",          projetado: 106135308, realizado: 86497450, qtdProj: 226, qtdReal: 190, pct: 71, status: "bad", isTotal: true },
       ]
     ),
-    mai: {
-      label: "Maio / 2026 (mês vigente)",
+    jun: {
+      label: "Junho / 2026 (mês vigente)",
       kpi: {
-        andamento: 46937969,
-        finalizadas: 69501120,
-        total: 116439088,
+        andamento: 37122807,
+        finalizadas: 0,
+        total: 37122807,
       },
-      // Esteira + finalizadas Maio — extraída do BI em 31/05/2026 (BI ts 31/05/2026 12:23:29)
+      // Esteira Junho — extraída do BI em 01/06/2026 (BI ts 01/06/2026 16:59:04)
       funil: [
-        { name: "00 — Proposta",     vgv: 2175785,  qtd: 6 },
+        { name: "00 — Proposta",     vgv: 1565785,  qtd: 5 },
         { name: "01 — Crédito",      vgv: 1646304,  qtd: 4 },
         { name: "02 — Jurídico",     vgv: 715335,   qtd: 2 },
-        { name: "03 — Assinatura",   vgv: 26293850, qtd: 49, highlight: true },
-        { name: "04 — Conferência",  vgv: 9855670,  qtd: 24 },
-        { name: "05 — Pendência",    vgv: 6251025,  qtd: 17 },
-        { name: "06 — Finalizado",   vgv: 69501120, qtd: 154, last: true },
+        { name: "03 — Assinatura",   vgv: 21634518, qtd: 39, highlight: true },
+        { name: "04 — Conferência",  vgv: 5420370,  qtd: 13 },
+        { name: "05 — Pendência",    vgv: 6140496,  qtd: 13 },
+        { name: "06 — Finalizado",   vgv: 0,        qtd: 0, last: true },
       ],
       regional: [
-        { name: "Regional GO", vgv: 96637068, qtd: 214 },
-        { name: "Regional DF", vgv: 11271782, qtd: 28  },
-        { name: "Regional SP", vgv: 8530238,  qtd: 14  },
+        { name: "Regional GO", vgv: 27723437, qtd: 57 },
+        { name: "Regional DF", vgv: 4262870,  qtd: 11 },
+        { name: "Regional SP", vgv: 5136500,  qtd: 8  },
       ],
-      regionalTotal: { vgv: 116439088, qtd: 256 },
-      regionalNote: "Total Maio/2026 (esteira + finalizadas) por Regional — snapshot BI 31/05/2026 12:23.",
+      regionalTotal: { vgv: 37122807, qtd: 76 },
+      regionalNote: "Total Junho/2026 (esteira — sem finalizadas ainda) por Regional — snapshot BI 01/06/2026 16:59.",
       diretores: [
-        { name: "Felipe",         projetado: 62026937,  realizado: 57206966, qtdProj: 111, qtdReal: 113, pct: 89,  status: "bad" },
-        { name: "Paulo / Sérgio", projetado: 24441495,  realizado: 35573682, qtdProj: 67,  qtdReal: 98,  pct: 125, status: "ok" },
-        { name: "Renato",         projetado: 14033320,  realizado: 7188500,  qtdProj: 40,  qtdReal: 20,  pct: null, status: "ok" },
-        { name: "EBM Diretoria",  projetado: null,      realizado: 16469940, qtdProj: null, qtdReal: 25, pct: null, status: "na" },
-        { name: "TOTAL",          projetado: 100501752, realizado: 116439088, qtdProj: 218, qtdReal: 256, pct: 99,  status: "bad", isTotal: true },
+        // Junho 2026: Blank diretor (R$1,431,076/4) lumpado em EBM Diretoria → 1,795,983/5
+        { name: "Felipe",         projetado: 69392102,  realizado: 22391230, qtdProj: 113, qtdReal: 35, pct: 32, status: "bad" },
+        { name: "Paulo / Sérgio", projetado: 25198514,  realizado: 10453595, qtdProj: 69,  qtdReal: 29, pct: 35, status: "bad" },
+        { name: "Renato",         projetado: 14033320,  realizado: 2482000,  qtdProj: 40,  qtdReal: 7,  pct: 18, status: "bad" },
+        { name: "EBM Diretoria",  projetado: null,      realizado: 1795983,  qtdProj: null, qtdReal: 5, pct: null, status: "na" },
+        { name: "TOTAL",          projetado: 108623936, realizado: 37122807, qtdProj: 222, qtdReal: 76, pct: 31, status: "bad", isTotal: true },
       ],
-      // Empreendimentos × estágio Maio — drill-down NÃO re-extraído neste refresh (BI ts 31/05/2026 12:23:29).
-      // Soma dos totals (~R$92,8M GO + DF/SP) é ~R$22M MENOR que regionalTotal.vgv (R$115,2M) — os deals novos
-      // estão refletidos nos KPIs/funil/regional/diretores, mas a distribuição por empreendimento GO permanece
-      // no snapshot 29/05 08:49. DF/SP agregados foram atualizados com os novos totais por estágio (30/05 16:46).
+      // Empreendimentos × estágio Junho — drill-down agregado por regional (BI ts 01/06/2026 16:59:04)
+      // s05 inclui s04 (Conferência) + s05 (Pendência) lumpados. s06=0 (sem finalizadas em Junho).
       empreendimentos: [
-        { reg:"GO", nome:"CONDOMÍNIO TRANCOSO",                  s00:365000, s01:0,       s02:0,      s03:760156,  s05:1467928, s06:2573480, total:5166564 },
-        { reg:"GO", nome:"LOC SERRINHA",                         s00:0,      s01:0,       s02:0,      s03:532699,  s05:0,       s06:2682882, total:3215581 },
-        { reg:"GO", nome:"Metropolitan Bueno",                   s00:403050, s01:0,       s02:0,      s03:2173440, s05:417000,  s06:900480,  total:3893970 },
-        { reg:"GO", nome:"Metropolitan Genebra",                 s00:0,      s01:0,       s02:0,      s03:5438691, s05:0,       s06:3193310, total:8632001 },
-        { reg:"GO", nome:"Now 111",                              s00:0,      s01:0,       s02:0,      s03:350500,  s05:775220,  s06:2821011, total:3946731 },
-        { reg:"GO", nome:"Now Alameda das Águas - 1ª Fase",      s00:0,      s01:0,       s02:0,      s03:0,       s05:0,       s06:840677,  total:840677 },
-        { reg:"GO", nome:"Now Alameda das Águas - 2ª Fase",      s00:0,      s01:0,       s02:0,      s03:475537,  s05:1431290, s06:3134617, total:5041444 },
-        { reg:"GO", nome:"Now Laguna - 1ª Fase",                 s00:335000, s01:0,       s02:370000, s03:670033,  s05:335000,  s06:5228377, total:6938410 },
-        { reg:"GO", nome:"Now Laguna - 2ª Fase",                 s00:0,      s01:0,       s02:0,      s03:1728128, s05:2925260, s06:4180675, total:8834063 },
-        { reg:"GO", nome:"Now Milão - 1ª Fase",                  s00:0,      s01:0,       s02:0,      s03:1486860, s05:1118450, s06:2327740, total:4933050 },
-        { reg:"GO", nome:"Now Milão - 2ª Fase",                  s00:0,      s01:0,       s02:0,      s03:0,       s05:0,       s06:2295709, total:2295709 },
-        { reg:"GO", nome:"Now PQ Amazônia - 3ª Fase",            s00:0,      s01:371033,  s02:0,      s03:0,       s05:0,       s06:0,       total:371033 },
-        { reg:"GO", nome:"Now Praça C8",                         s00:0,      s01:0,       s02:0,      s03:323200,  s05:450000,  s06:450000,  total:1223200 },
-        { reg:"GO", nome:"NOW Reserva das Águas - 3ª Fase",      s00:0,      s01:0,       s02:0,      s03:0,       s05:385050,  s06:0,       total:385050 },
-        { reg:"GO", nome:"Parque América Cancun - 3ª Fase",      s00:0,      s01:0,       s02:0,      s03:0,       s05:0,       s06:360000,  total:360000 },
-        { reg:"GO", nome:"Reserva Urbana Pitangueira 1ª Fase",   s00:397900, s01:0,       s02:345335, s03:335000,  s05:1105050, s06:5305090, total:7488375 },
-        { reg:"GO", nome:"Reserva Urbana Pitangueira 2ª Fase",   s00:434468, s01:0,       s02:0,      s03:349741,  s05:0,       s06:360000,  total:1144209 },
-        { reg:"GO", nome:"Smart 36",                             s00:0,      s01:0,       s02:0,      s03:0,       s05:0,       s06:431000,  total:431000 },
-        { reg:"GO", nome:"Smart Parque Areião",                  s00:0,      s01:0,       s02:0,      s03:0,       s05:0,       s06:2452774, total:2452774 },
-        { reg:"GO", nome:"UND Terceiros - Wide Maristta",        s00:0,      s01:0,       s02:0,      s03:0,       s05:0,       s06:2400000, total:2400000 },
-        { reg:"GO", nome:"VOLT C 220",                           s00:0,      s01:559271,  s02:0,      s03:574161,  s05:0,       s06:0,       total:1133432 },
-        { reg:"GO", nome:"Wish 211",                             s00:0,      s01:0,       s02:0,      s03:0,       s05:0,       s06:1908338, total:1908338 },
-        { reg:"GO", nome:"WISH GRAN 29",                         s00:0,      s01:0,       s02:0,      s03:1164000, s05:0,       s06:1070204, total:2234204 },
-        { reg:"GO", nome:"Wish Gran Six",                        s00:0,      s01:0,       s02:0,      s03:0,       s05:0,       s06:694389,  total:694389 },
-        { reg:"GO", nome:"Wish Vaca Brava",                      s00:0,      s01:0,       s02:0,      s03:0,       s05:0,       s06:3151016, total:3151016 },
-        // Regional DF — totais agregados por estágio (atualizado BI ts 31/05/2026 12:23; s04 R$1.812.870 lumpado em s05)
-        { reg:"DF", nome:"(Regional DF — agregado)",             s00:0,      s01:716000,  s02:0,      s03:2642410, s05:2162870, s06:5750502, total:11271782, aggregated:true },
-        // Regional SP — totais agregados por estágio (atualizado BI ts 31/05/2026 12:23; s04 R$0 lumpado em s05)
-        { reg:"SP", nome:"(Regional SP — agregado)",             s00:610000, s01:0,       s02:0,      s03:3276500, s05:610000,  s06:4033738, total:8530238, aggregated:true }
+        { reg:"GO", nome:"(Regional GO — agregado)", s00:1565785, s01:930304, s02:715335, s03:15602018, s05:8909996, s06:0, total:27723438, aggregated:true },
+        { reg:"DF", nome:"(Regional DF — agregado)", s00:0,       s01:716000, s02:0,      s03:2116000,  s05:1430870, s06:0, total:4262870,  aggregated:true },
+        { reg:"SP", nome:"(Regional SP — agregado)", s00:0,       s01:0,      s02:0,      s03:3916500,  s05:1220000, s06:0, total:5136500,  aggregated:true },
       ],
     },
+    mai: makeMonth(
+      "Maio / 2026",
+      81715201,
+      [
+        { name: "Regional GO", vgv: 68862961, qtd: 157 },
+        { name: "Regional DF", vgv: 6848502,  qtd: 17  },
+        { name: "Regional SP", vgv: 4603738,  qtd: 8   },
+        { name: "(Sem Regional)", vgv: 1400000, qtd: 1 },
+      ],
+      [
+        // Maio 2026 fechado em 01/06/2026 — BI ts 01/06/2026 16:59:04
+        { name: "Felipe",         projetado: 62026937,  realizado: 45855724, qtdProj: 111, qtdReal: 94, pct: 72, status: "bad" },
+        { name: "Paulo / Sérgio", projetado: 24441495,  realizado: 26076587, qtdProj: 67,  qtdReal: 71, pct: 91, status: "warn" },
+        { name: "Renato",         projetado: 14033320,  realizado: 5422500,  qtdProj: 40,  qtdReal: 15, pct: 39, status: "bad" },
+        { name: "EBM Diretoria",  projetado: null,      realizado: 4360389,  qtdProj: null, qtdReal: 3, pct: null, status: "na" },
+        { name: "TOTAL",          projetado: 100501752, realizado: 81715201, qtdProj: 218, qtdReal: 183, pct: 72, status: "bad", isTotal: true },
+      ]
+    ),
     ytd: {
-      label: "2026 YTD (Jan–Abr acumulado)",
+      label: "2026 YTD (Jan–Mai acumulado)",
       kpi: {
         andamento: ANDAMENTO_ATUAL,
-        finalizadas: 81708983 + 74952478 + 95422416 + 86497450,   // 338,581,327 (Abril REVISADO 07/05; total inalterado em 25/05)
-        total:       81708983 + 74952478 + 95422416 + 86497450 + ANDAMENTO_ATUAL,
+        finalizadas: 81708983 + 74952478 + 95422416 + 86497450 + 81715201,   // 420,296,528
+        total:       81708983 + 74952478 + 95422416 + 86497450 + 81715201 + ANDAMENTO_ATUAL,
       },
       funil: [
-        { name: "06 — Finalizado", vgv: 338581327, qtd: 755, highlight: true, last: true },
+        { name: "06 — Finalizado", vgv: 420296528, qtd: 938, highlight: true, last: true },
       ],
       regional: [
-        { name: "Regional GO", vgv: 70711847+66832837+85593716+73264836, qtd: 152+148+202+159 }, // 296,403,236 / 661
-        { name: "Regional DF", vgv: 6927250+4934878+3337798+6003750,     qtd: 20+10+7+17 },      // 21,203,676 / 54
-        { name: "Regional SP", vgv: 4069886+3184763+6490902+7228864,     qtd: 6+5+15+14 },       // 20,974,415 / 40
+        { name: "Regional GO", vgv: 70711847+66832837+85593716+73264836+68862961, qtd: 152+148+202+159+157 }, // 365,266,197 / 818
+        { name: "Regional DF", vgv: 6927250+4934878+3337798+6003750+6848502,     qtd: 20+10+7+17+17 },      // 28,052,178 / 71
+        { name: "Regional SP", vgv: 4069886+3184763+6490902+7228864+4603738,     qtd: 6+5+15+14+8 },        // 25,578,153 / 48
+        { name: "(Sem Regional)", vgv: 1400000, qtd: 1 }, // Maio: 1 deal sem atribuição regional
       ],
-      regionalTotal: { vgv: 338581327, qtd: 755 },
-      regionalNote: "Soma de Jan–Abr 2026 (Abril RE-REVISADO em 25/05 — diretoria re-alocada, Renato separado).",
+      regionalTotal: { vgv: 420296528, qtd: 938 },
+      regionalNote: "Soma de Jan–Mai 2026 (Maio fechou em 01/06 — R$81,7M / 183 unidades).",
       diretores: [
-        // YTD RE-CALCULADO em 25/05 — Paulo/Sérgio Abril projetado caiu 41,4M→26,7M; EBM Diretoria Abril realizado caiu 10,35M→4,35M;
-        // Renato passou a aparecer separadamente em Abril (R$6,00M / 17 deals).
-        { name: "Felipe",         projetado: 55275088+68625050+68475570+65396703,  realizado: 45592156+50163105+55922437+48512026, qtdProj: 96+108+107+113, qtdReal: 78+102+118+94,  pct: 78, status: "bad" },
-        { name: "Paulo / Sérgio", projetado: 35833188+35692124+30472083+26705286,  realizado: 34909827+22329373+38415979+27631674, qtdProj: 98+98+84+73,    qtdReal: 98+59+104+78,   pct: 96, status: "bad" },
-        { name: "Renato",         projetado: 14033320,                              realizado: 6003750,                             qtdProj: 40,             qtdReal: 17,             pct: null, status: "ok" },
-        { name: "EBM Diretoria",  projetado: null,                                  realizado: 1207000+2460000+1084000+4350000,     qtdProj: null,           qtdReal: 2+2+2+1,        pct: null, status: "na" },
-        { name: "TOTAL",          projetado: 91108276+104317175+98947653+106135308, realizado: 338581327,                           qtdProj: 194+206+191+226, qtdReal: 178+163+224+190, pct: 85, status: "bad", isTotal: true },
+        // YTD RE-CALCULADO em 01/06/2026 — Maio adicionado: Felipe +R$45,9M; Paulo +R$26,1M; Renato +R$5,4M; EBM +R$4,4M.
+        { name: "Felipe",         projetado: 55275088+68625050+68475570+65396703+62026937,  realizado: 45592156+50163105+55922437+48512026+45855724, qtdProj: 96+108+107+113+111, qtdReal: 78+102+118+94+94,  pct: 77, status: "bad" },
+        { name: "Paulo / Sérgio", projetado: 35833188+35692124+30472083+26705286+24441495,  realizado: 34909827+22329373+38415979+27631674+26076587, qtdProj: 98+98+84+73+67,     qtdReal: 98+59+104+78+71,   pct: 97, status: "bad" },
+        { name: "Renato",         projetado: 14033320+14033320,                              realizado: 6003750+5422500,                              qtdProj: 40+40,              qtdReal: 17+15,             pct: 41, status: "bad" },
+        { name: "EBM Diretoria",  projetado: null,                                           realizado: 1207000+2460000+1084000+4350000+4360389,      qtdProj: null,               qtdReal: 2+2+2+1+3,         pct: null, status: "na" },
+        { name: "TOTAL",          projetado: 91108276+104317175+98947653+106135308+100501752, realizado: 420296528,                                    qtdProj: 194+206+191+226+218, qtdReal: 178+163+224+190+183, pct: 84, status: "bad", isTotal: true },
       ],
     },
   };
 
   // ---------- KPIs (com deltas) ----------
-  const monthOrder = ['jan','fev','mar','abr'];
+  const monthOrder = ['jan','fev','mar','abr','mai'];
   function deltaPct(curr, prev) {
     if (prev == null || prev === 0 || curr == null) return null;
     return (curr - prev) / prev * 100;
@@ -1807,8 +1799,8 @@
     let diffFinHtml = '', diffActHtml = '';
     if (window.__diffBadge) {
       if (period === 'ytd')      diffFinHtml = window.__diffBadge((window.__diffSnap||{}).ytd_fin, 'val');
-      else if (period === 'abr') diffFinHtml = window.__diffBadge((window.__diffSnap||{}).abr_fin, 'val');
-      else if (period === 'mai') diffActHtml = window.__diffBadge((window.__diffSnap||{}).mai_act, 'val');
+      else if (period === 'mai') diffFinHtml = window.__diffBadge((window.__diffSnap||{}).mai_fin, 'val');
+      else if (period === 'jun') diffActHtml = window.__diffBadge((window.__diffSnap||{}).mai_act, 'val');
     }
     // Gauge circular SVG no hero (% atingimento)
     let gaugeHtml = '';
@@ -1830,9 +1822,9 @@
     // Hero: Vendas Finalizadas | Secundário 1: Andamento | Secundário 2: VGV Total
     const isWinner = pct != null && pct >= 100;
     // KPIs clicáveis apenas no mês vigente (mai) — onde há detalhe por empreendimento × estágio
-    const drillFin = (period === 'mai') ? 'data-kpi-drill="finalizadas" title="Clique para ver empreendimentos finalizados em Maio"' : '';
-    const drillAct = (period === 'mai') ? 'data-kpi-drill="andamento" title="Clique para ver esteira detalhada por empreendimento"' : '';
-    const drillTot = (period === 'mai') ? 'data-kpi-drill="total" title="Clique para ver todos os empreendimentos de Maio"' : '';
+    const drillFin = (period === 'jun') ? 'data-kpi-drill="finalizadas" title="Clique para ver empreendimentos finalizados em Junho"' : '';
+    const drillAct = (period === 'jun') ? 'data-kpi-drill="andamento" title="Clique para ver esteira detalhada por empreendimento"' : '';
+    const drillTot = (period === 'jun') ? 'data-kpi-drill="total" title="Clique para ver todos os empreendimentos de Junho"' : '';
     el.innerHTML = `
       <div class="kpi hero finalizadas ${statusCls}${isWinner?' gold-glow':''}" ${drillFin}>
         ${gaugeHtml}
@@ -1934,10 +1926,10 @@
     ];
     const el = document.getElementById('esteira-funnel');
     el.innerHTML = stages.map(s => {
-      const m = data.mai.funil.find(x => x.name.startsWith(s.code));
-      // 06 - Finalizado: mostra apenas vendas finalizadas no mês vigente (Maio)
-      const finMes = data.mai.kpi.finalizadas || 0;
-      const qtdMes = (data.mai.funil.find(x => x.name.startsWith('06')) || {qtd: 0}).qtd || 0;
+      const m = data.jun.funil.find(x => x.name.startsWith(s.code));
+      // 06 - Finalizado: mostra apenas vendas finalizadas no mês vigente (Junho)
+      const finMes = data.jun.kpi.finalizadas || 0;
+      const qtdMes = (data.jun.funil.find(x => x.name.startsWith('06')) || {qtd: 0}).qtd || 0;
       const vgv = s.closed ? (finMes > 0 ? fmtBRLshort(finMes) : 'R$0') : (m && m.vgv ? fmtBRLshort(m.vgv) : '—');
       const qtd = s.closed ? (qtdMes > 0 ? fmtNum(qtdMes) + ' propostas (mês)' : 'sem vendas no mês') : (m && m.qtd ? fmtNum(m.qtd) + ' propostas' : s.hint);
       return `
@@ -2290,15 +2282,15 @@
   function renderFunil(p, period){
     const el = document.getElementById('funil');
     const hint = document.getElementById('funil-hint');
-    if (period === 'mai') {
+    if (period === 'jun') {
       // Dinâmico — soma estágios 00–05 (aberto) vs 06 (finalizado)
       var maiF = p.funil || [];
       var aberto = maiF.filter(function(s){return !s.last;}).reduce(function(a,s){return a + (s.qtd||0);},0);
       var fin = (maiF.find(function(s){return s.last;}) || {qtd:0}).qtd;
       var totVgv = p.kpi && p.kpi.total ? Math.round(p.kpi.total/1e6) : 0;
-      hint.textContent = '— Esteira ativa em Maio/2026: ' + aberto + ' propostas em aberto + ' + fin + ' finalizadas — total R$' + totVgv + 'M';
+      hint.textContent = '— Esteira ativa em Junho/2026: ' + aberto + ' propostas em aberto + ' + fin + ' finalizadas — total R$' + totVgv + 'M';
     } else if (period === 'ytd') {
-      hint.textContent = '— Total finalizado Jan–Abr (vendas concluídas no ano)';
+      hint.textContent = '— Total finalizado Jan–Mai (vendas concluídas no ano)';
     } else {
       hint.textContent = '— No filtro mensal, o BI mostra apenas as propostas finalizadas no mês';
     }
@@ -2454,7 +2446,7 @@
     // Empreendimentos por Regional — só na aba Mai
     const maiSec = document.getElementById('mai-regionais-section');
     if (maiSec) {
-      if (period === 'mai') {
+      if (period === 'jun') {
         maiSec.style.display = '';
         renderMaiRegionais();
       } else {
@@ -2521,7 +2513,7 @@
   btnPresent.addEventListener('click', togglePresent);
 
   // Atalhos de teclado
-  const keyMap = { '1':'jan','2':'fev','3':'mar','4':'abr','5':'mai','6':'ytd','7':'esteira','8':'empreendimentos' };
+  const keyMap = { '1':'jan','2':'fev','3':'mar','4':'abr','5':'mai','6':'jun','7':'ytd','8':'esteira','9':'empreendimentos' };
   document.addEventListener('keydown', (e) => {
     if (e.target && typeof e.target.matches === 'function' && e.target.matches('input,textarea,[contenteditable="true"]')) return;
     if (e.metaKey || e.ctrlKey || e.altKey) return;
@@ -2566,9 +2558,9 @@
       ytd_fin: data.ytd.kpi.finalizadas,
       ytd_qty: data.ytd.diretores.find(d=>d.isTotal).qtdReal,
       ytd_pct: data.ytd.diretores.find(d=>d.isTotal).pct,
-      abr_fin: data.abr.kpi.finalizadas,
-      abr_pct: data.abr.diretores.find(d=>d.isTotal).pct,
-      mai_act: data.mai.kpi.andamento,
+      mai_fin: data.mai.kpi.finalizadas,
+      mai_pct: data.mai.diretores.find(d=>d.isTotal).pct,
+      jun_act: data.jun.kpi.andamento,
       felipe_ytd: data.ytd.diretores.find(d=>d.name==='Felipe').realizado,
       paulo_ytd:  data.ytd.diretores.find(d=>d.name==='Paulo / Sérgio').realizado
     };
@@ -2620,7 +2612,7 @@
       hint.classList.add('has-diff');
       const sign = __diff.ytd_fin >= 0 ? '+' : '−';
       hint.innerHTML = `🔔 ${sign}${fmtBRLshort(Math.abs(__diff.ytd_fin))} YTD desde ${__diff.prevTs}`;
-      hint.title = `YTD: ${__diff.ytd_fin>=0?'+':''}${fmtBRL(__diff.ytd_fin)} | Abril: ${__diff.abr_fin>=0?'+':''}${fmtBRL(__diff.abr_fin)} | Esteira Maio: ${__diff.mai_act>=0?'+':''}${fmtBRL(__diff.mai_act)}`;
+      hint.title = `YTD: ${__diff.ytd_fin>=0?'+':''}${fmtBRL(__diff.ytd_fin)} | Maio: ${__diff.mai_fin>=0?'+':''}${fmtBRL(__diff.mai_fin)} | Esteira Junho: ${__diff.jun_act>=0?'+':''}${fmtBRL(__diff.jun_act)}`;
     } else {
       // Diferença entre primeira visita e mesmo snapshot
       const stored = safeGet('ebm-last-snapshot');
@@ -2643,7 +2635,7 @@
     if (!dirName || dirName === 'TOTAL') return;
     drillTitle.textContent = `📊 Drill-down — ${dirName}`;
     // Coletar dados do diretor por mês
-    const months = ['jan','fev','mar','abr'];
+    const months = ['jan','fev','mar','abr','mai','jun'];
     const monthLabels = {jan:'Janeiro', fev:'Fevereiro', mar:'Março', abr:'Abril'};
     const rows = months.map(m => {
       const d = data[m].diretores.find(x => x.name === dirName);
@@ -2692,17 +2684,17 @@
     let insightsHtml = '';
     if (rows.length === 0) {
       // Diretor sem histórico jan-abr — mostrar dados do mês vigente se houver
-      const maiDir = data.mai.diretores.find(x => x.name === dirName);
+      const maiDir = data.jun.diretores.find(x => x.name === dirName);
       if (maiDir && maiDir.realizado != null) {
         insightsHtml = `
-          <h4 style="margin:18px 0 8px;color:var(--ebm-navy);font-size:14px;">💡 Insights — Maio/2026 (mês vigente)</h4>
+          <h4 style="margin:18px 0 8px;color:var(--ebm-navy);font-size:14px;">💡 Insights — Junho/2026 (mês vigente)</h4>
           <div class="modal-grid" style="margin-top:8px;">
-            <div class="modal-stat"><div class="lbl">VGV Maio</div><div class="val">${fmtBRLshort(maiDir.realizado)}</div></div>
-            <div class="modal-stat"><div class="lbl">Meta Maio</div><div class="val">${maiDir.projetado?fmtBRLshort(maiDir.projetado):'—'}</div></div>
+            <div class="modal-stat"><div class="lbl">VGV Junho</div><div class="val">${fmtBRLshort(maiDir.realizado)}</div></div>
+            <div class="modal-stat"><div class="lbl">Meta Junho</div><div class="val">${maiDir.projetado?fmtBRLshort(maiDir.projetado):'—'}</div></div>
             <div class="modal-stat"><div class="lbl">% Atingimento</div><div class="val">${maiDir.pct!=null?maiDir.pct+'%':'—'}</div></div>
             <div class="modal-stat"><div class="lbl">Unidades</div><div class="val">${fmtNum(maiDir.qtdReal)}</div></div>
           </div>
-          <p style="margin:12px 0 0;font-size:12px;color:var(--ebm-muted);">📌 Diretor sem histórico em Jan–Abr (entrou na operação em Maio). Comparativo mensal vai ser construído ao longo do ano.</p>`;
+          <p style="margin:12px 0 0;font-size:12px;color:var(--ebm-muted);">📌 Diretor sem histórico em Jan–Mai (entrou na operação posterior). Comparativo mensal vai ser construído ao longo do ano.</p>`;
       } else {
         insightsHtml = `<p style="margin:18px 0 0;font-size:13px;color:var(--ebm-muted);">Sem dados históricos disponíveis para esse diretor.</p>`;
       }
@@ -2752,11 +2744,11 @@
   const kpiDrillTitle = document.getElementById('kpi-drill-title');
 
   function openKpiDrill(kpiType) {
-    const mai = data.mai;
+    const mai = data.jun;
     const emps = mai.empreendimentos || [];
     if (!emps.length) {
       kpiDrillBody.innerHTML = '<p style="text-align:center;color:var(--ebm-muted);padding:30px;">Sem dados de empreendimentos disponíveis. Aguarde próximo refresh do BI.</p>';
-      kpiDrillTitle.textContent = '📊 Drill — Maio/2026';
+      kpiDrillTitle.textContent = '📊 Drill — Junho/2026';
       kpiDrillModal.classList.add('show');
       document.body.style.overflow = 'hidden';
       return;
@@ -2765,15 +2757,15 @@
     let stagesToShow, titleEmoji, titleText, totalVgv;
     if (kpiType === 'andamento') {
       stagesToShow = STAGE_DEFS.filter(s => s.inEsteira);
-      titleEmoji = '⚙'; titleText = 'Esteira Ativa — Maio/2026';
+      titleEmoji = '⚙'; titleText = 'Esteira Ativa — Junho/2026';
       totalVgv = mai.kpi.andamento;
     } else if (kpiType === 'finalizadas') {
       stagesToShow = STAGE_DEFS.filter(s => s.inFinal);
-      titleEmoji = '📊'; titleText = 'Vendas Finalizadas — Maio/2026';
+      titleEmoji = '📊'; titleText = 'Vendas Finalizadas — Junho/2026';
       totalVgv = mai.kpi.finalizadas;
     } else { // total
       stagesToShow = STAGE_DEFS;
-      titleEmoji = '💰'; titleText = 'VGV Total — Maio/2026';
+      titleEmoji = '💰'; titleText = 'VGV Total — Junho/2026';
       totalVgv = mai.kpi.total;
     }
     kpiDrillTitle.textContent = titleEmoji + ' ' + titleText;
@@ -2806,7 +2798,7 @@
       html += '</div>';
       html += '<div class="kpi-stage-list">';
       if (rows.length === 0) {
-        html += '<div class="kpi-stage-empty">Nenhum empreendimento neste estágio em Maio.</div>';
+        html += '<div class="kpi-stage-empty">Nenhum empreendimento neste estágio em Junho.</div>';
       } else {
         rows.forEach(function(e){
           const regClass = (e.reg||'go').toLowerCase();
@@ -2872,7 +2864,7 @@
     document.body.classList.toggle('tv-mode', on);
     document.getElementById('btn-tv').textContent = on ? '⏸ Sair TV' : '📺 TV';
     if (on) {
-      const seq = ['ytd','jan','fev','mar','abr','mai','esteira','empreendimentos'];
+      const seq = ['ytd','jan','fev','mar','abr','mai','jun','esteira','empreendimentos'];
       let i = 0;
       activate(seq[0]);
       window.__tvInterval = setInterval(() => {
@@ -2916,7 +2908,8 @@
       {label:'Fevereiro 2026', icon:'📅', period:'fev', meta:'Fev'},
       {label:'Março 2026', icon:'📅', period:'mar', meta:'Mar'},
       {label:'Abril 2026', icon:'📅', period:'abr', meta:'Abr'},
-      {label:'Maio 2026', icon:'📅', period:'mai', meta:'Mai (vigente)'},
+      {label:'Maio 2026', icon:'📅', period:'mai', meta:'Mai'},
+      {label:'Junho 2026', icon:'📅', period:'jun', meta:'Jun (vigente)'},
       {label:'2026 YTD', icon:'📊', period:'ytd', meta:'Acumulado'},
       {label:'Esteira Ativa', icon:'⚙', period:'esteira', meta:'Funil'},
       {label:'Empreendimentos', icon:'🏢', period:'empreendimentos', meta:'Lista completa'}
@@ -3213,7 +3206,7 @@
         {key:'ytd_pct', lbl:'YTD % Atingimento', fmt:'pp'},
         {key:'abr_fin', lbl:'Abril Finalizadas', fmt:'val'},
         {key:'abr_pct', lbl:'Abril %', fmt:'pp'},
-        {key:'mai_act', lbl:'Maio Esteira Ativa', fmt:'val'},
+        {key:'jun_act', lbl:'Junho Esteira Ativa', fmt:'val'},
         {key:'felipe_ytd', lbl:'Felipe YTD', fmt:'val'},
         {key:'paulo_ytd', lbl:'Paulo YTD', fmt:'val'}
       ];
@@ -3408,11 +3401,11 @@
     const wrap = document.getElementById('month-cards');
     if (!wrap) return;
     const months = ['jan','fev','mar','abr','mai'];
-    const monthLbl = {jan:'Janeiro', fev:'Fevereiro', mar:'Março', abr:'Abril', mai:'Maio'};
+    const monthLbl = {jan:'Janeiro', fev:'Fevereiro', mar:'Março', abr:'Abril', mai:'Maio', jun:'Junho'};
     const active = document.querySelector('#period-toggle button.active');
     const activePeriod = active ? active.dataset.period : 'ytd';
     const today = new Date();
-    const dayMaio = today.getMonth() === 4 ? today.getDate() : null; // Maio = mês 4 (0-indexed)
+    const dayMaio = today.getMonth() === 5 ? today.getDate() : null; // Junho = mês 5 (0-indexed) — mês vigente
     wrap.innerHTML = months.map((m, i) => {
       const d = data[m];
       const tot = d.diretores.find(x=>x.isTotal);
@@ -3424,13 +3417,13 @@
         if (pct >= 90) pctCls = 'ok';
         else if (pct >= 60) pctCls = 'warn';
       }
-      const isCurrent = (m === 'mai');
+      const isCurrent = (m === 'jun');
       const isActive = (m === activePeriod);
       // Pace para mês vigente
       let paceHtml = '';
       if (isCurrent && dayMaio) {
-        const pacePct = Math.round((dayMaio/31)*100);
-        paceHtml = `<div class="mo-pace-hint">Dia ${dayMaio}/31 · esperado ${pacePct}%</div>`;
+        const pacePct = Math.round((dayMaio/30)*100);
+        paceHtml = `<div class="mo-pace-hint">Dia ${dayMaio}/30 · esperado ${pacePct}%</div>`;
       }
       // Trend vs mês anterior
       let trendHtml = '';
@@ -3483,12 +3476,12 @@
   // ---------- Maio badge "Dia X de 31" ----------
   function appendMaioBadge() {
     const today = new Date();
-    if (today.getMonth() !== 4) return; // só em Maio
+    if (today.getMonth() !== 5) return; // só em Junho (mês vigente)
     const day = today.getDate();
-    const total = 31;
+    const total = 30;
     const pct = Math.round((day/total)*100);
     const active = document.querySelector('#period-toggle button.active');
-    if (!active || active.dataset.period !== 'mai') return;
+    if (!active || active.dataset.period !== 'jun') return;
     const heroKpi = document.querySelector('.kpi.hero');
     if (!heroKpi || heroKpi.querySelector('.mai-pace-badge')) return;
     const heroLabel = heroKpi.querySelector('.label');
@@ -3583,10 +3576,10 @@
       const arrow = diff.ytd_fin > 0 ? '↑' : '↓';
       html += `<span class="cmp ${cls}"><span class="cmp-lbl">vs último snapshot:</span><span class="cmp-val">${arrow} ${fmtBRLshort(Math.abs(diff.ytd_fin))}</span></span>`;
     }
-    if (p === 'abr' && diff.abr_fin != null) {
-      const cls = diff.abr_fin > 0 ? 'up' : (diff.abr_fin < 0 ? 'down' : 'neutral');
-      const arrow = diff.abr_fin > 0 ? '↑' : '↓';
-      html += `<span class="cmp ${cls}"><span class="cmp-lbl">vs último snapshot:</span><span class="cmp-val">${arrow} ${fmtBRLshort(Math.abs(diff.abr_fin))}</span></span>`;
+    if (p === 'mai' && diff.mai_fin != null) {
+      const cls = diff.mai_fin > 0 ? 'up' : (diff.mai_fin < 0 ? 'down' : 'neutral');
+      const arrow = diff.mai_fin > 0 ? '↑' : '↓';
+      html += `<span class="cmp ${cls}"><span class="cmp-lbl">vs último snapshot:</span><span class="cmp-val">${arrow} ${fmtBRLshort(Math.abs(diff.mai_fin))}</span></span>`;
     }
     if (html) {
       cmp.innerHTML = html;
@@ -3750,8 +3743,8 @@
     const p = active.dataset.period;
     let key = null;
     if (p === 'ytd') key = 'ytd_fin';
-    else if (p === 'abr') key = 'abr_fin';
-    else if (p === 'mai') key = 'mai_act';
+    else if (p === 'mai') key = 'mai_fin';
+    else if (p === 'jun') key = 'jun_act';
     if (!key || !anom[key]) return;
     const heroLabel = document.querySelector('.kpi.hero .label');
     if (!heroLabel || heroLabel.querySelector('.anomaly-badge')) return;
