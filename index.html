@@ -1294,7 +1294,7 @@
         <button role="tab" data-period="empreendimentos" type="button">🏢 Empreend.</button>
       </div>
       <div class="updated">
-        Última atualização BI: <strong id="last-update">01/06/2026 21:34:26</strong>
+        Última atualização BI: <strong id="last-update">02/06/2026 08:58:24</strong>
         <span class="snapshot-hint" id="snapshot-hint" title="Variação dos KPIs desde a sua última visita"></span>
       </div>
       <div class="header-buttons">
@@ -1722,46 +1722,46 @@
     },
     mai: makeMonth(
       "Maio / 2026",
-      106978879,
+      107362538,
       [
-        { name: "Regional GO", vgv: 91079269, qtd: 196 },
+        { name: "Regional GO", vgv: 91517129, qtd: 197 },
         { name: "Regional DF", vgv: 7929372,  qtd: 19  },
-        { name: "Regional SP", vgv: 7970238,  qtd: 13  },
+        { name: "Regional SP", vgv: 7916038,  qtd: 13  },
       ],
       [
-        // Maio 2026 RE-FECHADO em 01/06/2026 21:34 — adicionais R$18,30M / +29 deals reclassificados pra Maio
-        // (era R$88,7M/199 → R$107,0M/228; Felipe quase 100% 98%, Paulo 118%, Renato 41% inalterado, Sem Regional removido)
-        { name: "Felipe",         projetado: 62026937,  realizado: 62311032, qtdProj: 111, qtdReal: 115, pct: 98, status: "bad" },
-        { name: "Paulo / Sérgio", projetado: 24441495,  realizado: 34084847, qtdProj: 67,  qtdReal: 93,  pct: 118, status: "ok" },
+        // Maio 2026 — 3a reclassificação pós-fechamento em 02/06/2026 08:58 (+R$383k / +1 deal vs snapshot 01/06 21:34).
+        // Felipe +R$390k/+1; Paulo -R$6,5k ajuste fino; Renato/EBM inalterados. Status meta inalterados.
+        { name: "Felipe",         projetado: 62026937,  realizado: 62701241, qtdProj: 111, qtdReal: 116, pct: 98, status: "bad" },
+        { name: "Paulo / Sérgio", projetado: 24441495,  realizado: 34078298, qtdProj: 67,  qtdReal: 93,  pct: 118, status: "ok" },
         { name: "Renato",         projetado: 14033320,  realizado: 5788500,  qtdProj: 40,  qtdReal: 16,  pct: 41, status: "bad" },
         { name: "EBM Diretoria",  projetado: null,      realizado: 4794499,  qtdProj: null, qtdReal: 4, pct: null, status: "na" },
-        { name: "TOTAL",          projetado: 100501752, realizado: 106978879, qtdProj: 218, qtdReal: 228, pct: 95, status: "bad", isTotal: true },
+        { name: "TOTAL",          projetado: 100501752, realizado: 107362538, qtdProj: 218, qtdReal: 229, pct: 95, status: "bad", isTotal: true },
       ]
     ),
     ytd: {
       label: "2026 YTD (Jan–Mai acumulado)",
       kpi: {
         andamento: ANDAMENTO_ATUAL,
-        finalizadas: 81708983 + 74952478 + 95422416 + 86497450 + 106978879,   // 445,560,206
-        total:       81708983 + 74952478 + 95422416 + 86497450 + 106978879 + ANDAMENTO_ATUAL,
+        finalizadas: 81708983 + 74952478 + 95422416 + 86497450 + 107362538,   // 445,943,865
+        total:       81708983 + 74952478 + 95422416 + 86497450 + 107362538 + ANDAMENTO_ATUAL,
       },
       funil: [
-        { name: "06 — Finalizado", vgv: 445560206, qtd: 983, highlight: true, last: true },
+        { name: "06 — Finalizado", vgv: 445943865, qtd: 984, highlight: true, last: true },
       ],
       regional: [
-        { name: "Regional GO", vgv: 70711847+66832837+85593716+73264836+91079269, qtd: 152+148+202+159+196 }, // 387,482,505 / 857
+        { name: "Regional GO", vgv: 70711847+66832837+85593716+73264836+91517129, qtd: 152+148+202+159+197 }, // 387,920,365 / 858
         { name: "Regional DF", vgv: 6927250+4934878+3337798+6003750+7929372,     qtd: 20+10+7+17+19 },      // 29,133,048 / 73
-        { name: "Regional SP", vgv: 4069886+3184763+6490902+7228864+7970238,     qtd: 6+5+15+14+13 },        // 28,944,653 / 53
+        { name: "Regional SP", vgv: 4069886+3184763+6490902+7228864+7916038,     qtd: 6+5+15+14+13 },        // 28,890,453 / 53
       ],
-      regionalTotal: { vgv: 445560206, qtd: 983 },
-      regionalNote: "Soma de Jan–Mai 2026 (Maio re-fechado em 01/06 21:34 — R$107,0M / 228 unidades; +R$18,30M / +29 deals vs snapshot 18:38; Sem Regional removido — deal reatribuído).",
+      regionalTotal: { vgv: 445943865, qtd: 984 },
+      regionalNote: "Soma de Jan–Mai 2026 (Maio 3a reclassificação 02/06 08:58 — R$107,4M / 229 unidades; +R$383k / +1 vs snapshot 01/06 21:34).",
       diretores: [
-        // YTD RE-CALCULADO em 01/06/2026 21:34 — Maio revisado: Felipe +R$13,0M(+15q); Paulo +R$4,9M(+13q); Renato inalterado; EBM +R$0,4M(+1q).
-        { name: "Felipe",         projetado: 55275088+68625050+68475570+65396703+62026937,  realizado: 45592156+50163105+55922437+48512026+62311032, qtdProj: 96+108+107+113+111, qtdReal: 78+102+118+94+115,  pct: 82, status: "bad" },
-        { name: "Paulo / Sérgio", projetado: 35833188+35692124+30472083+26705286+24441495,  realizado: 34909827+22329373+38415979+27631674+34084847, qtdProj: 98+98+84+73+67,     qtdReal: 98+59+104+78+93,    pct: 103, status: "ok" },
+        // YTD RE-CALCULADO em 02/06/2026 08:58 — Maio revisado novamente: Felipe +R$390k/+1; Paulo -R$6,5k; Renato/EBM inalterados.
+        { name: "Felipe",         projetado: 55275088+68625050+68475570+65396703+62026937,  realizado: 45592156+50163105+55922437+48512026+62701241, qtdProj: 96+108+107+113+111, qtdReal: 78+102+118+94+116,  pct: 82, status: "bad" },
+        { name: "Paulo / Sérgio", projetado: 35833188+35692124+30472083+26705286+24441495,  realizado: 34909827+22329373+38415979+27631674+34078298, qtdProj: 98+98+84+73+67,     qtdReal: 98+59+104+78+93,    pct: 103, status: "ok" },
         { name: "Renato",         projetado: 14033320+14033320,                              realizado: 6003750+5788500,                              qtdProj: 40+40,              qtdReal: 17+16,              pct: 42, status: "bad" },
         { name: "EBM Diretoria",  projetado: null,                                           realizado: 1207000+2460000+1084000+4350000+4794499,      qtdProj: null,               qtdReal: 2+2+2+1+4,          pct: null, status: "na" },
-        { name: "TOTAL",          projetado: 91108276+104317175+98947653+106135308+100501752, realizado: 445560206,                                    qtdProj: 194+206+191+226+218, qtdReal: 178+163+224+190+228, pct: 89, status: "bad", isTotal: true },
+        { name: "TOTAL",          projetado: 91108276+104317175+98947653+106135308+100501752, realizado: 445943865,                                    qtdProj: 194+206+191+226+218, qtdReal: 178+163+224+190+229, pct: 89, status: "bad", isTotal: true },
       ],
     },
   };
