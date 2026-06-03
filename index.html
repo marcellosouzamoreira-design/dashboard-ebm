@@ -967,7 +967,7 @@
   /* === Onda 14: Hierarquia + Microvisualizações + Polish + Navegação === */
 
   /* 1. Cards de mês (substitui visual flat das tabs) */
-  .month-cards { display: grid; grid-template-columns: repeat(5, 1fr); gap: var(--space-sm);
+  .month-cards { display: grid; grid-template-columns: repeat(6, 1fr); gap: var(--space-sm);
     margin-bottom: var(--space-md); }
   .mo-card { background: var(--ebm-card); border: 1px solid var(--ebm-border);
     border-radius: var(--radius-md); padding: 10px 12px; cursor: pointer; transition: all .18s;
@@ -1104,7 +1104,7 @@
     transition: top .15s ease; position: absolute; }
 
   @media (max-width: 700px) {
-    .month-cards { grid-template-columns: repeat(5, 1fr); gap: 4px; }
+    .month-cards { grid-template-columns: repeat(6, 1fr); gap: 4px; }
     .mo-card { padding: 6px 4px; }
     .mo-card .mo-name { font-size: 9px; letter-spacing: 0.3px; }
     .mo-card .mo-val { font-size: 13px; }
@@ -3399,7 +3399,7 @@
   function renderMonthCards() {
     const wrap = document.getElementById('month-cards');
     if (!wrap) return;
-    const months = ['jan','fev','mar','abr','mai'];
+    const months = ['jan','fev','mar','abr','mai','jun'];
     const monthLbl = {jan:'Janeiro', fev:'Fevereiro', mar:'Março', abr:'Abril', mai:'Maio', jun:'Junho'};
     const active = document.querySelector('#period-toggle button.active');
     const activePeriod = active ? active.dataset.period : 'ytd';
@@ -3410,13 +3410,17 @@
       const tot = d.diretores.find(x=>x.isTotal);
       const pct = tot ? tot.pct : null;
       const fin = d.kpi.finalizadas || 0;
+      const andamento = d.kpi.andamento || 0;
+      const isCurrent = (m === 'jun');
+      // Para o mês vigente sem finalizadas, mostrar esteira ativa em vez de "—"
+      const showEsteira = isCurrent && fin === 0 && andamento > 0;
       let pctCls = 'bad', pctTxt = '—';
-      if (pct == null) { pctCls = 'na'; pctTxt = 'Aguardando'; }
+      if (showEsteira) { pctCls = 'na'; pctTxt = 'em esteira'; }
+      else if (pct == null) { pctCls = 'na'; pctTxt = 'Aguardando'; }
       else { pctTxt = pct + '% meta';
         if (pct >= 90) pctCls = 'ok';
         else if (pct >= 60) pctCls = 'warn';
       }
-      const isCurrent = (m === 'jun');
       const isActive = (m === activePeriod);
       // Pace para mês vigente
       let paceHtml = '';
@@ -3435,10 +3439,11 @@
           trendHtml = `<div class="mo-trend ${cls}">${arrow} ${Math.abs(delta).toFixed(1)}%</div>`;
         }
       }
+      const displayVal = showEsteira ? fmtBRLshort(andamento) : (fin > 0 ? fmtBRLshort(fin) : '—');
       return `<button class="mo-card ${isActive?'active':''} ${isCurrent?'is-current':''}" data-period="${m}" type="button" ${isActive?'aria-current="page"':''}>
         ${isCurrent?'<span class="mo-current-tag">Vigente</span>':''}
         <div class="mo-name">${monthLbl[m]}</div>
-        <div class="mo-val">${fin > 0 ? fmtBRLshort(fin) : '—'}</div>
+        <div class="mo-val">${displayVal}</div>
         <div class="mo-pct ${pctCls}">${pctTxt}</div>
         ${paceHtml || trendHtml}
       </button>`;
