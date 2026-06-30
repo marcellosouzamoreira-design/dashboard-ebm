@@ -1294,7 +1294,7 @@
         <button role="tab" data-period="empreendimentos" type="button">🏢 Empreend.</button>
       </div>
       <div class="updated">
-        Última atualização BI: <strong id="last-update">29/06/2026 08:36:43</strong>
+        Última atualização BI: <strong id="last-update">30/06/2026 08:34:15</strong>
         <span class="snapshot-hint" id="snapshot-hint" title="Variação dos KPIs desde a sua última visita"></span>
       </div>
       <div class="header-buttons">
@@ -1407,8 +1407,8 @@
     <div class="kpis" style="margin-bottom:18px;grid-template-columns:1fr;">
       <div class="kpi andamento" style="text-align:center;padding:24px;">
         <div class="label">Esteira ativa neste momento</div>
-        <div class="value" style="font-size:42px;">R$50M</div>
-        <div class="sub">Soma de todas propostas em andamento (estágios 00–05) — snapshot 29/06/2026 08:36</div>
+        <div class="value" style="font-size:42px;">R$42M</div>
+        <div class="sub">Soma de todas propostas em andamento (estágios 00–05) — snapshot 30/06/2026 08:34</div>
       </div>
     </div>
 
@@ -1598,10 +1598,10 @@
 
   // ---------- DATA ----------
   // Todos os dados são meses de 2026, capturados via Power BI público.
-  // Esteira ativa (andamento) é um snapshot único capturado em 29/06/2026 08:36 (BI ts)
+  // Esteira ativa (andamento) é um snapshot único capturado em 30/06/2026 08:34 (BI ts)
   // — reflete propostas em estágios 00–05 no momento da extração. Mesmo valor
   // usado em todos os meses e na aba JUN (mês vigente).
-  const ANDAMENTO_ATUAL = 49694421;
+  const ANDAMENTO_ATUAL = 41525339;
   function makeMonth(label, finalizadas, regionals, diretores) {
     const total = regionals.reduce((s,r)=>s+r.vgv, 0);
     const qtd   = regionals.reduce((s,r)=>s+r.qtd, 0);
@@ -1684,40 +1684,40 @@
       label: "Junho / 2026 (mês vigente)",
       kpi: {
         andamento: ANDAMENTO_ATUAL,
-        finalizadas: 78106341,
-        total: 78106341 + ANDAMENTO_ATUAL,
+        finalizadas: 89824781,
+        total: 89824781 + ANDAMENTO_ATUAL,
       },
-      // Esteira Junho — extraída do BI em 29/06/2026 08:36 (finalizados R$78,11M/198 em 06; esteira ativa 00-05 R$49,69M/125; total geral R$127,80M/323)
+      // Esteira Junho — extraída do BI em 30/06/2026 08:34 (finalizados R$89,82M/229 em 06; esteira ativa 00-05 R$41,53M/102; total geral R$131,35M/331)
       funil: [
-        { name: "00 — Proposta",     vgv: 1807518,  qtd: 5 },
-        { name: "01 — Crédito",      vgv: 2533013,  qtd: 7 },
+        { name: "00 — Proposta",     vgv: 1547518,  qtd: 5 },
+        { name: "01 — Crédito",      vgv: 2174375,  qtd: 6 },
         { name: "02 — Jurídico",     vgv: 715335,   qtd: 2 },
-        { name: "03 — Assinatura",   vgv: 16778579, qtd: 42 },
-        { name: "04 — Conferência",  vgv: 18272124, qtd: 44, highlight: true },
-        { name: "05 — Pendência",    vgv: 9587852,  qtd: 25 },
-        { name: "06 — Finalizado",   vgv: 78106341, qtd: 198, last: true },
+        { name: "03 — Assinatura",   vgv: 15707244, qtd: 39 },
+        { name: "04 — Conferência",  vgv: 2315256,  qtd: 5 },
+        { name: "05 — Pendência",    vgv: 19065611, qtd: 45, highlight: true },
+        { name: "06 — Finalizado",   vgv: 89824781, qtd: 229, last: true },
       ],
       regional: [
-        { name: "Regional GO", vgv: 112721248, qtd: 291 },
-        { name: "Regional DF", vgv: 6890499,   qtd: 18 },
+        { name: "Regional GO", vgv: 115904606, qtd: 298 },
+        { name: "Regional DF", vgv: 7256499,   qtd: 19 },
         { name: "Regional SP", vgv: 8189015,   qtd: 14 },
       ],
-      regionalTotal: { vgv: 127800762, qtd: 323 },
-      regionalNote: "Total Junho/2026 (esteira ativa + finalizadas) por Regional — snapshot BI 29/06/2026 08:36.",
+      regionalTotal: { vgv: 131350120, qtd: 331 },
+      regionalNote: "Total Junho/2026 (esteira ativa + finalizadas) por Regional — snapshot BI 30/06/2026 08:34.",
       diretores: [
-        // Junho 2026 — snapshot 28/06 13:58. "Ebm Diretoria" (R$1,276,210/2) + "Não Identificado" (R$11,967,166/31) lumpados em EBM Diretoria (R$13,243,376/33). Pcts diretos do BI.
-        { name: "Felipe",         projetado: 69392102,  realizado: 72093956, qtdProj: 113, qtdReal: 171, pct: 48, status: "bad" },
-        { name: "Paulo / Sérgio", projetado: 25198514,  realizado: 37732431, qtdProj: 69,  qtdReal: 106, pct: 75, status: "bad" },
-        { name: "Renato",         projetado: 14033320,  realizado: 4731000,  qtdProj: 40,  qtdReal: 13, pct: 34, status: "bad" },
-        { name: "EBM Diretoria",  projetado: null,      realizado: 13243376,  qtdProj: null, qtdReal: 33, pct: null, status: "na" },
-        { name: "TOTAL",          projetado: 108623936, realizado: 127800762, qtdProj: 222, qtdReal: 323, pct: 52, status: "bad", isTotal: true },
+        // Junho 2026 — snapshot 30/06 08:34. "Ebm Diretoria" (R$1,732,405/3) + "Não Identificado" (R$9,700,946/24) lumpados em EBM Diretoria (R$11,433,351/27). Pcts diretos do BI.
+        { name: "Felipe",         projetado: 69392102,  realizado: 75344890, qtdProj: 113, qtdReal: 179, pct: 50, status: "bad" },
+        { name: "Paulo / Sérgio", projetado: 25198514,  realizado: 39474879, qtdProj: 69,  qtdReal: 111, pct: 79, status: "bad" },
+        { name: "Renato",         projetado: 14033320,  realizado: 5097000,  qtdProj: 40,  qtdReal: 14, pct: 36, status: "bad" },
+        { name: "EBM Diretoria",  projetado: null,      realizado: 11433351,  qtdProj: null, qtdReal: 27, pct: null, status: "na" },
+        { name: "TOTAL",          projetado: 108623936, realizado: 131350120, qtdProj: 222, qtdReal: 331, pct: 55, status: "bad", isTotal: true },
       ],
-      // Empreendimentos × estágio Junho — drill-down agregado por regional (BI ts 29/06/2026 08:36)
+      // Empreendimentos × estágio Junho — drill-down agregado por regional (BI ts 30/06/2026 08:34)
       // s05 inclui s04 (Conferência) + s05 (Pendência) lumpados. s06 = finalizados.
       empreendimentos: [
-        { reg:"GO", nome:"(Regional GO — agregado)", s00:1227518, s01:2167013, s02:715335,  s03:15071339, s05:22721804, s06:70818240, total:112721248, aggregated:true },
-        { reg:"DF", nome:"(Regional DF — agregado)", s00:0,       s01:366000,  s02:0,       s03:1707240,  s05:1759000,  s06:3058259,  total:6890499,  aggregated:true },
-        { reg:"SP", nome:"(Regional SP — agregado)", s00:0,       s01:0,       s02:0,       s03:0,        s05:3379173,  s06:4229842,  total:8189015,  aggregated:true },
+        { reg:"GO", nome:"(Regional GO — agregado)", s00:1547518, s01:1538375, s02:715335,  s03:14000004, s05:16500694, s06:81602680, total:115904606, aggregated:true },
+        { reg:"DF", nome:"(Regional DF — agregado)", s00:0,       s01:636000,  s02:0,       s03:1707240,  s05:1472000,  s06:3441259,  total:7256499,  aggregated:true },
+        { reg:"SP", nome:"(Regional SP — agregado)", s00:0,       s01:0,       s02:0,       s03:0,        s05:3408173,  s06:4780842,  total:8189015,  aggregated:true },
       ],
     },
         mai: makeMonth(
@@ -2472,7 +2472,7 @@
     });
   });
   document.getElementById('btn-refresh').addEventListener('click', () => {
-    alert('Esse painel é um snapshot do BI extraído em 29/06/2026 08:36.\n\nPara atualizar os números, peça ao Claude:\n"Atualize o dashboard da esteira EBM."');
+    alert('Esse painel é um snapshot do BI extraído em 30/06/2026 08:34.\n\nPara atualizar os números, peça ao Claude:\n"Atualize o dashboard da esteira EBM."');
   });
   document.getElementById('btn-print').addEventListener('click', () => window.print());
 
