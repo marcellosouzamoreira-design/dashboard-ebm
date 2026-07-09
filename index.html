@@ -2677,7 +2677,9 @@
     const rows = months.map(m => {
       const d = data[m].diretores.find(x => x.name === dirName);
       if (!d || d.realizado == null) return null;
-      return { mes: monthLabels[m], proj: d.projetado, real: d.realizado, qreal: d.qtdReal, pct: d.pct };
+      // Calcular % a partir de realizado/projetado (não usar d.pct do BI, que usa meta interna diferente do VGV Projetado exibido)
+      const calcPct = d.projetado ? Math.round(d.realizado / d.projetado * 100) : null;
+      return { mes: monthLabels[m], proj: d.projetado, real: d.realizado, qreal: d.qtdReal, pct: calcPct };
     }).filter(Boolean);
 
     // Totais
