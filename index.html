@@ -251,6 +251,18 @@
     .diretor .bullet, .diretor .vgv-side { grid-column: 1/3; }
   }
 
+  /* Mini funil horizontal por diretor */
+  .mini-funnel { grid-column: 1 / -1; display: flex; height: 18px; border-radius: 4px; overflow: hidden; gap: 1px; margin-top: 2px; }
+  .mini-funnel .seg { height: 100%; position: relative; min-width: 2px; transition: width .3s ease; cursor: default; }
+  .mini-funnel .seg:first-child { border-radius: 4px 0 0 4px; }
+  .mini-funnel .seg:last-child { border-radius: 0 4px 4px 0; }
+  .mini-funnel .seg-label { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 700; color: #fff; text-shadow: 0 0 2px rgba(0,0,0,0.3); white-space: nowrap; overflow: hidden; }
+  .mini-funnel-legend { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 6px 12px; margin-top: 4px; font-size: 10px; }
+  .mini-funnel-legend .item { display: inline-flex; align-items: center; gap: 4px; }
+  .mini-funnel-legend .swatch { width: 8px; height: 8px; border-radius: 2px; }
+  .mini-funnel-legend .nm { color: var(--ebm-muted); font-weight: 600; }
+  .mini-funnel-legend .vl { color: var(--ebm-text); font-weight: 700; }
+
   /* pct-pill — usado na tabela de empreendimentos */
   .pct-pill.ok { background: rgba(27,127,88,0.12); color: var(--ebm-ok); }
   .pct-pill.bad { background: rgba(178,58,72,0.12); color: var(--ebm-bad); }
@@ -1724,11 +1736,11 @@
       regionalNote: "Esteira ativa Julho/2026 por Regional — snapshot BI 10/07/2026 08:34 (nada finalizado ainda).",
       diretores: [
         // Julho 2026 (mês vigente, dia 10) — snapshot BI 10/07 08:34. "realizado" = pipeline ativo atribuído (nada finalizado em 07 ainda). Pcts diretos do BI. EBM Diretoria = "Não Identificado".
-        { name: "Felipe",         projetado: 42541986,  realizado: 6078724, qtdProj: 79,  qtdReal: 13, pct: 12, status: "bad" },
-        { name: "Paulo / Sérgio", projetado: 17555777,  realizado: 7113960, qtdProj: 48,  qtdReal: 19, pct: 33, status: "bad" },
-        { name: "Renato",         projetado: 8770825,   realizado: 1090000, qtdProj: 25,  qtdReal: 3,  pct: 12, status: "bad" },
-        { name: "EBM Diretoria",  projetado: null,      realizado: 8096972, qtdProj: null, qtdReal: 20, pct: null, status: "na" },
-        { name: "TOTAL",          projetado: 68868588,  realizado: 22379655, qtdProj: 152, qtdReal: 55, pct: 17, status: "bad", isTotal: true },
+        { name: "Felipe",         projetado: 42541986,  realizado: 6078724, qtdProj: 79,  qtdReal: 13, pct: 12, status: "bad", esteira: {s00:673050,s01:559271,s02:0,s03:1343000,s04:1871440,s05:1631963} },
+        { name: "Paulo / Sérgio", projetado: 17555777,  realizado: 7113960, qtdProj: 48,  qtdReal: 19, pct: 33, status: "bad", esteira: {s00:1378468,s01:801033,s02:0,s03:2384083,s04:2220375,s05:330000} },
+        { name: "Renato",         projetado: 8770825,   realizado: 1090000, qtdProj: 25,  qtdReal: 3,  pct: 12, status: "bad", esteira: {s00:0,s01:366000,s02:0,s03:350000,s04:0,s05:374000} },
+        { name: "EBM Diretoria",  projetado: null,      realizado: 8096972, qtdProj: null, qtdReal: 20, pct: null, status: "na", esteira: {s00:0,s01:815000,s02:1315335,s03:3199445,s04:2417192,s05:350000} },
+        { name: "TOTAL",          projetado: 68868588,  realizado: 22379655, qtdProj: 152, qtdReal: 55, pct: 17, status: "bad", isTotal: true, esteira: {s00:2051518,s01:2541304,s02:1315335,s03:7276528,s04:6509007,s05:2685963} },
       ],
       // Empreendimentos × estágio Julho — drill-down agregado por regional (BI ts 10/07/2026 08:34)
       // s05 inclui s04 (Conferência) + s05 (Pendência) lumpados. s06 = finalizados (0 no dia 9).
@@ -2386,6 +2398,28 @@
             de ${fmtBRLshort(d.projetado)}<br>
             ${fmtNum(d.qtdReal)} unid.
           </div>
+          ${d.esteira ? (() => {
+            const stages = [
+              {key:'s00', label:'00-Prop', color:'#003D6B'},
+              {key:'s01', label:'01-Cr\u00e9d', color:'#1a6da8'},
+              {key:'s02', label:'02-Jur',  color:'#4a9bd9'},
+              {key:'s03', label:'03-Assin', color:'#A4001B'},
+              {key:'s04', label:'04-Conf', color:'#B07A1F'},
+              {key:'s05', label:'05-Pend', color:'#6B7585'},
+            ];
+            const total = Object.values(d.esteira).reduce((a,b)=>a+b,0);
+            if(!total) return '';
+            const segs = stages.filter(s => d.esteira[s.key] > 0).map(s => {
+              const v = d.esteira[s.key];
+              const pctW = (v / total * 100).toFixed(1);
+              const showLabel = pctW > 8;
+              return `<div class="seg" style="width:${pctW}%;background:${s.color}" title="${s.label}: ${fmtBRL(v)} (${fmtNum(Math.round(v/total*100))}%)"><div class="seg-label">${showLabel ? fmtBRLshort(v) : ''}</div></div>`;
+            }).join('');
+            const legend = stages.filter(s => d.esteira[s.key] > 0).map(s => {
+              return `<span class="item"><span class="swatch" style="background:${s.color}"></span><span class="nm">${s.label}</span> <span class="vl">${fmtBRLshort(d.esteira[s.key])}</span></span>`;
+            }).join('');
+            return `<div class="mini-funnel">${segs}</div><div class="mini-funnel-legend">${legend}</div>`;
+          })() : ''}
         </div>
       `;
     }).join('');
