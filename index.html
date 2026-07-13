@@ -1299,9 +1299,9 @@
         <button role="tab" data-period="abr" type="button">Abr</button>
         <button role="tab" data-period="mai" type="button">Mai</button>
         <button role="tab" data-period="jun" type="button">Jun</button>
-        <button role="tab" data-period="jul" type="button">Jul</button>
+        <button role="tab" data-period="jul" class="active" type="button">Jul</button>
         <span class="sep" aria-hidden="true"></span>
-        <button role="tab" data-period="ytd" class="active" type="button">2026 YTD</button>
+        <button role="tab" data-period="ytd" type="button">2026 YTD</button>
         <span class="sep" aria-hidden="true"></span>
         <button role="tab" data-period="esteira" type="button">⚙ Esteira</button>
         <button role="tab" data-period="empreendimentos" type="button">🏢 Empreend.</button>
@@ -2507,6 +2507,9 @@
       loadNotes('empreendimentos');
       return;
     }
+    // Splits Modalidade/Momento — só disponível para Abril (snapshot manual)
+    const splitsEl = document.getElementById('splits-section');
+    if (splitsEl) splitsEl.style.display = period === 'abr' ? '' : 'none';
     const p = data[period];
     if (!p) return;
     renderKpis(p, period);
@@ -3970,9 +3973,9 @@
   const _kpiRow = document.getElementById('kpi-row');
   if (_kpiRow) _kpiRow.style.display = '';
 
-  // initial: 2026 YTD acumulado é a visão padrão mais útil pro diretor comercial
-  try { activate('ytd'); } catch(e) {
-    console.error('[EBM] activate(ytd) falhou:', e);
+  // initial: mês vigente é a visão padrão — diretor quer ver pipeline atual
+  try { activate('jul'); } catch(e) {
+    console.error('[EBM] activate(jul) falhou:', e);
     if (_kpiRow) _kpiRow.innerHTML = '<div style="padding:24px;color:var(--ebm-red);">⚠ Erro ao renderizar KPIs. Pressione Cmd+Shift+R para recarregar.</div>';
   }
 })();
