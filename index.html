@@ -1307,7 +1307,7 @@
         <button role="tab" data-period="empreendimentos" type="button">🏢 Empreend.</button>
       </div>
       <div class="updated">
-        Última atualização BI: <strong id="last-update">14/07/2026 09:58:33</strong>
+        Última atualização BI: <strong id="last-update">15/07/2026 08:34:01</strong>
         <span class="snapshot-hint" id="snapshot-hint" title="Variação dos KPIs desde a sua última visita"></span>
       </div>
       <div class="header-buttons">
@@ -1611,10 +1611,10 @@
 
   // ---------- DATA ----------
   // Todos os dados são meses de 2026, capturados via Power BI público.
-  // Esteira ativa (andamento) é um snapshot único capturado em 14/07/2026 09:58 (BI ts)
+  // Esteira ativa (andamento) é um snapshot único capturado em 15/07/2026 08:34 (BI ts)
   // — reflete propostas em estágios 00–05 no momento da extração. Mesmo valor
   // usado em todos os meses e na aba JUL (mês vigente).
-  const ANDAMENTO_ATUAL = 27166715;
+  const ANDAMENTO_ATUAL = 29844764;
   function makeMonth(label, finalizadas, regionals, diretores) {
     const total = regionals.reduce((s,r)=>s+r.vgv, 0);
     const qtd   = regionals.reduce((s,r)=>s+r.qtd, 0);
@@ -1717,37 +1717,37 @@
         finalizadas: 6507394,
         total: 6507394 + ANDAMENTO_ATUAL,
       },
-      // Esteira Julho — extraída do BI em 14/07/2026 09:58 (esteira ativa 00-05 R$27,17M/62; finalizado R$6,51M/16)
+      // Esteira Julho — extraída do BI em 15/07/2026 08:34 (esteira ativa 00-05 R$29,84M/68; finalizado R$6,51M/16)
       funil: [
-        { name: "00 — Proposta",     vgv: 1424518, qtd: 5 },
-        { name: "01 — Crédito",      vgv: 2280304, qtd: 5 },
-        { name: "02 — Jurídico",     vgv: 1255335, qtd: 3 },
-        { name: "03 — Assinatura",   vgv: 10884427, qtd: 24, highlight: true },
-        { name: "04 — Conferência",  vgv: 1913000, qtd: 4 },
-        { name: "05 — Pendência",    vgv: 9409130, qtd: 21 },
+        { name: "00 — Proposta",     vgv: 2419519, qtd: 6 },
+        { name: "01 — Crédito",      vgv: 1841144, qtd: 4 },
+        { name: "02 — Jurídico",     vgv: 715335, qtd: 2 },
+        { name: "03 — Assinatura",   vgv: 11841935, qtd: 27, highlight: true },
+        { name: "04 — Conferência",  vgv: 3769700, qtd: 8 },
+        { name: "05 — Pendência",    vgv: 9257130, qtd: 21 },
         { name: "06 — Finalizado",   vgv: 6507394, qtd: 16, last: true },
       ],
       regional: [
-        { name: "Regional GO", vgv: 28218759, qtd: 66 },
+        { name: "Regional GO", vgv: 30556808, qtd: 71 },
         { name: "Regional DF", vgv: 3332350,  qtd: 9 },
-        { name: "Regional SP", vgv: 2123000,  qtd: 3 },
+        { name: "Regional SP", vgv: 2463000,  qtd: 4 },
       ],
-      regionalTotal: { vgv: 33674109, qtd: 78 },
-      regionalNote: "Esteira Julho/2026 por Regional — snapshot BI 14/07/2026 09:58 (R$6,51M finalizados / 16 un).",
+      regionalTotal: { vgv: 36352158, qtd: 84 },
+      regionalNote: "Esteira Julho/2026 por Regional — snapshot BI 15/07/2026 08:34 (R$6,51M finalizados / 16 un).",
       diretores: [
-        // Julho 2026 (mês vigente, dia 14) — snapshot BI 14/07 09:58. "realizado" = VGV total atribuído (todas as stages). Pcts diretos do BI. EBM Diretoria = "Não Identificado".
+        // Julho 2026 (mês vigente, dia 15) — snapshot BI 15/07 08:34. "realizado" = VGV total atribuído (todas as stages). Pcts diretos do BI. EBM Diretoria = "Não Identificado".
         { name: "Felipe",         projetado: 42541986,  realizado: 11442234, qtdProj: 79,  qtdReal: 25, pct: 18, status: "bad" },
-        { name: "Paulo / Sérgio", projetado: 17555777,  realizado: 11179225, qtdProj: 48,  qtdReal: 30, pct: 42, status: "bad" },
+        { name: "Paulo / Sérgio", projetado: 17555777,  realizado: 12772274, qtdProj: 48,  qtdReal: 33, pct: 44, status: "bad" },
         { name: "Renato",         projetado: 8770825,   realizado: 1090000,  qtdProj: 25,  qtdReal: 3,  pct: 12, status: "bad" },
-        { name: "EBM Diretoria",  projetado: null,      realizado: 9962649,  qtdProj: null, qtdReal: 20, pct: null, status: "na" },
-        { name: "TOTAL",          projetado: 68868588,  realizado: 33674109, qtdProj: 152, qtdReal: 78, pct: 24, status: "bad", isTotal: true },
+        { name: "EBM Diretoria",  projetado: null,      realizado: 11047649,  qtdProj: null, qtdReal: 23, pct: null, status: "na" },
+        { name: "TOTAL",          projetado: 68868588,  realizado: 36352158, qtdProj: 152, qtdReal: 84, pct: 24, status: "bad", isTotal: true },
       ],
-      // Empreendimentos × estágio Julho — drill-down agregado por regional (BI ts 14/07/2026 09:58)
+      // Empreendimentos × estágio Julho — drill-down agregado por regional (BI ts 15/07/2026 08:34)
       // s05 inclui s04 (Conferência) + s05 (Pendência) lumpados. s06 = finalizados.
       empreendimentos: [
-        { reg:"GO", nome:"(Regional GO — agregado)", s00:1154518, s01:1914304, s02:1255335, s03:7819077, s05:10622130, s06:5453394, total:28218758, aggregated:true },
-        { reg:"DF", nome:"(Regional DF — agregado)", s00:270000,  s01:366000,  s02:0,      s03:1642350, s05:0,        s06:1054000, total:3332350,  aggregated:true },
-        { reg:"SP", nome:"(Regional SP — agregado)", s00:0,       s01:0,       s02:0,      s03:1423000, s05:700000,   s06:0,       total:2123000,  aggregated:true },
+        { reg:"GO", nome:"(Regional GO — agregado)", s00:2079519, s01:1475144, s02:715335, s03:8506585, s05:12326830, s06:5453394, total:30556808, aggregated:true },
+        { reg:"DF", nome:"(Regional DF — agregado)", s00:0,       s01:366000,  s02:0,      s03:1912350, s05:0,        s06:1054000, total:3332350,  aggregated:true },
+        { reg:"SP", nome:"(Regional SP — agregado)", s00:340000,  s01:0,       s02:0,      s03:1423000, s05:700000,   s06:0,       total:2463000,  aggregated:true },
       ],
     },
         mai: makeMonth(
