@@ -1279,6 +1279,267 @@
     .time-travel-panel { padding: 10px 14px; gap: 10px; flex-wrap: wrap; }
     .tt-info { min-width: 100%; order: 2; font-size: 11px; }
   }
+
+  /* ======================================================
+     MOBILE OVERHAUL (≤ 480px — phones in portrait)
+     ====================================================== */
+  @media (max-width: 480px) {
+    /* --- Global spacing --- */
+    :root {
+      --space-xs: 4px; --space-sm: 8px; --space-md: 14px;
+      --space-lg: 20px; --space-xl: 28px;
+    }
+    body { font-size: 13px; }
+    .wrap { padding: 10px 10px 80px; }
+
+    /* --- Sticky header: ultra-compacto --- */
+    header.sticky-header {
+      padding: 10px 12px;
+      margin: -10px -10px 10px;
+      gap: 8px;
+    }
+    .title .logo { width: 36px; height: 36px; font-size: 13px; border-radius: 8px; }
+    .title { gap: 10px; }
+    .title h1 { font-size: 16px; letter-spacing: -0.3px; }
+    .title .subtitle { font-size: 9px; letter-spacing: 0.6px; }
+    .header-meta { align-items: flex-start; gap: 6px; }
+    .updated { font-size: 10px; }
+    .header-buttons { gap: 4px; flex-wrap: wrap; }
+    .header-buttons .cmdk-trigger,
+    .header-buttons .btn-more,
+    .header-buttons .btn-export { padding: 5px 8px; font-size: 11px; }
+    .header-buttons .cmdk-trigger kbd { display: none; }
+    /* Esconde botões secundários no header mobile — usa bottom-nav */
+    .header-buttons #btn-history,
+    .header-buttons #btn-bookmarks,
+    .header-buttons .modos-wrap { display: none; }
+
+    /* --- Month cards: 3 colunas (2 linhas) --- */
+    .month-cards {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+    }
+    .mo-card { padding: 8px 6px; }
+    .mo-card .mo-name { font-size: 10px; }
+    .mo-card .mo-val { font-size: 15px; margin-top: 3px; }
+    .mo-card .mo-pct { font-size: 10px; }
+    .mo-card .mo-trend { font-size: 9px; }
+
+    /* --- KPIs --- */
+    #kpi-row { gap: 8px; }
+    #kpi-row .kpi { padding: 14px; border-radius: 12px; }
+    #kpi-row .kpi.hero { padding: 16px; }
+    #kpi-row .kpi.hero .label { font-size: 11px; padding-right: 80px; }
+    #kpi-row .kpi.hero .value { font-size: 36px; margin: 8px 0 4px; }
+    #kpi-row .kpi .value { font-size: 24px; }
+    #kpi-row .kpi .label { font-size: 10px; }
+    #kpi-row .kpi .sub { font-size: 11px; }
+    .gauge-circle { width: 64px; height: 64px; top: 10px; right: 10px; }
+    .gauge-circle .gauge-text { font-size: 12px; }
+    .gauge-circle circle { stroke-width: 8; }
+    .kpi-compare { font-size: 10px; gap: 6px; }
+    .kpi-compare .cmp { padding: 2px 6px; }
+    .mai-pace-badge { font-size: 9px; padding: 3px 8px; max-width: calc(100% - 80px); }
+    .pct-badge { font-size: 10px !important; padding: 2px 7px !important; }
+    .diff-badge { font-size: 10px; padding: 2px 6px; margin-left: 4px; }
+
+    /* --- Sections --- */
+    section { padding: 12px; margin-bottom: 16px; border-radius: 12px; }
+    section h2 { font-size: 13px; gap: 6px; margin-bottom: 12px; }
+    section h2::before { width: 3px; height: 14px; }
+    section h2 .hint { font-size: 10px; }
+
+    /* --- Funil: 2 colunas em portrait --- */
+    .funnel:not(.single-step) { grid-template-columns: 1fr 1fr !important; gap: 4px !important; }
+    .funnel .step { padding: 10px 6px; border-radius: 8px; }
+    .funnel .step .name { font-size: 9px; }
+    .funnel .step .vgv { font-size: 12px; margin-top: 4px; }
+    .funnel .step .qtd { font-size: 10px; }
+
+    /* --- Esteira funnel: 2 colunas --- */
+    .esteira-funnel { grid-template-columns: 1fr 1fr; gap: 4px; }
+    .esteira-step { padding: 10px 6px; border-radius: 8px; }
+    .esteira-step .e-stage { font-size: 9px; }
+    .esteira-step .e-name { font-size: 11px; }
+    .esteira-step .e-vgv { font-size: 12px; }
+    .esteira-step .e-qtd { font-size: 9px; }
+
+    /* --- Diretores: layout vertical card --- */
+    .diretores { gap: 10px; }
+    .diretor {
+      grid-template-columns: 1fr auto;
+      grid-template-rows: auto auto auto;
+      gap: 6px 10px;
+      padding: 12px;
+    }
+    .diretor .name { font-size: 13px; }
+    .diretor .name-status { font-size: 9px; }
+    .diretor .gauge-pct { font-size: 20px; text-align: right; }
+    .diretor .bullet { grid-column: 1 / -1; height: 18px; }
+    .diretor .vgv-side { grid-column: 1 / -1; font-size: 11px; display: flex;
+      justify-content: space-between; gap: 8px; }
+    .diretor .vgv-side strong { display: inline; font-size: 12px; }
+    .diretor:not(.is-total)::after { display: none; }
+    .mini-funnel { height: 14px; }
+    .mini-funnel .seg-label { font-size: 8px; }
+    .mini-funnel-legend { font-size: 9px; gap: 4px 8px; }
+
+    /* --- Tabelas: scroll horizontal com indicador --- */
+    section:has(.emp-table),
+    #esteira-section { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .emp-table { min-width: 580px; }
+    .emp-table th, .emp-table td { padding: 6px 6px; font-size: 10px; white-space: nowrap; }
+    .emp-table .nm { font-size: 11px; }
+    .emp-table .reg-tag { font-size: 8px; padding: 1px 4px; }
+
+    /* --- Regional cards --- */
+    .reg-grid { gap: 10px; }
+    .reg-card { padding: 12px; border-radius: 10px; }
+    .reg-card .reg-title { font-size: 14px; }
+    .reg-card .reg-summary { font-size: 10px; }
+    .reg-card .reg-summary strong { font-size: 13px; }
+    .reg-card .emp-list li { font-size: 11px; padding: 6px 2px; gap: 6px; }
+    .reg-card .emp-list .e-vgv { font-size: 10px; }
+    .reg-card .emp-list { max-height: 240px; }
+
+    /* --- Ticket médio: horizontal compacto --- */
+    .ticket-grid { grid-template-columns: 1fr !important; gap: 8px; }
+    .ticket-card { padding: 12px 14px; display: flex; justify-content: space-between; align-items: center; }
+    .ticket-card .t-value { font-size: 18px; margin: 0; }
+    .ticket-card.feature .t-value { font-size: 22px; }
+    .ticket-card .t-label { font-size: 9px; }
+    .ticket-card .t-detail { font-size: 10px; }
+
+    /* --- ABC cards: 1 coluna horizontal --- */
+    .abc-cards { grid-template-columns: 1fr; gap: 8px; }
+    .abc-card { padding: 12px 14px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+    .abc-card .abc-class { font-size: 14px; flex-shrink: 0; }
+    .abc-card .abc-value { font-size: 16px; margin: 0; }
+    .abc-card .abc-detail { margin: 0; }
+
+    /* --- Summary cards --- */
+    .summary-cards { grid-template-columns: 1fr; gap: 8px; }
+    .summary-card { padding: 12px; display: flex; justify-content: space-between; align-items: center; }
+    .summary-card .val { font-size: 18px; margin: 0; }
+
+    /* --- Splits --- */
+    .split-chart-wrap { height: 160px; }
+    .split-legend { font-size: 11px; gap: 10px; }
+
+    /* --- Charts --- */
+    .chart-box { height: 200px; }
+    .trend-card { padding: 12px 14px; }
+    .trend-chart-wrap { min-height: 160px; height: 160px; }
+    .trend-title { font-size: 12px; }
+    .trend-meta { font-size: 10px; }
+
+    /* --- Filter chips: scroll horizontal --- */
+    .filter-chips { flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch;
+      scrollbar-width: none; padding-bottom: 2px; }
+    .filter-chips::-webkit-scrollbar { display: none; }
+    .chip-filter { white-space: nowrap; flex-shrink: 0; }
+    .chip-rank { white-space: nowrap; flex-shrink: 0; font-size: 11px; padding: 4px 10px; }
+    #emp-search { width: 100% !important; margin-left: 0 !important; margin-top: 6px; }
+
+    /* --- Bottom nav: mais gordo, safe area --- */
+    .bottom-nav {
+      padding: 8px 8px calc(8px + env(safe-area-inset-bottom));
+      box-shadow: 0 -2px 12px rgba(0,30,55,0.10);
+    }
+    .bottom-nav button { padding: 8px 4px; min-height: 44px; font-size: 10px; border-radius: 10px; }
+    .bottom-nav button .bn-icon { font-size: 20px; }
+    .bottom-nav button.active { background: rgba(0,61,107,0.08); }
+    body.dark .bottom-nav button.active { background: rgba(74,159,224,0.12); }
+
+    /* --- FAB: touch-friendly --- */
+    .fab { width: 48px; height: 48px; font-size: 20px;
+      bottom: calc(64px + env(safe-area-inset-bottom)) !important; right: 14px; }
+
+    /* --- Modais: full-width sheet --- */
+    .modal-backdrop { padding: 0; }
+    .modal, .comment-modal, .history-modal {
+      border-radius: 16px 16px 0 0; max-height: 90vh;
+    }
+    .modal-head { padding: 14px 16px; }
+    .modal-head h3 { font-size: 14px; }
+    .modal-body { padding: 14px 16px; }
+    .modal-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+    .modal-stat .val { font-size: 16px; }
+    .modal-stat .lbl { font-size: 9px; }
+
+    /* --- KPI drill modal --- */
+    .kpi-drill-summary { grid-template-columns: 1fr 1fr; gap: 6px; }
+    .kpi-drill-summary .item .v { font-size: 15px; }
+    .kpi-drill-summary .item .lbl { font-size: 9px; }
+    .kpi-stage-header { padding: 10px 12px; }
+    .kpi-stage-header .stage-name { font-size: 12px; }
+    .kpi-stage-header .stage-meta { font-size: 12px; }
+    .kpi-emp-row { grid-template-columns: 36px 1fr auto; padding: 7px 10px; font-size: 11px; gap: 6px; }
+    .kpi-reg-badge { font-size: 8px; padding: 1px 4px; }
+
+    /* --- Command palette --- */
+    .cmdk-backdrop { padding: 8px; }
+    .cmdk { border-radius: 14px; }
+    .cmdk-input { font-size: 14px; }
+    .cmdk-item { padding: 10px 14px; min-height: 44px; }
+
+    /* --- History modal --- */
+    .hist-item { padding: 10px 14px; gap: 8px; flex-wrap: wrap; }
+    .hist-when { font-size: 12px; min-width: auto; }
+    .hist-vals { font-size: 11px; gap: 8px; }
+    .diff-pair-row { grid-template-columns: 1fr; gap: 2px; }
+
+    /* --- Breadcrumb --- */
+    .breadcrumb { font-size: 10px; padding: 3px 8px; }
+
+    /* --- Focus mode --- */
+    body.focus-mode #focus-kpi-display .focus-num { font-size: 72px; }
+    body.focus-mode #focus-kpi-display .focus-lbl { font-size: 14px; letter-spacing: 2px; }
+    body.focus-mode #focus-kpi-display .focus-sub { font-size: 13px; }
+
+    /* --- Tooltips: desabilita hover (touch) --- */
+    [data-tooltip]:hover::before { display: none; }
+
+    /* --- Footer --- */
+    footer.note { font-size: 10px; padding: 10px 2px; }
+
+    /* --- Animações: reduz pra economizar bateria --- */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+    }
+    /* Reduz animações decorativas em mobile por padrão */
+    .logo::after { animation: none; }
+    .sticky-header::before { animation: none; }
+    body.tv-mode::before { display: none; }
+  }
+
+  /* ======================================================
+     LANDSCAPE PHONE (max-height ≤ 480px + landscape)
+     ====================================================== */
+  @media (max-height: 480px) and (orientation: landscape) {
+    header.sticky-header { padding: 6px 12px; }
+    .title .logo { width: 28px; height: 28px; font-size: 11px; }
+    .title h1 { font-size: 14px; }
+    .title .subtitle { display: none; }
+    .wrap { padding: 8px 12px 60px; }
+    #kpi-row .kpi.hero .value { font-size: 28px; }
+    #kpi-row .kpi .value { font-size: 20px; }
+    section { padding: 10px; margin-bottom: 10px; }
+    .bottom-nav { padding: 4px 6px; }
+    .bottom-nav button { min-height: 36px; font-size: 9px; }
+    .bottom-nav button .bn-icon { font-size: 16px; }
+  }
+
+  /* ======================================================
+     TABLET improvements (481px — 768px)
+     ====================================================== */
+  @media (min-width: 481px) and (max-width: 768px) {
+    .month-cards { grid-template-columns: repeat(4, 1fr); gap: 6px; }
+    .funnel:not(.single-step) { grid-template-columns: repeat(4, 1fr) !important; }
+    .esteira-funnel { grid-template-columns: repeat(4, 1fr); }
+    .ticket-grid { grid-template-columns: 1fr 1fr !important; }
+    #kpi-row .kpi.hero .value { font-size: 44px; }
+  }
 </style>
 </head>
 <body>
