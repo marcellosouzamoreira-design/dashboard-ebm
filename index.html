@@ -218,6 +218,22 @@
   .funnel-empty { color: var(--ebm-muted); font-size: 12px; padding: 12px; text-align: center;
     background: #fafafa; border: 1px dashed var(--ebm-border); border-radius: 10px; }
 
+  /* Split funnel grid (Modalidade / Momento) */
+  .split-funnel-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .split-funnel-block { }
+  .split-funnel-label { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;
+    margin-bottom: 8px; padding: 6px 12px; border-radius: 6px; display: flex; align-items: center; justify-content: space-between; }
+  .split-funnel-label.sbpe { background: rgba(0,61,107,0.08); color: var(--ebm-navy); }
+  .split-funnel-label.associativo { background: rgba(164,0,27,0.08); color: var(--ebm-red); }
+  .split-funnel-label.lancamento { background: rgba(176,122,31,0.08); color: var(--ebm-gold); }
+  .split-funnel-label.estoque { background: rgba(0,61,107,0.08); color: var(--ebm-navy); }
+  .split-funnel-total { font-size: 11px; font-weight: 600; opacity: 0.8; }
+  body.dark .split-funnel-label.sbpe { background: rgba(74,159,224,0.12); }
+  body.dark .split-funnel-label.associativo { background: rgba(255,102,117,0.12); }
+  body.dark .split-funnel-label.lancamento { background: rgba(230,201,122,0.12); }
+  body.dark .split-funnel-label.estoque { background: rgba(74,159,224,0.12); }
+  @media (max-width: 900px) { .split-funnel-grid { grid-template-columns: 1fr; gap: 16px; } }
+
   /* Diretores: bullet chart compacto (1 linha por diretor) */
   .diretores { display: flex; flex-direction: column; gap: 14px; }
   .diretor { padding: 14px 16px; background: var(--ebm-soft, #fafafa); border: 1px solid var(--ebm-border);
@@ -400,10 +416,14 @@
   /* Esconder seções quando aba Esteira ou Empreendimentos ativa */
   body.esteira-mode #splits-section,
   body.esteira-mode #funil-section,
+  body.esteira-mode #modalidade-funnel-section,
+  body.esteira-mode #momento-funnel-section,
   body.esteira-mode .grid.cols-2,
   body.esteira-mode #trend-card-wrap,
   body.empreendimentos-mode #splits-section,
   body.empreendimentos-mode #funil-section,
+  body.empreendimentos-mode #modalidade-funnel-section,
+  body.empreendimentos-mode #momento-funnel-section,
   body.empreendimentos-mode .grid.cols-2,
   body.empreendimentos-mode #trend-card-wrap { display: none; }
   body:not(.esteira-mode) #esteira-section { display: none; }
@@ -460,6 +480,7 @@
     .funnel:not(.single-step) { grid-template-columns: 1fr 1fr 1fr !important; }
     .ticket-grid { grid-template-columns: 1fr; }
     .splits-grid, .splits-tables { grid-template-columns: 1fr; }
+    .split-funnel-grid { grid-template-columns: 1fr; gap: 16px; }
     section h2 { font-size: 14px; }
     section { padding: 14px; }
     .emp-table th, .emp-table td { padding: 6px 8px; font-size: 11px; }
@@ -1602,7 +1623,35 @@
   <!-- Modo Foco (Onda 14) -->
   <div id="focus-kpi-display" style="display:none;"></div>
 
-<section id="funil-section">
+<section id="modalidade-funnel-section" class="briefing-hide">
+    <h2>📊 Esteira por Modalidade <span class="hint">SBPE vs Associativo — Jul/2026</span></h2>
+    <div class="split-funnel-grid">
+      <div class="split-funnel-block">
+        <div class="split-funnel-label sbpe">SBPE <span class="split-funnel-total" id="sbpe-total"></span></div>
+        <div class="funnel" id="funnel-sbpe"></div>
+      </div>
+      <div class="split-funnel-block">
+        <div class="split-funnel-label associativo">Associativo <span class="split-funnel-total" id="assoc-total"></span></div>
+        <div class="funnel" id="funnel-associativo"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="momento-funnel-section" class="briefing-hide">
+    <h2>📊 Esteira por Momento <span class="hint">Lançamento vs Estoque — Jul/2026</span></h2>
+    <div class="split-funnel-grid">
+      <div class="split-funnel-block">
+        <div class="split-funnel-label lancamento">Lançamento <span class="split-funnel-total" id="lanc-total"></span></div>
+        <div class="funnel" id="funnel-lancamento"></div>
+      </div>
+      <div class="split-funnel-block">
+        <div class="split-funnel-label estoque">Estoque <span class="split-funnel-total" id="estoque-total"></span></div>
+        <div class="funnel" id="funnel-estoque"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="funil-section">
     <h2>📊 Esteira / Funil de Propostas <span class="hint" id="funil-hint"></span></h2>
     <div id="funil"></div>
   </section>
@@ -1875,7 +1924,7 @@
   // Esteira ativa (andamento) é um snapshot único capturado em 20/07/2026 06:31 (BI ts)
   // — reflete propostas em estágios 00–05 no momento da extração. Mesmo valor
   // usado em todos os meses e na aba JUL (mês vigente).
-  const ANDAMENTO_ATUAL = 36801673;
+  const ANDAMENTO_ATUAL = 30915702;
   function makeMonth(label, finalizadas, regionals, diretores) {
     const total = regionals.reduce((s,r)=>s+r.vgv, 0);
     const qtd   = regionals.reduce((s,r)=>s+r.qtd, 0);
@@ -1975,18 +2024,56 @@
       label: "Julho / 2026 (mês vigente)",
       kpi: {
         andamento: ANDAMENTO_ATUAL,
-        finalizadas: 14903545,
-        total: 14903545 + ANDAMENTO_ATUAL,
+        finalizadas: 26129592,
+        total: 26129592 + ANDAMENTO_ATUAL,
       },
-      // Esteira Julho — extraída do BI em 20/07/2026 06:31 (esteira ativa 00-05 R$36,80M/90; finalizado R$14,90M/35)
+      // Esteira Julho — extraída do BI em 21/07/2026 16:18 (esteira ativa 00-05 R$30,92M/74; finalizado R$26,13M/63)
       funil: [
-        { name: "00 — Proposta",     vgv: 837518, qtd: 3 },
-        { name: "01 — Crédito",      vgv: 2716269, qtd: 6 },
+        { name: "00 — Proposta",     vgv: 4243572, qtd: 10 },
+        { name: "01 — Crédito",      vgv: 1296304, qtd: 3 },
         { name: "02 — Jurídico",     vgv: 715335, qtd: 2 },
-        { name: "03 — Assinatura",   vgv: 13755420, qtd: 33, highlight: true },
-        { name: "04 — Conferência",  vgv: 7135782, qtd: 18 },
-        { name: "05 — Pendência",    vgv: 11641349, qtd: 28 },
-        { name: "06 — Finalizado",   vgv: 14903545, qtd: 35, last: true },
+        { name: "03 — Assinatura",   vgv: 13361902, qtd: 32, highlight: true },
+        { name: "04 — Conferência",  vgv: 1006000, qtd: 3 },
+        { name: "05 — Pendência",    vgv: 10292589, qtd: 25 },
+        { name: "06 — Finalizado",   vgv: 26129592, qtd: 63, last: true },
+      ],
+      // Funil por Modalidade — BI 21/07/2026 16:18
+      funilSBPE: [
+        { name: "00 — Proposta",     vgv: 2188604, qtd: 4 },
+        { name: "01 — Crédito",      vgv: 559271, qtd: 1 },
+        { name: "02 — Jurídico",     vgv: 0, qtd: 0 },
+        { name: "03 — Assinatura",   vgv: 6209586, qtd: 11 },
+        { name: "04 — Conferência",  vgv: 0, qtd: 0 },
+        { name: "05 — Pendência",    vgv: 3642290, qtd: 6 },
+        { name: "06 — Finalizado",   vgv: 9281217, qtd: 16 },
+      ],
+      funilAssociativo: [
+        { name: "00 — Proposta",     vgv: 2054968, qtd: 6 },
+        { name: "01 — Crédito",      vgv: 737033, qtd: 2 },
+        { name: "02 — Jurídico",     vgv: 715335, qtd: 2 },
+        { name: "03 — Assinatura",   vgv: 6722317, qtd: 20 },
+        { name: "04 — Conferência",  vgv: 1006000, qtd: 3 },
+        { name: "05 — Pendência",    vgv: 6650299, qtd: 19 },
+        { name: "06 — Finalizado",   vgv: 16848376, qtd: 47 },
+      ],
+      // Funil por Momento — BI 21/07/2026 16:18
+      funilLancamento: [
+        { name: "00 — Proposta",     vgv: 0, qtd: 0 },
+        { name: "01 — Crédito",      vgv: 0, qtd: 0 },
+        { name: "02 — Jurídico",     vgv: 0, qtd: 0 },
+        { name: "03 — Assinatura",   vgv: 1419404, qtd: 4 },
+        { name: "04 — Conferência",  vgv: 0, qtd: 0 },
+        { name: "05 — Pendência",    vgv: 940419, qtd: 3 },
+        { name: "06 — Finalizado",   vgv: 6686905, qtd: 19 },
+      ],
+      funilEstoque: [
+        { name: "00 — Proposta",     vgv: 4243572, qtd: 10 },
+        { name: "01 — Crédito",      vgv: 1296304, qtd: 3 },
+        { name: "02 — Jurídico",     vgv: 715335, qtd: 2 },
+        { name: "03 — Assinatura",   vgv: 11512498, qtd: 27 },
+        { name: "04 — Conferência",  vgv: 1006000, qtd: 3 },
+        { name: "05 — Pendência",    vgv: 8822170, qtd: 20 },
+        { name: "06 — Finalizado",   vgv: 19442687, qtd: 44 },
       ],
       regional: [
         { name: "Regional GO", vgv: 41349903, qtd: 102 },
@@ -2626,6 +2713,48 @@
       <div class="qtd">${qtd}</div>
     </div>`;
   }
+
+  // Render split funnels (Modalidade / Momento)
+    function renderSplitFunnel(containerId, funilData) {
+      const el = document.getElementById(containerId);
+      if (!el || !funilData) return;
+      el.innerHTML = funilData.map((s, i) => {
+        const code = s.name.substring(0, 2);
+        const shortName = s.name.split('—')[1]?.trim() || s.name;
+        const cls = s.highlight ? ' highlight' : (s.last ? ' last' : '');
+        const vgvStr = s.vgv > 0 ? fmtBRLshort(s.vgv) : '—';
+        const qtdStr = s.qtd > 0 ? s.qtd + ' un' : '—';
+        return `<div class="step${cls}" style="animation-delay:${i * 0.04}s"><div class="name">${code} ${shortName}</div><div class="vgv">${vgvStr}</div><div class="qtd">${qtdStr}</div></div>`;
+      }).join('');
+    }
+
+    // Render Modalidade funnels
+    if (data.jul.funilSBPE) {
+      renderSplitFunnel('funnel-sbpe', data.jul.funilSBPE);
+      const sbpeTotal = data.jul.funilSBPE.reduce((s,x) => s + x.vgv, 0);
+      const sbpeQtd = data.jul.funilSBPE.reduce((s,x) => s + x.qtd, 0);
+      document.getElementById('sbpe-total').textContent = fmtBRLshort(sbpeTotal) + ' · ' + sbpeQtd + ' un';
+    }
+    if (data.jul.funilAssociativo) {
+      renderSplitFunnel('funnel-associativo', data.jul.funilAssociativo);
+      const assocTotal = data.jul.funilAssociativo.reduce((s,x) => s + x.vgv, 0);
+      const assocQtd = data.jul.funilAssociativo.reduce((s,x) => s + x.qtd, 0);
+      document.getElementById('assoc-total').textContent = fmtBRLshort(assocTotal) + ' · ' + assocQtd + ' un';
+    }
+
+    // Render Momento funnels
+    if (data.jul.funilLancamento) {
+      renderSplitFunnel('funnel-lancamento', data.jul.funilLancamento);
+      const lancTotal = data.jul.funilLancamento.reduce((s,x) => s + x.vgv, 0);
+      const lancQtd = data.jul.funilLancamento.reduce((s,x) => s + x.qtd, 0);
+      document.getElementById('lanc-total').textContent = fmtBRLshort(lancTotal) + ' · ' + lancQtd + ' un';
+    }
+    if (data.jul.funilEstoque) {
+      renderSplitFunnel('funnel-estoque', data.jul.funilEstoque);
+      const estTotal = data.jul.funilEstoque.reduce((s,x) => s + x.vgv, 0);
+      const estQtd = data.jul.funilEstoque.reduce((s,x) => s + x.qtd, 0);
+      document.getElementById('estoque-total').textContent = fmtBRLshort(estTotal) + ' · ' + estQtd + ' un';
+    }
 
   // ---------- Diretores (bullet chart) ----------
   function renderDiretores(p){
