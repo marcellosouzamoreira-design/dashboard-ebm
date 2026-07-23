@@ -204,7 +204,8 @@
   .grid { display: grid; gap: 18px; margin-bottom: 20px; }
 
   /* Funil */
-  .funnel { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
+  .funnel { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; overflow: hidden; }
+  .split-funnel-block .funnel { grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); }
   .funnel .step { background: linear-gradient(180deg, #fff 0%, #fafafa 100%);
     border: 1px solid var(--ebm-border); border-radius: 10px; padding: 12px 10px;
     text-align: center; position: relative; }
@@ -232,6 +233,7 @@
   body.dark .split-funnel-label.associativo { background: rgba(255,102,117,0.12); }
   body.dark .split-funnel-label.lancamento { background: rgba(230,201,122,0.12); }
   body.dark .split-funnel-label.estoque { background: rgba(74,159,224,0.12); }
+  @media (max-width: 1100px) { .split-funnel-grid { grid-template-columns: 1fr; gap: 16px; } }
   @media (max-width: 900px) { .split-funnel-grid { grid-template-columns: 1fr; gap: 16px; } }
 
   /* Diretores: bullet chart compacto (1 linha por diretor) */
